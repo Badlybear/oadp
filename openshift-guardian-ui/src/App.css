@@ -1,0 +1,8 @@
+/* src/App.css */
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #f5f7fa;
+  font-family: 'Roboto', sans-serif;
+}
