@@ -1,8 +1,42 @@
 /* src/App.css */
 .app-container {
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  background-color: #f5f7fa;
   font-family: 'Roboto', sans-serif;
+  background-color: #f5f7fa;
+  color: #333;
+}
+
+/* Global header */
+.main-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #2d3436;
+  color: #fff;
+  padding: 10px 20px;
+}
+
+/* Dark mode toggle button */
+.dark-mode-toggle {
+  background: none;
+  border: 1px solid #fff;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Dark mode styles */
+.dark {
+  background-color: #1c1e21;
+  color: #ddd;
+}
+
+.dark .main-header {
+  background-color: #121212;
+}
+
+.dark .btn {
+  background-color: #3a3a3a;
+  color: #ddd;
 }

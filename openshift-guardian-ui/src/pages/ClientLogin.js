@@ -1,17 +1,17 @@
-// src/pages/StaffLogin.js
+// src/pages/ClientLogin.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './StaffLogin.css';
+import './ClientLogin.css'; // Correct import
 
-const StaffLogin = () => {
+const ClientLogin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = e => {
     e.preventDefault();
-    // Simulated login validation
-    if (email === 'staff@openshiftguardian.com' && password === 'password') {
+    // Demo credentials for clients
+    if (email === 'client@openshiftguardian.com' && password === 'password') {
       navigate('/dashboard');
     } else {
       alert('Invalid credentials. Please try again.');
@@ -21,7 +21,7 @@ const StaffLogin = () => {
   return (
     <div className="login-container">
       <div className="login-card">
-        <h2>Staff Login</h2>
+        <h2>Client Login</h2>
         <form onSubmit={handleSubmit}>
           <input
             type="email"
@@ -37,11 +37,11 @@ const StaffLogin = () => {
             onChange={e => setPassword(e.target.value)}
             required
           />
-          <button type="submit">Login</button>
+          <button type="submit" className="btn">Login</button>
         </form>
       </div>
     </div>
   );
 };
 
-export default StaffLogin;
+export default ClientLogin;

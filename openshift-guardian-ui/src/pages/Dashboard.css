@@ -2,14 +2,13 @@
 .dashboard-container {
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
+    min-height: calc(100vh - 60px);
     text-align: center;
+    padding: 20px;
   }
   
   .dashboard-header {
-    background-color: #2d3436;
-    color: #fff;
-    padding: 20px;
+    margin-bottom: 20px;
   }
   
   .dashboard-content {
@@ -24,21 +23,18 @@
     margin: 20px;
     display: flex;
     gap: 20px;
-    justify-content: center;
   }
   
   .btn {
     background-color: #0984e3;
     color: #fff;
     padding: 10px 20px;
-    margin-top: 20px;
     text-decoration: none;
     border-radius: 4px;
   }
   
   .dashboard-footer {
-    background-color: #2d3436;
-    color: #fff;
-    padding: 10px;
+    margin-top: 20px;
+    font-size: 0.9em;
   }
   
