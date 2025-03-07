@@ -100,3 +100,13 @@ body {
 .dark .btn {
   background-color: #444;
 }
+
+/* Transition styles for login page */
+.page-transition {
+  opacity: 1;
+  transition: opacity 0.5s ease-in-out;
+}
+
+.page-transition.fade-out {
+  opacity: 0;
+}

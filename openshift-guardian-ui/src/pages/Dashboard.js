@@ -1,22 +1,23 @@
-// src/pages/Dashboard.js
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import guardianLogo from './GUARDIAN.png';
 import './Dashboard.css';
 
 const Dashboard = ({ darkMode }) => {
-  const [fadeTransition, setFadeTransition] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+  
+  // Determine whether to apply the pop effect based on navigation state.
+  const applyPopEffect = location.state && location.state.fromLogin;
 
   const handleNavigation = (path) => {
-    setFadeTransition(true);
-    setTimeout(() => {
-      navigate(path);
-    }, 500); // 0.5s fade-out transition
+    // Direct navigation without any transition; subsequent navigations don't need the pop.
+    navigate(path);
   };
 
   return (
-    <div className={`dashboard-container page-transition ${fadeTransition ? 'fade-out' : ''} ${darkMode ? 'dark' : ''}`}>
+    // Add the "fade-in" class only if coming from Login (applyPopEffect is true)
+    <div className={`dashboard-container ${applyPopEffect ? 'fade-in' : ''} ${darkMode ? 'dark' : ''}`}>
       <header className="dashboard-header">
         <img src={guardianLogo} alt="Guardian Logo" className="guardian-logo" />
         <h2>Openshift Guardian</h2>
