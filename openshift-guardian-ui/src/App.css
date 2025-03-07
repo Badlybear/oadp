@@ -16,23 +16,33 @@
   padding: 10px 20px;
 }
 
-/* Default dark mode toggle style */
 .dark-mode-toggle {
-  background: linear-gradient(135deg, #4b6cb7, #182848);
+  background: none;
   border: none;
-  color: #fff;
-  padding: 8px 16px;
-  border-radius: 25px;
-  font-weight: bold;
   cursor: pointer;
-  transition: transform 0.2s ease, background 0.3s ease;
+  transition: transform 0.3s, opacity 0.3s;
 }
 
 .dark-mode-toggle:hover {
-  transform: scale(1.05);
+  transform: scale(1.1);
 }
 
-/* Dark mode overrides */
+.page-transition {
+  animation: fadeInDown 0.5s ease;
+}
+
+@keyframes fadeInDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Dark mode global styles */
 .dark .app-container {
   background: #121212;
   color: #ddd;
@@ -40,9 +50,4 @@
 
 .dark .main-header {
   background-color: #1f1f1f;
-}
-
-/* Dark mode toggle when active */
-.dark .dark-mode-toggle {
-  background: linear-gradient(135deg, #f39c12, #d35400);
 }

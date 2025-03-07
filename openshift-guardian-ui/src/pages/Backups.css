@@ -1,19 +1,101 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
 /* src/pages/Backups.css */
 
 .backup-container {
-  min-height: 100vh;
-  padding: 40px;
-  text-align: center;
-  background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #fbc2eb, #a18cd1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh; /* fills the screen */
+  background: linear-gradient(-45deg, #0d47a1, #1976d2, #2196f3, #64b5f6);
   background-size: 400% 400%;
-  animation: gradientAnim 12s infinite;
-  color: #333;
+  animation: gradientBlue 15s ease infinite;
+  color: #ffffff;
+  padding: 20px;
 }
 
-@keyframes gradientAnim {
-  0% { background-position: 0% 50%; }
+@keyframes gradientBlue {
+  0%, 100% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+}
+
+/* Header with logo on the backups page */
+.backup-header {
+  text-align: center;
+  padding: 15px;
+  background: rgba(25, 118, 210, 0.9);
+  border-radius: 12px;
+  margin-bottom: 40px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.guardian-logo {
+  width: 300px;  /* larger logo for branding */
+  height: auto;
+  margin-bottom: 10px;
+}
+
+.backup-header h2 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 2.4rem;
+  font-weight: 700;
+  margin: 5px 0;
+}
+
+.backup-header p {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+/* Content styles */
+.backup-content {
+  width: 100%;
+  max-width: 900px;
+  background: #ffffff;
+  color: #333;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+/* Reuse transition effects if needed */
+.page-transition {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+}
+
+.page-transition.fade-out {
+  opacity: 0;
+}
+
+.backup-footer {
+  margin-top: auto;
+  text-align: center;
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.8);
+}
+
+/* Dark Mode Styles */
+.dark.backup-container {
+  background: linear-gradient(-45deg, #121212, #1d1d1d, #282828, #333);
+  color: #ddd;
+}
+
+.dark .backup-header {
+  background: rgba(40, 40, 40, 0.9);
+  color: #fff;
+}
+
+.dark .backup-content {
+  background: #212121;
+  color: #ddd;
+}
+
+.dark .backup-footer {
+  color: #aaa;
 }
 
 .backup-actions .btn {
@@ -35,11 +117,6 @@
 .btn:hover {
   transform: translateY(-4px);
   box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-}
-/* Dark Mode Styles */
-.dark.backup-container {
-  background: linear-gradient(-45deg, #111, #222, #333, #444);
-  color: #eee;
 }
 
 .dark .backup-actions .btn.create {

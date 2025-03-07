@@ -1,12 +1,22 @@
 // src/pages/Dashboard.js
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import guardianLogo from './GUARDIAN.png';
 import './Dashboard.css';
 
 const Dashboard = ({ darkMode }) => {
+  const [fadeTransition, setFadeTransition] = useState(false);
+  const navigate = useNavigate();
+
+  const handleNavigation = (path) => {
+    setFadeTransition(true);
+    setTimeout(() => {
+      navigate(path);
+    }, 500); // 0.5s fade-out transition
+  };
+
   return (
-    <div className={`dashboard-container ${darkMode ? 'dark' : ''}`}>
+    <div className={`dashboard-container page-transition ${fadeTransition ? 'fade-out' : ''} ${darkMode ? 'dark' : ''}`}>
       <header className="dashboard-header">
         <img src={guardianLogo} alt="Guardian Logo" className="guardian-logo" />
         <h2>Openshift Guardian</h2>
@@ -30,9 +40,9 @@ const Dashboard = ({ darkMode }) => {
 
       <main className="dashboard-content">
         <div className="dashboard-links">
-          <Link to="/backups" className="btn">Manage Backups</Link>
-          <Link to="/restores" className="btn">Manage Restores</Link>
-          <Link to="/" className="btn">Logout</Link>
+          <button className="btn" onClick={() => handleNavigation('/backups')}>Manage Backups</button>
+          <button className="btn" onClick={() => handleNavigation('/restores')}>Manage Restores</button>
+          <button className="btn" onClick={() => handleNavigation('/')}>Logout</button>
         </div>
       </main>
 

@@ -21,68 +21,74 @@
 
 .dashboard-header {
   text-align: center;
-  padding: 10px;
-  background: rgba(25, 118, 210, 0.8);
+  padding: 15px;
+  background: rgba(25, 118, 210, 0.9);
   color: #ffffff;
   border-radius: 12px;
-  margin-bottom: 100px;
+  margin-bottom: 60px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 .guardian-logo {
-  width: 300px; /* Extremely bigger logo */
+  width: 300px; /* Increased logo size */
   height: auto;
-  margin-bottom: -50px;
+  margin-bottom: 10px;
 }
 
 .dashboard-header h2 {
   font-family: 'Poppins', sans-serif;
-  font-size: 2.2rem;
+  font-size: 2.4rem;
   font-weight: 700;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
 }
 
 .dashboard-header p {
   font-family: 'Poppins', sans-serif;
-  font-size: 0rem;
+  font-size: 1.1rem;
+  margin: 0;
 }
 
 .dashboard-stats {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 20px;
-  margin-bottom: 40px;
   width: 100%;
-  max-width: 800px;
+  max-width: 900px;
+  margin-bottom: 40px;
 }
 
 .card {
-  background: #fff;
+  background: #ffffff;
   padding: 20px;
   border-radius: 10px;
   color: #333;
   text-align: center;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  transition: transform 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .card:hover {
   transform: translateY(-5px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
 }
 
 .card h3 {
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   color: #23a6d5;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
+  font-weight: 600;
 }
 
 .card p {
   font-size: 2rem;
   font-weight: bold;
+  margin: 0;
 }
 
 .dashboard-content {
+  width: 100%;
   text-align: center;
+  margin-top: 30px;
 }
 
 .dashboard-links .btn {
@@ -90,17 +96,33 @@
   padding: 14px;
   background-color: #23a6d5;
   color: #fff;
-  text-decoration: none;
+  border: none;
   border-radius: 50px;
   font-weight: 600;
-  margin: 100px 0; /* Increased space between buttons */
-  transform: translateY(--5px);
+  margin: 20px; /* increased spacing between buttons */
   box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
 }
 
 .dashboard-links .btn:hover {
   transform: translateY(-3px);
   box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+}
+
+/* Page transition effects */
+.page-transition {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+}
+
+.page-transition.fade-out {
+  opacity: 0;
+}
+
+.page-transition.slide-out-active {
+  transform: translateY(-100%);  /* Slide up transition */
 }
 
 .dashboard-footer {
