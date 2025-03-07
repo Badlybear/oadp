@@ -1,136 +1,86 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
 
-/* src/pages/Backups.css */
-
 .backup-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-height: 100vh; /* fills the screen */
-  background: linear-gradient(-45deg, #0d47a1, #1976d2, #2196f3, #64b5f6);
-  background-size: 400% 400%;
-  animation: gradientBlue 15s ease infinite;
-  color: #ffffff;
   padding: 20px;
-}
-
-@keyframes gradientBlue {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-}
-
-/* Header with logo on the backups page */
-.backup-header {
-  text-align: center;
-  padding: 15px;
-  background: rgba(25, 118, 210, 0.9);
-  border-radius: 12px;
-  margin-bottom: 40px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  color: #ffffff;
+  flex-grow: 1; /* Allows it to expand within page-content */
 }
 
 .guardian-logo {
-  width: 300px;  /* larger logo for branding */
+  width: 300px;
   height: auto;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
+  transition: transform 0.3s ease, filter 0.3s ease, box-shadow 0.3s ease;
+  filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.2));
 }
 
-.backup-header h2 {
-  font-family: 'Poppins', sans-serif;
-  font-size: 2.4rem;
-  font-weight: 700;
-  margin: 5px 0;
-}
-
-.backup-header p {
-  font-family: 'Poppins', sans-serif;
-  font-size: 1.1rem;
-  margin: 0;
-}
-
-/* Content styles */
-.backup-content {
-  width: 100%;
-  max-width: 900px;
-  background: #ffffff;
-  color: #333;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-  text-align: center;
-}
-
-/* Reuse transition effects if needed */
-.page-transition {
-  opacity: 1;
-  transform: translateY(0);
-  transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
-}
-
-.page-transition.fade-out {
-  opacity: 0;
-}
-
-.backup-footer {
-  margin-top: auto;
-  text-align: center;
-  font-size: 0.9rem;
-  color: rgba(255,255,255,0.8);
-}
-
-/* Dark Mode Styles */
-.dark.backup-container {
-  background: linear-gradient(-45deg, #121212, #1d1d1d, #282828, #333);
-  color: #ddd;
-}
-
-.dark .backup-header {
-  background: rgba(40, 40, 40, 0.9);
-  color: #fff;
-}
-
-.dark .backup-content {
-  background: #212121;
-  color: #ddd;
-}
-
-.dark .backup-footer {
-  color: #aaa;
+.guardian-logo:hover {
+  transform: scale(1.05) rotate(2deg);
+  filter: brightness(1.2) drop-shadow(0 4px 10px rgba(0, 0, 0, 0.3));
 }
 
 .backup-actions .btn {
-  margin: 15px;
+  margin: 20px;
   padding: 14px 28px;
   border-radius: 10px;
   border: none;
   color: white;
-  font-size: 1.1rem;
+  font-size: 1.5rem;
   cursor: pointer;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
-.btn.create { background-color: #28a745; }
-.btn.view { background-color: #007bff; }
-.btn.schedule { background-color: #ffc107; }
+.btn.create { background-color: #356adc; }
+.btn.view { background-color: #17a2b8; }
+.btn.schedule { background-color: #9570da; }
 
 .btn:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Dark Mode Styles */
+.dark .backup-container {
+  color: #ddd;
+}
+
+.dark .guardian-logo {
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+}
+
+.dark .guardian-logo:hover {
+  transform: scale(1.1) rotate(2deg);
+  filter: brightness(1.3) drop-shadow(0 0 15px rgba(255, 255, 255, 0.7));
 }
 
 .dark .backup-actions .btn.create {
-  background-color: #2ecc71;
+  background-color: #1a2f5b;
 }
 
 .dark .backup-actions .btn.view {
-  background-color: #3498db;
+  background-color: #1a3c34;
 }
 
 .dark .backup-actions .btn.schedule {
-  background-color: #f1c40f;
+  background-color: #3c2f3c;
 }
 
 .dark .backup-actions .btn:hover {
-  box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+}
+
+.dark .backup-actions .btn.create:hover {
+  background-color: #2a4b8b;
+}
+
+.dark .backup-actions .btn.view:hover {
+  background-color: #2a5c4a;
+}
+
+.dark .backup-actions .btn.schedule:hover {
+  background-color: #5c4b5c;
 }

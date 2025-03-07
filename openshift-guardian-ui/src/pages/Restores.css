@@ -1,72 +1,22 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
 
-/* src/pages/Restores.css */
-
 .restore-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-height: 100vh; /* fills the screen */
-  background: linear-gradient(-45deg, #0d47a1, #1976d2, #2196f3, #64b5f6);
-  background-size: 400% 400%;
-  animation: gradientBlue 15s ease infinite;
-  color: #ffffff;
   padding: 20px;
-}
-
-@keyframes gradientBlue {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-}
-
-.restore-header {
-  text-align: center;
-  padding: 15px;
-  background: rgba(25, 118, 210, 0.9);
-  border-radius: 12px;
-  margin-bottom: 40px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  color: #ffffff;
+  flex-grow: 1; /* Allows it to expand within page-content */
 }
 
 .guardian-logo {
-  width: 300px;  /* same large logo */
+  width: 300px;
   height: auto;
   margin-bottom: 10px;
 }
 
-.restore-header h2 {
-  font-family: 'Poppins', sans-serif;
-  font-size: 2.4rem;
-  font-weight: 700;
-  margin: 5px 0;
-}
-
-.restore-header p {
-  font-family: 'Poppins', sans-serif;
-  font-size: 1.1rem;
-  margin: 0;
-}
-
-.restore-content {
-  width: 100%;
-  max-width: 900px;
-  background: #ffffff;
-  color: #333;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-  text-align: center;
-}
-
-.restore-footer {
-  margin-top: auto;
-  text-align: center;
-  font-size: 0.9rem;
-  color: rgba(255,255,255,0.8);
-}
-
 .restore-actions .btn {
-  margin: 100px;
+  margin: 20px;
   padding: 14px 28px;
   border-radius: 10px;
   border: none;
@@ -85,24 +35,36 @@
   transform: translateY(-4px);
   box-shadow: 0 8px 20px rgba(0,0,0,0.3);
 }
+
 /* Dark Mode Styles */
-.dark.restore-container {
-  background: linear-gradient(-45deg, #111, #1a1a1a, #292929, #333);
+.dark .restore-container {
   color: #eee;
 }
 
 .dark .restore-actions .btn.initiate {
-  background-color: #444;
+  background-color: #1a2f5b;
 }
 
 .dark .restore-actions .btn.history {
-  background-color: #444;
+  background-color: #1a3c34;
 }
 
 .dark .restore-actions .btn.settings {
-  background-color: #444;
+  background-color: #3c2f3c;
 }
 
 .dark .restore-actions .btn:hover {
   box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+}
+
+.dark .restore-actions .btn.initiate:hover {
+  background-color: #2a4b8b;
+}
+
+.dark .restore-actions .btn.history:hover {
+  background-color: #2a5c4a;
+}
+
+.dark .restore-actions .btn.settings:hover {
+  background-color: #5c4b5c;
 }

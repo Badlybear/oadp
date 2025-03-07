@@ -1,36 +1,25 @@
-/* src/pages/Dashboard.css */
-
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
 
-/* New keyframe animation for fade in with a pop */
 @keyframes fadeInPop {
-  0% {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-  60% {
-    opacity: 0.8;
-    transform: scale(1.05);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
+  0% { opacity: 0; transform: scale(0.95); }
+  60% { opacity: 0.8; transform: scale(1.05); }
+  100% { opacity: 1; transform: scale(1); }
 }
 
 .dashboard-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-height: 100vh;
+  justify-content: space-between;
+  height: 100%;
   background: linear-gradient(-45deg, #0d47a1, #1976d2, #2196f3, #64b5f6);
   background-size: 400% 400%;
   animation: gradientBlue 15s ease infinite;
   color: #ffffff;
   padding: 20px;
+  overflow: hidden;
 }
 
-/* Class added to trigger fade in on mount */
 .fade-in {
   animation: fadeInPop 0.7s ease-out;
 }
@@ -43,15 +32,12 @@
 .dashboard-header {
   text-align: center;
   padding: 15px;
-  background: rgba(25, 118, 210, 0.9);
-  color: #ffffff;
-  border-radius: 12px;
   margin-bottom: 60px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  position: relative;
 }
 
 .guardian-logo {
-  width: 300px; /* Increased logo size */
+  width: 300px;
   height: auto;
   margin-bottom: 10px;
 }
@@ -69,6 +55,21 @@
   margin: 0;
 }
 
+.dark-mode-toggle {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #ffffff;
+}
+
+.dark .dark-mode-toggle {
+  color: #ddd;
+}
+
 .dashboard-stats {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -78,7 +79,6 @@
   margin-bottom: 40px;
 }
 
-/* Cards now use the fade in pop animation as well */
 .card {
   background: #ffffff;
   padding: 20px;
@@ -111,7 +111,10 @@
 .dashboard-content {
   width: 100%;
   text-align: center;
-  margin-top: 30px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .dashboard-links .btn {
@@ -122,7 +125,7 @@
   border: none;
   border-radius: 50px;
   font-weight: 600;
-  margin: 20px; /* increased spacing between buttons */
+  margin: 30px;
   box-shadow: 0 10px 25px rgba(0,0,0,0.3);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   cursor: pointer;
@@ -133,28 +136,6 @@
   box-shadow: 0 8px 16px rgba(0,0,0,0.3);
 }
 
-/* Page transition effects */
-.page-transition {
-  opacity: 1;
-  transform: translateY(0);
-  transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
-}
-
-.page-transition.fade-out {
-  opacity: 0;
-}
-
-.page-transition.slide-out-active {
-  transform: translateY(-100%);  /* Slide up transition */
-}
-
-.dashboard-footer {
-  margin-top: auto;
-  text-align: center;
-  font-size: 0.9rem;
-  color: rgba(255,255,255,0.8);
-}
-
 /* Dark mode styles */
 .dark.dashboard-container {
   background: linear-gradient(-45deg, #121212, #1d1d1d, #282828, #333);
@@ -162,7 +143,6 @@
 }
 
 .dark .dashboard-header {
-  background: rgba(40, 40, 40, 0.9);
   color: #fff;
 }
 
@@ -171,14 +151,12 @@
   color: #ddd;
 }
 
-.dark .btn {
-  background-color: #444;
+.dark .dashboard-links .btn {
+  background-color: #2a2a2a;
+  color: #fff;
 }
 
-.dark .btn:hover {
-  background-color: #555;
-}
-
-.dark .dashboard-footer {
-  color: #aaa;
+.dark .dashboard-links .btn:hover {
+  background-color: #3a3a3a;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.5);
 }

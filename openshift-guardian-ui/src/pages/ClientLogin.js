@@ -1,10 +1,10 @@
 // src/pages/ClientLogin.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import guardianLogo from './GUARDIAN.png';
 import './ClientLogin.css';
 
 const ClientLogin = () => {
-  // Added state variable to flag when to trigger fade-out transition.
   const [transition, setTransition] = useState(false);
   const navigate = useNavigate();
 
@@ -29,7 +29,7 @@ const ClientLogin = () => {
     // The container gets "page-transition" and conditionally "fade-out" when transition state is true.
     <div className={`login-container page-transition ${transition ? 'fade-out' : ''}`}>
       <div className="login-card">
-        <h2>Openshift Guardian</h2>
+      <img src={guardianLogo} alt="Guardian Logo" className="login-logo" />
         <p>
           Welcome to the Guardian portal—your data shield. Protect your backups,
           enable rapid restores, and let our Guardian keep your information secure.
@@ -37,6 +37,7 @@ const ClientLogin = () => {
         <button onClick={handleSSOLogin} className="btn">Login with SSO</button>
         <div className="extra-text">
           <p>By logging in, you agree to our terms and privacy policy.</p>
+          <p>&copy; 2025 Openshift Guardian</p>
         </div>
       </div>
     </div>

@@ -6,20 +6,22 @@ import './Dashboard.css';
 const Dashboard = ({ darkMode }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  
-  // Determine whether to apply the pop effect based on navigation state.
   const applyPopEffect = location.state && location.state.fromLogin;
 
   const handleNavigation = (path) => {
-    // Direct navigation without any transition; subsequent navigations don't need the pop.
     navigate(path);
   };
 
+  const handleLogoClick = () => {
+    navigate('/dashboard');
+  };
+
   return (
-    // Add the "fade-in" class only if coming from Login (applyPopEffect is true)
     <div className={`dashboard-container ${applyPopEffect ? 'fade-in' : ''} ${darkMode ? 'dark' : ''}`}>
       <header className="dashboard-header">
-        <img src={guardianLogo} alt="Guardian Logo" className="guardian-logo" />
+        <div onClick={handleLogoClick} style={{ cursor: 'pointer' }}>
+          <img src={guardianLogo} alt="Guardian Logo" className="guardian-logo" />
+        </div>
         <h2>Openshift Guardian</h2>
         <p>Your Guardian is always watching—protecting your data 24/7.</p>
       </header>
@@ -48,7 +50,6 @@ const Dashboard = ({ darkMode }) => {
       </main>
 
       <footer className="dashboard-footer">
-        <p>&copy; 2025 Openshift Guardian</p>
       </footer>
     </div>
   );
