@@ -1,20 +1,15 @@
 // src/pages/Backups.js
 import React from 'react';
-import { Link } from 'react-router-dom';
 import './Backups.css';
 
 const Backups = () => (
-  <div className="backups-container">
-    <header className="backups-header">
-      <h2>Backups</h2>
-    </header>
-    <main className="backups-content">
-      <p>Here you can create and manage your backups.</p>
-      {/* Future: API integration for backups */}
-    </main>
-    <footer className="backups-footer">
-      <Link to="/dashboard" className="btn">Back to Dashboard</Link>
-    </footer>
+  <div className="backup-container">
+    <h2>Manage Your Backups</h2>
+    <div className="backup-actions">
+      <button className="btn create">Create Backup</button>
+      <button className="btn view">View All Backups</button>
+      <button className="btn schedule">Schedule Backup</button>
+    </div>
   </div>
 );
 

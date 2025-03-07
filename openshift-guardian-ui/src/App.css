@@ -1,12 +1,12 @@
 /* src/App.css */
 .app-container {
   min-height: 100vh;
-  font-family: 'Roboto', sans-serif;
-  background-color: #f5f7fa;
+  font-family: 'Poppins', sans-serif;
+  background: #f5f7fa;
   color: #333;
+  transition: background 0.5s, color 0.5s;
 }
 
-/* Global header */
 .main-header {
   display: flex;
   justify-content: space-between;
@@ -16,27 +16,33 @@
   padding: 10px 20px;
 }
 
-/* Dark mode toggle button */
+/* Default dark mode toggle style */
 .dark-mode-toggle {
-  background: none;
-  border: 1px solid #fff;
+  background: linear-gradient(135deg, #4b6cb7, #182848);
+  border: none;
   color: #fff;
-  padding: 5px 10px;
-  border-radius: 4px;
+  padding: 8px 16px;
+  border-radius: 25px;
+  font-weight: bold;
   cursor: pointer;
+  transition: transform 0.2s ease, background 0.3s ease;
 }
 
-/* Dark mode styles */
-.dark {
-  background-color: #1c1e21;
+.dark-mode-toggle:hover {
+  transform: scale(1.05);
+}
+
+/* Dark mode overrides */
+.dark .app-container {
+  background: #121212;
   color: #ddd;
 }
 
 .dark .main-header {
-  background-color: #121212;
+  background-color: #1f1f1f;
 }
 
-.dark .btn {
-  background-color: #3a3a3a;
-  color: #ddd;
+/* Dark mode toggle when active */
+.dark .dark-mode-toggle {
+  background: linear-gradient(135deg, #f39c12, #d35400);
 }

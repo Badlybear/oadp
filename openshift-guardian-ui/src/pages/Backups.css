@@ -1,34 +1,38 @@
 /* src/pages/Backups.css */
-.backups-container {
-    display: flex;
-    flex-direction: column;
-    min-height: calc(100vh - 60px);
-    text-align: center;
-    padding: 20px;
-  }
-  
-  .backups-header {
-    margin-bottom: 20px;
-  }
-  
-  .backups-content {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .btn {
-    background-color: #0984e3;
-    color: #fff;
-    padding: 10px 20px;
-    margin: 20px;
-    text-decoration: none;
-    border-radius: 4px;
-  }
-  
-  .backups-footer {
-    margin-top: 20px;
-  }
-  
+
+.backup-container {
+  min-height: 100vh;
+  padding: 40px;
+  text-align: center;
+  background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #fbc2eb, #a18cd1);
+  background-size: 400% 400%;
+  animation: gradientAnim 12s infinite;
+  color: #333;
+}
+
+@keyframes gradientAnim {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.backup-actions .btn {
+  margin: 15px;
+  padding: 14px 28px;
+  border-radius: 10px;
+  border: none;
+  color: white;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.btn.create { background-color: #28a745; }
+.btn.view { background-color: #007bff; }
+.btn.schedule { background-color: #ffc107; }
+
+.btn:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+}
