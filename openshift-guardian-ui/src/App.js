@@ -8,22 +8,29 @@ import Restores from './pages/Restores';
 import './App.css';
 
 function App() {
-  const [darkMode, setDarkMode] = useState(false);
-  const toggleDarkMode = () => setDarkMode(prev => !prev);
+  const [darkMode, setDarkMode] = useState(() => {
+    const storedMode = localStorage.getItem('darkMode');
+    return storedMode === 'true';
+  });
+
+  const toggleDarkMode = () => {
+    setDarkMode(prev => !prev);
+  };
+
+  useEffect(() => {
+    localStorage.setItem('darkMode', darkMode);
+  }, [darkMode]);
 
   useEffect(() => {
     if (darkMode) {
       const handleMouseMove = (e) => {
-        const offsetX = e.clientX / 100;
-        const offsetY = e.clientY / 100;
+        const offsetX = (e.clientX / window.innerWidth - 0.5) * 10;
+        const offsetY = (e.clientY / window.innerHeight - 0.5) * 10;
         document.documentElement.style.setProperty('--bg-offset-x', `${offsetX}px`);
         document.documentElement.style.setProperty('--bg-offset-y', `${offsetY}px`);
       };
       window.addEventListener('mousemove', handleMouseMove);
       return () => window.removeEventListener('mousemove', handleMouseMove);
-    } else {
-      document.documentElement.style.setProperty('--bg-offset-x', `0px`);
-      document.documentElement.style.setProperty('--bg-offset-y', `0px`);
     }
   }, [darkMode]);
 
@@ -33,15 +40,16 @@ function App() {
         <header className="main-header">
           <h1>Openshift Guardian</h1>
           <button onClick={toggleDarkMode} className="dark-mode-toggle">
-            {darkMode ? 'Light Mode' : 'Dark Mode'}
+            {darkMode ? '🌞 Light Mode' : '🌙 Dark Mode'}
           </button>
         </header>
+
         <Routes>
           <Route path="/" element={<Navigate to="/login" />} />
           <Route path="/login" element={<ClientLogin />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/backups" element={<Backups />} />
-          <Route path="/restores" element={<Restores />} />
+          <Route path="/dashboard" element={<Dashboard darkMode={darkMode} />} />
+          <Route path="/backups" element={<Backups darkMode={darkMode} />} />
+          <Route path="/restores" element={<Restores darkMode={darkMode} />} />
         </Routes>
       </div>
     </Router>

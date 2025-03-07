@@ -36,3 +36,24 @@
   transform: translateY(-4px);
   box-shadow: 0 8px 20px rgba(0,0,0,0.3);
 }
+/* Dark Mode Styles */
+.dark.backup-container {
+  background: linear-gradient(-45deg, #111, #222, #333, #444);
+  color: #eee;
+}
+
+.dark .backup-actions .btn.create {
+  background-color: #2ecc71;
+}
+
+.dark .backup-actions .btn.view {
+  background-color: #3498db;
+}
+
+.dark .backup-actions .btn.schedule {
+  background-color: #f1c40f;
+}
+
+.dark .backup-actions .btn:hover {
+  box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+}

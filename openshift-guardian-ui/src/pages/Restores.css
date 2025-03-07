@@ -11,22 +11,43 @@
 }
 
 .restore-actions .btn {
-  margin: 15px;
+  margin: 100px;
   padding: 14px 28px;
   border-radius: 10px;
   border: none;
   color: white;
-  font-size: 1.1rem;
+  font-size: 1.5rem;
   cursor: pointer;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   box-shadow: 0 4px 10px rgba(0,0,0,0.2);
 }
 
-.btn.initiate { background-color: #dc3545; }
+.btn.initiate { background-color: #356adc; }
 .btn.history { background-color: #17a2b8; }
-.btn.settings { background-color: #6f42c1; }
+.btn.settings { background-color: #9570da; }
 
 .btn:hover {
   transform: translateY(-4px);
   box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+}
+/* Dark Mode Styles */
+.dark.restore-container {
+  background: linear-gradient(-45deg, #111, #1a1a1a, #292929, #333);
+  color: #eee;
+}
+
+.dark .restore-actions .btn.initiate {
+  background-color: #2c1917;
+}
+
+.dark .restore-actions .btn.history {
+  background-color: #132127;
+}
+
+.dark .restore-actions .btn.settings {
+  background-color: #1c1020;
+}
+
+.dark .restore-actions .btn:hover {
+  box-shadow: 0 10px 20px rgba(0,0,0,0.5);
 }
