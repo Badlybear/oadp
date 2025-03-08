@@ -1,4 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+body {
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  padding: 0;
+}
 
 .app-container {
   min-height: 100vh;
@@ -11,56 +17,60 @@
 }
 
 @keyframes gradientBlue {
-  0%, 100% { background-position: 0% 50%; }
+  0%,100% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
 }
 
 .main-header {
+  background: transparent;
+  border-bottom: 1px solid rgba(255,255,255,0.2);
+  padding: 10px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 20px;
-  background-color: rgba(25, 118, 210, 0.9);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
-
-.main-header h1 {
-  font-family: 'Poppins', sans-serif;
-  font-size: 1.8rem;
-  margin: 0;
 }
 
 .dark-mode-toggle {
   background: none;
   border: none;
+  font-size: 1.5rem;
   cursor: pointer;
 }
 
-.page-content {
-  flex: 1; /* Takes up remaining space */
-  display: flex;
-  flex-direction: column;
-  overflow: auto; /* Allows scrolling if content overflows */
-}
-
 .page-footer {
-  font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.8);
-  padding: 10px 0 5px; /* Slightly higher with 5px bottom padding */
+  background: transparent;
   text-align: center;
-  flex-shrink: 0;
+  padding: 10px;
+  border-top: 1px solid rgba(255,255,255,0.2);
+  font-size: 0.9rem;
 }
 
-/* Dark mode styles */
+/* Dark mode */
 .dark.app-container {
   background: linear-gradient(-45deg, #121212, #1d1d1d, #282828, #333);
+  background-size: 400% 400%;
+  animation: gradientDark 15s ease infinite;
   color: #ddd;
 }
 
-.dark .main-header {
-  background-color: rgba(40, 40, 40, 0.9);
+@keyframes gradientDark {
+  0%,100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+/* App.css */
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  overflow: hidden; /* Disable scrolling completely */
 }
 
-.dark .page-footer {
-  color: rgba(255, 255, 255, 0.7);
+.app-container {
+  height: 100vh; /* fixed viewport height */
+  display: flex;
+  flex-direction: column;
+}
+
+.page-content {
+  flex: 1;
+  overflow: hidden; /* prevent scrolling within content */
 }

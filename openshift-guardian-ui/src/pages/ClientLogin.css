@@ -1,19 +1,7 @@
-/* src/pages/ClientLogin.css */
-
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: 'Poppins', sans-serif;
-}
+/* ClientLogin.css */
 
 .login-container {
-  min-height: calc(100vh - 60px);
+  min-height: 100vh; /* changed from calc(100vh - 60px) */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -24,9 +12,8 @@ body {
 }
 
 @keyframes gradientBG {
-  0% { background-position: 0% 50%; }
+  0%,100% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
 }
 
 .login-card {
@@ -34,12 +21,8 @@ body {
   border-radius: 15px;
   padding: 40px;
   max-width: 500px;
-  width: 100%;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
   text-align: center;
-  position: relative;
-  overflow: hidden;
-  transition: background 0.5s, box-shadow 0.5s;
 }
 
 .login-logo {
@@ -83,35 +66,28 @@ body {
   color: #555;
 }
 
-/* Dark mode overrides for ClientLogin */
+/* Dark Mode Styles */
 .dark .login-container {
   background: linear-gradient(-45deg, #0d0d0d, #131313, #1a1a1a, #222222);
   background-size: 400% 400%;
-  background-position: calc(50% + var(--bg-offset-x)) calc(50% + var(--bg-offset-y));
+  animation: gradientDark 15s ease infinite;
+  color: #ddd;
+}
+
+@keyframes gradientDark {
+  0%,100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
 }
 
 .dark .login-card {
   background: rgba(20, 20, 20, 0.95);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
   color: #ddd;
-}
-
-.dark .login-card h2,
-.dark .login-card p,
-.dark .extra-text {
-  color: #ccc;
 }
 
 .dark .btn {
   background-color: #444;
 }
 
-/* Transition styles for login page */
-.page-transition {
-  opacity: 1;
-  transition: opacity 0.5s ease-in-out;
-}
-
-.page-transition.fade-out {
-  opacity: 0;
+.dark .btn:hover {
+  background-color: #555;
 }

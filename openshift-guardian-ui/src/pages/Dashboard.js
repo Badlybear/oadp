@@ -22,7 +22,6 @@ const Dashboard = ({ darkMode }) => {
         <div onClick={handleLogoClick} style={{ cursor: 'pointer' }}>
           <img src={guardianLogo} alt="Guardian Logo" className="guardian-logo" />
         </div>
-        <h2>Openshift Guardian</h2>
         <p>Your Guardian is always watching—protecting your data 24/7.</p>
       </header>
 

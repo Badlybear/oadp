@@ -1,25 +1,36 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
 
+/* New keyframe animation for fade in with a pop */
 @keyframes fadeInPop {
-  0% { opacity: 0; transform: scale(0.95); }
-  60% { opacity: 0.8; transform: scale(1.05); }
-  100% { opacity: 1; transform: scale(1); }
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  60% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 .dashboard-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  height: 100%;
+  justify-content: space-between; /* Distribute content with footer at bottom */
+  height: 100%; /* Fit within parent (page-transition) */
   background: linear-gradient(-45deg, #0d47a1, #1976d2, #2196f3, #64b5f6);
   background-size: 400% 400%;
   animation: gradientBlue 15s ease infinite;
   color: #ffffff;
   padding: 20px;
-  overflow: hidden;
+  overflow: hidden; /* Prevent scrolling */
 }
 
+/* Class added to trigger fade in on mount */
 .fade-in {
   animation: fadeInPop 0.7s ease-out;
 }
@@ -32,42 +43,19 @@
 .dashboard-header {
   text-align: center;
   padding: 15px;
-  margin-bottom: 60px;
-  position: relative;
+  margin-bottom: 20px; /* Kept from your snippet */
 }
 
 .guardian-logo {
   width: 300px;
   height: auto;
-  margin-bottom: 10px;
-}
-
-.dashboard-header h2 {
-  font-family: 'Poppins', sans-serif;
-  font-size: 2.4rem;
-  font-weight: 700;
-  margin-bottom: 5px;
+  margin-bottom: 10px; /* Reduced from 100px to fit */
 }
 
 .dashboard-header p {
   font-family: 'Poppins', sans-serif;
-  font-size: 1.1rem;
+  font-size: 1.3rem;
   margin: 0;
-}
-
-.dark-mode-toggle {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  cursor: pointer;
-  color: #ffffff;
-}
-
-.dark .dark-mode-toggle {
-  color: #ddd;
 }
 
 .dashboard-stats {
@@ -76,7 +64,7 @@
   gap: 20px;
   width: 100%;
   max-width: 900px;
-  margin-bottom: 40px;
+  margin-bottom: 20px; /* Reduced to fit */
 }
 
 .card {
@@ -85,14 +73,14 @@
   border-radius: 10px;
   color: #333;
   text-align: center;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   animation: fadeInPop 0.7s ease-out;
 }
 
 .card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
 }
 
 .card h3 {
@@ -111,7 +99,7 @@
 .dashboard-content {
   width: 100%;
   text-align: center;
-  flex-grow: 1;
+  flex-grow: 1; /* Allow content to take available space */
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -125,15 +113,22 @@
   border: none;
   border-radius: 50px;
   font-weight: 600;
-  margin: 30px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+  margin: 10px; /* Reduced spacing to fit */
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   cursor: pointer;
 }
 
 .dashboard-links .btn:hover {
   transform: translateY(-3px);
-  box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.page-footer {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
+  padding-bottom: 10px;
+  flex-shrink: 0; /* Prevent footer from shrinking */
 }
 
 /* Dark mode styles */
@@ -142,21 +137,20 @@
   color: #ddd;
 }
 
-.dark .dashboard-header {
-  color: #fff;
-}
 
 .dark .card {
   background: #212121;
   color: #ddd;
 }
 
-.dark .dashboard-links .btn {
-  background-color: #2a2a2a;
-  color: #fff;
+.dark .btn {
+  background-color: #444;
 }
 
-.dark .dashboard-links .btn:hover {
-  background-color: #3a3a3a;
-  box-shadow: 0 8px 16px rgba(0,0,0,0.5);
+.dark .btn:hover {
+  background-color: #555;
+}
+
+.dark .page-footer {
+  color: rgba(255, 255, 255, 0.7);
 }

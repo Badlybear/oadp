@@ -1,0 +1,99 @@
+/* Sidebar container */
+.sidebar {
+    width: 250px; /* Full width when expanded */
+    height: 100vh; /* Full height */
+    background-color: #292e34; /* OpenShift default background */
+    color: #72767b; /* Default icon/text color */
+    position: fixed; /* Stays on the left */
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    transition: width 0.3s ease; /* Smooth collapse/expand */
+    z-index: 1000; /* Stays above other content */
+  }
+  
+  /* Collapsed state */
+  .sidebar.collapsed {
+    width: 60px; /* Only icon width when collapsed */
+  }
+  
+  /* Sidebar header with toggle button */
+  .sidebar-header {
+    padding: 10px;
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  .toggle-btn {
+    background: none;
+    border: none;
+    color: #ffffff;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 5px;
+  }
+  
+  /* Navigation list */
+  .sidebar-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    flex-grow: 1;
+  }
+  
+  .sidebar-nav li {
+    display: flex;
+    align-items: center;
+    padding: 15px 20px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  /* Icon styling */
+  .sidebar-nav .icon {
+    font-size: 1.2rem;
+    width: 20px; /* Fixed width for alignment */
+    text-align: center;
+    margin-right: 15px; /* Space between icon and label */
+  }
+  
+  /* Label styling */
+  .sidebar-nav .label {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+  }
+  
+  /* Hover state */
+  .sidebar-nav li:hover {
+    background-color: #383f47; /* OpenShift hover background */
+    color: #ffffff;
+  }
+  
+  /* Active/selected state */
+  .sidebar-nav li.active {
+    background-color: #383f47;
+    color: #39a5dc; /* OpenShift selected color */
+    border-left: 4px solid #39a5dc; /* Left accent bar */
+  }
+  
+  /* Hide labels when collapsed */
+  .sidebar.collapsed .label {
+    display: none;
+  }
+  
+  /* Adjust padding when collapsed */
+  .sidebar.collapsed li {
+    padding: 15px 20px;
+    justify-content: center; /* Center icons when collapsed */
+  }
+  
+  /* Ensure content shifts when sidebar is present */
+  .app-container .inner-content {
+    margin-left: 250px; /* Offset for sidebar */
+    transition: margin-left 0.3s ease;
+  }
+  
+  .app-container .inner-content.collapsed {
+    margin-left: 60px; /* Offset when sidebar is collapsed */
+  }
