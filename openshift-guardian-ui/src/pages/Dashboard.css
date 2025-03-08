@@ -47,10 +47,12 @@
 }
 
 .guardian-logo {
-  width: 300px;
-  height: auto;
-  margin-bottom: 10px; /* Reduced from 100px to fit */
+  width: 200px; /* or any size you want */
+  height: 200px; /* match the width for a perfect circle */
+  object-fit: cover; /* helps maintain aspect ratio within the circle */
+  clip-path: circle(50% at 50% 50%);
 }
+
 
 .dashboard-header p {
   font-family: 'Poppins', sans-serif;

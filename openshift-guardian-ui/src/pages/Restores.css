@@ -10,9 +10,9 @@
 }
 
 .guardian-logo {
-  width: 300px;
-  height: auto;
-  margin-bottom: 10px;
+  width: 350px;
+  height: 300px;
+  margin-bottom: -10px;
 }
 
 .restore-actions .btn {

@@ -19,8 +19,13 @@ const Dashboard = ({ darkMode }) => {
   return (
     <div className={`dashboard-container ${applyPopEffect ? 'fade-in' : ''} ${darkMode ? 'dark' : ''}`}>
       <header className="dashboard-header">
-        <div onClick={handleLogoClick} style={{ cursor: 'pointer' }}>
-          <img src={guardianLogo} alt="Guardian Logo" className="guardian-logo" />
+        <div onClick={handleLogoClick}>
+          <img
+                  src={guardianLogo}
+                  alt="Guardian Logo"
+                  className="guardian-logo"
+                  onClick={handleLogoClick}
+                />
         </div>
         <p>Your Guardian is always watching—protecting your data 24/7.</p>
       </header>
