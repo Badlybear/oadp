@@ -1,99 +1,157 @@
-/* Sidebar container */
 .sidebar {
-    width: 250px; /* Full width when expanded */
-    height: 100vh; /* Full height */
-    background-color: #292e34; /* OpenShift default background */
-    color: #72767b; /* Default icon/text color */
-    position: fixed; /* Stays on the left */
-    top: 0;
-    left: 0;
-    display: flex;
-    flex-direction: column;
-    transition: width 0.3s ease; /* Smooth collapse/expand */
-    z-index: 1000; /* Stays above other content */
-  }
-  
-  /* Collapsed state */
-  .sidebar.collapsed {
-    width: 60px; /* Only icon width when collapsed */
-  }
-  
-  /* Sidebar header with toggle button */
-  .sidebar-header {
-    padding: 10px;
-    display: flex;
-    justify-content: flex-end;
-  }
-  
-  .toggle-btn {
-    background: none;
-    border: none;
-    color: #ffffff;
-    font-size: 1.5rem;
-    cursor: pointer;
-    padding: 5px;
-  }
-  
-  /* Navigation list */
-  .sidebar-nav ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    flex-grow: 1;
-  }
-  
-  .sidebar-nav li {
-    display: flex;
-    align-items: center;
-    padding: 15px 20px;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-  }
-  
-  /* Icon styling */
-  .sidebar-nav .icon {
-    font-size: 1.2rem;
-    width: 20px; /* Fixed width for alignment */
-    text-align: center;
-    margin-right: 15px; /* Space between icon and label */
-  }
-  
-  /* Label styling */
-  .sidebar-nav .label {
-    font-family: 'Poppins', sans-serif;
-    font-size: 1rem;
-  }
-  
-  /* Hover state */
-  .sidebar-nav li:hover {
-    background-color: #383f47; /* OpenShift hover background */
-    color: #ffffff;
-  }
-  
-  /* Active/selected state */
-  .sidebar-nav li.active {
-    background-color: #383f47;
-    color: #39a5dc; /* OpenShift selected color */
-    border-left: 4px solid #39a5dc; /* Left accent bar */
-  }
-  
-  /* Hide labels when collapsed */
-  .sidebar.collapsed .label {
-    display: none;
-  }
-  
-  /* Adjust padding when collapsed */
-  .sidebar.collapsed li {
-    padding: 15px 20px;
-    justify-content: center; /* Center icons when collapsed */
-  }
-  
-  /* Ensure content shifts when sidebar is present */
-  .app-container .inner-content {
-    margin-left: 250px; /* Offset for sidebar */
-    transition: margin-left 0.3s ease;
-  }
-  
-  .app-container .inner-content.collapsed {
-    margin-left: 60px; /* Offset when sidebar is collapsed */
-  }
+  position: fixed;
+  top: 85px;
+  left: -250px;
+  width: 250px;
+  height: calc(100vh - 60px);
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  transition: left 0.3s ease-in-out;
+  z-index: 1000;
+}
+
+.sidebar.open {
+  left: 0;
+}
+
+.sidebar.dark {
+  background: rgba(40, 40, 40, 0.95);
+}
+
+.sidebar-toggle {
+  position: absolute;
+  right: -40px;
+  top: 10px;
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.95);
+  border: none;
+  border-radius: 0 5px 5px 0;
+  cursor: pointer;
+  font-size: 1.2rem;
+  transition: all 0.3s ease;
+}
+
+.dark .sidebar-toggle {
+  background: rgba(40, 40, 40, 0.95);
+}
+
+.sidebar-nav {
+  margin-top: 25px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  position: relative; /* Allow absolute positioning of logout */
+  /* Optionally, add overflow-y: auto if many nav links are expected */
+}
+
+.nav-link {
+  color: #1976d2;
+  text-decoration: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  transition: all 0.2s ease;
+}
+
+.dark .nav-link {
+  color: #64b5f6;
+}
+
+.nav-link:hover {
+  background: rgba(25, 118, 210, 0.1);
+}
+
+.nav-link.active {
+  background: #1976d2;
+  color: white;
+}
+
+.dark .nav-link:hover {
+  background: rgba(100, 181, 246, 0.1);
+}
+
+.dark .nav-link.active {
+  background: #64b5f6;
+  color: #121212;
+}
+
+/* signout link styling */
+.nav-link.logout {
+  position: absolute;
+  bottom: -598px; /* Adjust spacing from the bottom */
+  left: 20px;
+  right: 20px;
+  font-weight: normal;
+  color: #ff0000; /* Use the same link color as regular items */
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  padding-top: 15px;
+}
+
+/* For dark mode */
+.dark .nav-link.logout {
+  color: #ff0000;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Custom confirmation modal styling */
+.confirm-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.confirm-dialog {
+  background: #fff;
+  padding: 20px 30px;
+  border-radius: 8px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  text-align: center;
+  max-width: 320px;
+  width: 90%;
+}
+
+.confirm-dialog p {
+  font-size: 1.1rem;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.confirm-actions {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.confirm-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.confirm-btn.yes {
+  background-color: #d32f2f;
+  color: #fff;
+}
+
+.confirm-btn.yes:hover {
+  background-color: #b71c1c;
+}
+
+.confirm-btn.no {
+  background-color: #1976d2;
+  color: #fff;
+}
+
+.confirm-btn.no:hover {
+  background-color: #1565c0;
+}

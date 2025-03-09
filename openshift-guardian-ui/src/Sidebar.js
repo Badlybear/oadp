@@ -1,72 +1,76 @@
+// components/Sidebar.jsx
 import React, { useState } from 'react';
+import { NavLink, useNavigate } from 'react-router-dom';
 import './Sidebar.css';
 
-const Sidebar = () => {
-  const [isCollapsed, setIsCollapsed] = useState(false);
+const Sidebar = ({ isOpen, toggleSidebar, darkMode }) => {
+  const [showConfirm, setShowConfirm] = useState(false);
+  const navigate = useNavigate();
 
-  const toggleSidebar = () => {
-    setIsCollapsed(!isCollapsed);
+  // When Sign Out (Logout) is clicked, show our custom modal instead of calling window.confirm.
+  const handleLogoutClick = (e) => {
+    e.preventDefault();
+    setShowConfirm(true);
+  };
+
+  // When user confirms logout
+  const confirmLogout = () => {
+    setShowConfirm(false);
+    toggleSidebar(); // Closes the sidebar on sign out
+    navigate("/");
+  };
+
+  // If user cancels logout
+  const cancelLogout = () => {
+    setShowConfirm(false);
   };
 
   return (
-    <div className={`sidebar ${isCollapsed ? 'collapsed' : ''}`}>
-      <div className="sidebar-header">
-        <button className="toggle-btn" onClick={toggleSidebar}>
-          {isCollapsed ? '☰' : '✕'}
-        </button>
-      </div>
+    <div className={`sidebar ${isOpen ? 'open' : ''} ${darkMode ? 'dark' : ''}`}>
+      <button className="sidebar-toggle" onClick={toggleSidebar}>
+        {isOpen ? '✕' : '☰'}
+      </button>
+      
       <nav className="sidebar-nav">
-        <ul>
-          <li className="active">
-            <span className="icon">🏠</span>
-            <span className="label">Dashboard</span>
-          </li>
-          <li>
-            <span className="icon">💾</span>
-            <span className="label">Backups</span>
-          </li>
-          <li>
-            <span className="icon">🔄</span>
-            <span className="label">Restores</span>
-          </li>
-          <li>
-            <span className="icon">⚙️</span>
-            <span className="label">Settings</span>
-          </li>
-          <li>
-            <span className="icon">📊</span>
-            <span className="label">Monitoring</span>
-          </li>
-          <li>
-            <span className="icon">📋</span>
-            <span className="label">Logs</span>
-          </li>
-          <li>
-            <span className="icon">👥</span>
-            <span className="label">Users</span>
-          </li>
-          <li>
-            <span className="icon">🔒</span>
-            <span className="label">Security</span>
-          </li>
-          <li>
-            <span className="icon">🌐</span>
-            <span className="label">Networking</span>
-          </li>
-          <li>
-            <span className="icon">🔔</span>
-            <span className="label">Alerts</span>
-          </li>
-          <li>
-            <span className="icon">🛠️</span>
-            <span className="label">Tools</span>
-          </li>
-          <li>
-            <span className="icon">📖</span>
-            <span className="label">Documentation</span>
-          </li>
-        </ul>
+        <NavLink 
+          to="/dashboard" 
+          className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}
+        >
+          Dashboard
+        </NavLink>
+        <NavLink 
+          to="/backups" 
+          className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}
+        >
+          Backups
+        </NavLink>
+        <NavLink 
+          to="/restores" 
+          className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}
+        >
+          Restores
+        </NavLink>
+        {/* Sign Out link still triggers the logout confirmation */}
+        <NavLink 
+          to="/"
+          className={({ isActive }) => isActive ? 'nav-link logout active' : 'nav-link logout'}
+          onClick={handleLogoutClick}
+        >
+          Sign Out
+        </NavLink>
       </nav>
+
+      {showConfirm && (
+        <div className="confirm-modal">
+          <div className="confirm-dialog">
+            <p>Are you sure you want to sign out?</p>
+            <div className="confirm-actions">
+              <button className="confirm-btn yes" onClick={confirmLogout}>Yes</button>
+              <button className="confirm-btn no" onClick={cancelLogout}>No</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

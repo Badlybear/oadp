@@ -5,21 +5,32 @@ import ClientLogin from './pages/ClientLogin';
 import Dashboard from './pages/Dashboard';
 import Backups from './pages/Backups';
 import Restores from './pages/Restores';
+import Sidebar from './Sidebar'; // Add this import
 import './App.css';
 
 const AppLayout = ({ darkMode, toggleDarkMode }) => {
   const location = useLocation();
   const isLoginPage = location.pathname.startsWith('/login');
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  const toggleSidebar = () => setIsSidebarOpen(prev => !prev);
 
   return (
     <div className={`app-container ${darkMode ? 'dark' : ''}`}>
       {!isLoginPage && (
-        <header className="main-header">
-          <h1>Openshift Guardian</h1>
-          <button onClick={toggleDarkMode} className="dark-mode-toggle">
-            {darkMode ? '☀️' : '🌙'}
-          </button>
-        </header>
+        <>
+          <Sidebar 
+            isOpen={isSidebarOpen} 
+            toggleSidebar={toggleSidebar} 
+            darkMode={darkMode} 
+          />
+          <header className="main-header">
+            <h1>Openshift Guardian</h1>
+            <button onClick={toggleDarkMode} className="dark-mode-toggle">
+              {darkMode ? '☀️' : '🌙'}
+            </button>
+          </header>
+        </>
       )}
 
       <div className="page-content">
