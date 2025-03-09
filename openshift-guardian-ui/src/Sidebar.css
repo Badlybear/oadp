@@ -76,22 +76,30 @@
   color: #121212;
 }
 
-/* signout link styling */
+/* Remove the old absolute positioning from .nav-link.logout */
 .nav-link.logout {
-  position: absolute;
-  bottom: -598px; /* Adjust spacing from the bottom */
-  left: 20px;
-  right: 20px;
+  display: inline-block;
   font-weight: normal;
-  color: #ff0000; /* Use the same link color as regular items */
+  color: #ff0000;
   border-top: 1px solid rgba(0, 0, 0, 0.1);
   padding-top: 15px;
+  /* Remove position and bottom properties */
 }
 
 /* For dark mode */
 .dark .nav-link.logout {
   color: #ff0000;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* New container for Sign Out at the bottom of the sidebar */
+.logout-container {
+  position: absolute;
+  bottom: 20px; /* Adjust spacing as needed */
+  left: 0;
+  width: 100%;
+  padding: 0 20px;
+  text-align: center;
 }
 
 /* Custom confirmation modal styling */

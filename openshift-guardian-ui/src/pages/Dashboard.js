@@ -21,11 +21,11 @@ const Dashboard = ({ darkMode }) => {
       <header className="dashboard-header">
         <div onClick={handleLogoClick}>
           <img
-                  src={guardianLogo}
-                  alt="Guardian Logo"
-                  className="guardian-logo"
-                  onClick={handleLogoClick}
-                />
+            src={guardianLogo}
+            alt="Guardian Logo"
+            className="guardian-logo"
+            onClick={handleLogoClick}
+          />
         </div>
         <p>Your Guardian is always watching—protecting your data 24/7.</p>
       </header>
@@ -49,7 +49,6 @@ const Dashboard = ({ darkMode }) => {
         <div className="dashboard-links">
           <button className="btn" onClick={() => handleNavigation('/backups')}>Manage Backups</button>
           <button className="btn" onClick={() => handleNavigation('/restores')}>Manage Restores</button>
-          <button className="btn" onClick={() => handleNavigation('/')}>Logout</button>
         </div>
       </main>
 
