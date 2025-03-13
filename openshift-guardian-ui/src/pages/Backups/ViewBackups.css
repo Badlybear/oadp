@@ -1,10 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
-
+/* ViewBackups.css */
 
 .view-backups-container {
   padding: 40px;
   min-height: 100vh;
-  background-color: var(--background-light);
+  background: linear-gradient(135deg, #23a6d5 0%, #1e93c0 100%);
   font-family: 'Poppins', sans-serif;
   display: flex;
   flex-direction: column;
@@ -12,7 +11,7 @@
 }
 
 .dark.view-backups-container {
-  background-color: var(--background-dark);
+  background: linear-gradient(135deg, #1a202c 0%, #324e8a 100%);
 }
 
 .page-header {
@@ -45,13 +44,13 @@
 .backups-table {
   width: 100%;
   border-collapse: collapse;
-  background-color: var(--table-bg-light);
+  background-color: rgba(255, 255, 255, 0.1);
   border-radius: 12px;
   overflow: hidden;
 }
 
 .dark .backups-table {
-  background-color: var(--table-bg-dark);
+  background-color: rgba(255, 255, 255, 0.05);
 }
 
 .backups-table th,
@@ -79,12 +78,12 @@
 }
 
 .backups-table tr {
-  border-bottom: 1px solid var(--border-light);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   transition: background-color 0.2s ease;
 }
 
 .dark .backups-table tr {
-  border-bottom: 1px solid var(--border-dark);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .backups-table tr:last-child {
@@ -92,11 +91,11 @@
 }
 
 .backups-table tr:hover {
-  background-color: rgba(0, 0, 0, 0.05);
+  background-color: rgba(0, 0, 0, 0.1);
 }
 
 .dark .backups-table tr:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.15);
 }
 
 .status.completed {
