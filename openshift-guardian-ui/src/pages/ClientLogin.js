@@ -13,7 +13,6 @@ const ClientLogin = () => {
     setTransition(true);
     
     // Simulate a login request delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
     const simulatedResponse = { data: { success: true, token: 'dummy_token' } };
     
     if (simulatedResponse.data.success) {

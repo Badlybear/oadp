@@ -10,6 +10,22 @@ const Backups = ({ darkMode }) => {
     navigate('/dashboard');
   };
 
+  const handleDeleteBackup = () => {
+    navigate('/backups/delete-backup');
+  };
+
+  const handleCreateBackup = () => {
+    navigate('/backups/create-backup');
+  };
+
+  const handleViewBackups = () => {
+    navigate('/backups/view-backups');
+  };
+
+  const handleScheduleBackup = () => {
+    navigate('/backups/schedule-backup');
+  };
+
   return (
     <div className={`backup-container ${darkMode ? 'dark' : ''}`}>
       <img
@@ -21,9 +37,10 @@ const Backups = ({ darkMode }) => {
       />
       <h1>Manage Your Backups</h1>
       <div className="backup-actions">
-        <button className="btn create">Create Backup</button>
-        <button className="btn view">View All Backups</button>
-        <button className="btn schedule">Schedule Backup</button>
+        <button className="btn create" onClick={handleCreateBackup}>Create Backup</button>
+        <button className="btn view" onClick={handleViewBackups}>View All Backups</button>
+        <button className="btn schedule" onClick={handleScheduleBackup}>Schedule Backup</button>
+        <button className="btn delete" onClick={handleDeleteBackup}>Delete Backup</button>
       </div>
     </div>
   );

@@ -1,5 +1,5 @@
 // components/Sidebar.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import './Sidebar.css';
 
@@ -7,20 +7,44 @@ const Sidebar = ({ isOpen, toggleSidebar, darkMode }) => {
   const [showConfirm, setShowConfirm] = useState(false);
   const navigate = useNavigate();
 
-  // When Sign Out (Logout) is clicked, show our custom modal instead of calling window.confirm.
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        setShowConfirm(false);
+      }
+    };
+
+    const handleClickOutside = (e) => {
+      if (e.target.classList.contains('confirm-modal')) {
+        setShowConfirm(false);
+      }
+    };
+
+    if (showConfirm) {
+      document.addEventListener('keydown', handleKeyDown);
+      document.addEventListener('click', handleClickOutside);
+    } else {
+      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('click', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, [showConfirm]);
+
   const handleLogoutClick = (e) => {
     e.preventDefault();
     setShowConfirm(true);
   };
 
-  // When user confirms logout
   const confirmLogout = () => {
     setShowConfirm(false);
     toggleSidebar(); // Closes the sidebar on sign out
     navigate("/");
   };
 
-  // If user cancels logout
   const cancelLogout = () => {
     setShowConfirm(false);
   };
