@@ -1,70 +1,140 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
 
+/* Root variables for consistent theming */
+:root {
+  --primary-color: #356adc; /* Matches original initiate button */
+  --primary-hover: #2a4b8b;
+  --secondary-color: #17a2b8; /* Matches original history button */
+  --secondary-hover: #2a5c4a;
+  --background-light: #f4f7fa;
+  --background-dark: #1e2a44;
+  --text-light: #333;
+  --text-dark: #e0e6ed;
+  --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --shadow-dark: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Container */
 .restore-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
-  color: #ffffff;
-  flex-grow: 1; /* Allows it to expand within page-content */
+  justify-content: center;
+  padding: 40px;
+  min-height: 100vh;
+  background-color: var(--background-light);
+  font-family: 'Poppins', sans-serif;
+  flex-grow: 1;
 }
 
-.guardian-logo {
-  width: 350px;
-  height: 300px;
-  margin-bottom: -10px;
+/* Heading */
+.restore-container h1 {
+  font-size: 2.2rem;
+  font-weight: 600;
+  color: var(--text-light);
+  margin-bottom: 40px;
+  text-align: center;
 }
 
-.restore-actions .btn {
-  margin: 20px;
-  padding: 14px 28px;
-  border-radius: 10px;
+/* Actions */
+.restore-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 25px;
+}
+
+/* Button Styles */
+.btn {
+  padding: 16px 32px;
   border: none;
-  color: white;
-  font-size: 1.5rem;
+  border-radius: 50px;
+  font-size: 1.3rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
   cursor: pointer;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-light);
+  min-width: 240px;
+  color: #ffffff;
 }
 
-.btn.initiate { background-color: #356adc; }
-.btn.history { background-color: #17a2b8; }
-.btn.settings { background-color: #9570da; }
+.primary-btn {
+  background-color: var(--primary-color);
+}
 
-.btn:hover {
+.primary-btn:hover {
+  background-color: var(--primary-hover);
   transform: translateY(-4px);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.secondary-btn {
+  background-color: var(--secondary-color);
+}
+
+.secondary-btn:hover {
+  background-color: var(--secondary-hover);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
 
 /* Dark Mode Styles */
-.dark .restore-container {
-  color: #eee;
+.dark.restore-container {
+  background-color: var(--background-dark);
 }
 
-.dark .restore-actions .btn.initiate {
-  background-color: #1a2f5b;
+.dark .restore-container h1 {
+  color: var(--text-dark);
 }
 
-.dark .restore-actions .btn.history {
-  background-color: #1a3c34;
+.dark .primary-btn {
+  background-color: #1a2f5b; /* Darker shade of primary */
 }
 
-.dark .restore-actions .btn.settings {
-  background-color: #3c2f3c;
-}
-
-.dark .restore-actions .btn:hover {
-  box-shadow: 0 10px 20px rgba(0,0,0,0.5);
-}
-
-.dark .restore-actions .btn.initiate:hover {
+.dark .primary-btn:hover {
   background-color: #2a4b8b;
+  box-shadow: var(--shadow-dark);
 }
 
-.dark .restore-actions .btn.history:hover {
+.dark .secondary-btn {
+  background-color: #1a3c34; /* Darker shade of secondary */
+}
+
+.dark .secondary-btn:hover {
   background-color: #2a5c4a;
+  box-shadow: var(--shadow-dark);
 }
 
-.dark .restore-actions .btn.settings:hover {
-  background-color: #5c4b5c;
+/* Responsive Design */
+@media (max-width: 768px) {
+  .restore-container {
+    padding: 20px;
+  }
+
+  .restore-container h1 {
+    font-size: 1.8rem;
+  }
+
+  .btn {
+    padding: 14px 28px;
+    font-size: 1.2rem;
+    min-width: 200px;
+  }
+
+
+}
+
+@media (max-width: 480px) {
+  .restore-container h1 {
+    font-size: 1.6rem;
+  }
+
+  .btn {
+    padding: 12px 24px;
+    font-size: 1.1rem;
+    min-width: 180px;
+  }
+
 }

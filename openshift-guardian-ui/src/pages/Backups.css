@@ -1,18 +1,84 @@
+/* Backups.css */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
 
+:root {
+  --primary-color: #23a6d5;
+  --primary-hover: #1e93c0;
+  --secondary-color: #64b5f6;
+  --card-bg-light: #ffffff;
+  --card-bg-dark: #2d3748;
+  --text-light: #2d3748;
+  --text-dark: #e2e8f0;
+  --shadow-light: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-dark: 0 4px 6px rgba(0, 0, 0, 0.2);
+  --success: #38a169;
+  --error: #e53e3e;
+}
+
 .backup-container {
+  padding: 40px;
+  max-width: 800px;
+  margin: 50px auto;
+  background-color: var(--card-bg-light);
+  border-radius: 12px;
+  box-shadow: var(--shadow-light);
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
-  color: #ffffff;
-  flex-grow: 1; /* Allows it to expand within page-content */
+  font-family: 'Poppins', sans-serif;
+  animation: fadeIn 0.5s ease-out;
 }
 
+.dark .backup-container {
+  background-color: var(--card-bg-dark);
+  box-shadow: var(--shadow-dark);
+}
+
+.page-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.backup-container h1 {
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--text-light);
+  margin: 0;
+  padding-bottom: 10px;
+  position: relative;
+}
+
+.backup-container h1::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 3px;
+  background-color: var(--primary-color);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+.backup-container h1:hover::after {
+  width: 100px;
+}
+
+.dark .backup-container h1 {
+  color: var(--text-dark);
+}
+
+.dark .backup-container h1::after {
+  background-color: var(--secondary-color);
+}
+
+/* Original Logo Styles */
 .guardian-logo {
-  width: 300px;
-  height: auto;
-  margin-bottom: 20px;
+  width: 350px;
+  height: 350px;
+  cursor: pointer;
+  margin-bottom: -30px;
   transition: transform 0.3s ease, filter 0.3s ease, box-shadow 0.3s ease;
   filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.2));
 }
@@ -20,32 +86,6 @@
 .guardian-logo:hover {
   transform: scale(1.05) rotate(2deg);
   filter: brightness(1.2) drop-shadow(0 4px 10px rgba(0, 0, 0, 0.3));
-}
-
-.backup-actions .btn {
-  margin: 20px;
-  padding: 14px 28px;
-  border-radius: 10px;
-  border: none;
-  color: white;
-  font-size: 1.5rem;
-  cursor: pointer;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
-
-.btn.create { background-color: #356adc; }
-.btn.view { background-color: #17a2b8; }
-.btn.schedule { background-color: #9570da; }
-
-.btn:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-}
-
-/* Dark Mode Styles */
-.dark .backup-container {
-  color: #ddd;
 }
 
 .dark .guardian-logo {
@@ -57,30 +97,156 @@
   filter: brightness(1.3) drop-shadow(0 0 15px rgba(255, 255, 255, 0.7));
 }
 
+.backup-actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  width: 100%;
+  padding: 0 20px;
+}
+
+.backup-actions .btn {
+  padding: 14px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  color: #ffffff;
+}
+
+.backup-actions .btn:hover:not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.backup-actions .btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Button Variants */
+.btn.create {
+  background-color: var(--primary-color);
+}
+
+.btn.create:hover {
+  background-color: var(--primary-hover);
+}
+
+.btn.view {
+  background-color: #2ecc71;
+}
+
+.btn.view:hover {
+  background-color: #27ae60;
+}
+
+.btn.schedule {
+  background-color: #8e44ad;
+}
+
+.btn.schedule:hover {
+  background-color: #7d3c98;
+}
+
+.btn.delete {
+  background-color: var(--error);
+}
+
+.btn.delete:hover {
+  background-color: #c53030;
+}
+
+/* Dark Mode Styles */
 .dark .backup-actions .btn.create {
-  background-color: #1a2f5b;
-}
-
-.dark .backup-actions .btn.view {
-  background-color: #1a3c34;
-}
-
-.dark .backup-actions .btn.schedule {
-  background-color: #3c2f3c;
-}
-
-.dark .backup-actions .btn:hover {
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+  background-color: #2b6cb0;
 }
 
 .dark .backup-actions .btn.create:hover {
-  background-color: #2a4b8b;
+  background-color: #2c5282;
+}
+
+.dark .backup-actions .btn.view {
+  background-color: #219653;
 }
 
 .dark .backup-actions .btn.view:hover {
-  background-color: #2a5c4a;
+  background-color: #276749;
+}
+
+.dark .backup-actions .btn.schedule {
+  background-color: #6b46c1;
 }
 
 .dark .backup-actions .btn.schedule:hover {
-  background-color: #5c4b5c;
+  background-color: #553c9a;
+}
+
+.dark .backup-actions .btn.delete {
+  background-color: #c53030;
+}
+
+.dark .backup-actions .btn.delete:hover {
+  background-color: #9b2c2c;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .backup-container {
+    margin: 30px 20px;
+    padding: 30px;
+  }
+
+  .guardian-logo {
+    width: 250px;
+    height: 250px;
+    margin-bottom: -20px;
+  }
+
+  .backup-actions {
+    grid-template-columns: 1fr;
+    padding: 0;
+  }
+
+  .backup-actions .btn {
+    padding: 12px 16px;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .backup-container {
+    padding: 20px;
+  }
+
+  .backup-container h1 {
+    font-size: 1.8rem;
+  }
+
+  .guardian-logo {
+    width: 200px;
+    height: 200px;
+    margin-bottom: -15px;
+  }
+
+  .backup-actions .btn {
+    padding: 10px 14px;
+    font-size: 0.95rem;
+  }
 }

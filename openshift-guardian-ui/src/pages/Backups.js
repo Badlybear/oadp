@@ -1,3 +1,4 @@
+// Backups.jsx
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Backups.css';
@@ -33,14 +34,26 @@ const Backups = ({ darkMode }) => {
         alt="Guardian Logo"
         className="guardian-logo"
         onClick={handleLogoClick}
-        style={{ cursor: 'pointer' }}
+        role="button"
+        tabIndex={0}
+        onKeyPress={(e) => e.key === 'Enter' && handleLogoClick()}
       />
-      <h1>Manage Your Backups</h1>
+      <header className="page-header">
+        <h1>Manage Your Backups</h1>
+      </header>
       <div className="backup-actions">
-        <button className="btn create" onClick={handleCreateBackup}>Create Backup</button>
-        <button className="btn view" onClick={handleViewBackups}>View All Backups</button>
-        <button className="btn schedule" onClick={handleScheduleBackup}>Schedule Backup</button>
-        <button className="btn delete" onClick={handleDeleteBackup}>Delete Backup</button>
+        <button className="btn create" onClick={handleCreateBackup}>
+          Create Backup
+        </button>
+        <button className="btn view" onClick={handleViewBackups}>
+          View All Backups
+        </button>
+        <button className="btn schedule" onClick={handleScheduleBackup}>
+          Schedule Backup
+        </button>
+        <button className="btn delete" onClick={handleDeleteBackup}>
+          Delete Backup
+        </button>
       </div>
     </div>
   );

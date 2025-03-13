@@ -1,28 +1,38 @@
-// App.js
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import ClientLogin from './pages/ClientLogin';
 import Dashboard from './pages/Dashboard';
 import Backups from './pages/Backups';
 import Restores from './pages/Restores';
-import Sidebar from './Sidebar'; // Add this import
+import Sidebar from './Sidebar';
 import './App.css';
+
+// Backup Pages
+import CreateBackup from './pages/Backups/CreateBackup';
+import ViewBackups from './pages/Backups/ViewBackups';
+import ScheduleBackup from './pages/Backups/ScheduleBackup';
+import DeleteBackup from './pages/Backups/DeleteBackup';
+import DeleteScheduleResource from './pages/Backups/DeleteScheduleResource'; // New component
+
+// Restore Pages
+import CreateRestore from './pages/Restores/CreateRestore'; // New component
+import ViewRestores from './pages/Restores/ViewRestores'; // New component
 
 const AppLayout = ({ darkMode, toggleDarkMode }) => {
   const location = useLocation();
   const isLoginPage = location.pathname.startsWith('/login');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  const toggleSidebar = () => setIsSidebarOpen(prev => !prev);
+  const toggleSidebar = () => setIsSidebarOpen((prev) => !prev);
 
   return (
     <div className={`app-container ${darkMode ? 'dark' : ''}`}>
       {!isLoginPage && (
         <>
-          <Sidebar 
-            isOpen={isSidebarOpen} 
-            toggleSidebar={toggleSidebar} 
-            darkMode={darkMode} 
+          <Sidebar
+            isOpen={isSidebarOpen}
+            toggleSidebar={toggleSidebar}
+            darkMode={darkMode}
           />
           <header className="main-header">
             <h1>Openshift Guardian</h1>
@@ -39,7 +49,14 @@ const AppLayout = ({ darkMode, toggleDarkMode }) => {
           <Route path="/login" element={<ClientLogin darkMode={darkMode} />} />
           <Route path="/dashboard" element={<Dashboard darkMode={darkMode} toggleDarkMode={toggleDarkMode} />} />
           <Route path="/backups" element={<Backups darkMode={darkMode} />} />
+          <Route path="/backups/create-backup" element={<CreateBackup darkMode={darkMode} />} />
+          <Route path="/backups/view-backups" element={<ViewBackups darkMode={darkMode} />} />
+          <Route path="/backups/schedule-backup" element={<ScheduleBackup darkMode={darkMode} />} />
+          <Route path="/backups/delete-backup" element={<DeleteBackup darkMode={darkMode} />} />
+          <Route path="/backups/delete-schedule-resource" element={<DeleteScheduleResource darkMode={darkMode} />} />
           <Route path="/restores" element={<Restores darkMode={darkMode} />} />
+          <Route path="/restores/create-restore" element={<CreateRestore darkMode={darkMode} />} />
+          <Route path="/restores/view-restores" element={<ViewRestores darkMode={darkMode} />} />
         </Routes>
       </div>
 

@@ -10,6 +10,14 @@ const Restores = ({ darkMode }) => {
     navigate('/dashboard');
   };
 
+  const handleCreateRestore = () => {
+    navigate('/restores/create-restore');
+  };
+
+  const handleViewRestores = () => {
+    navigate('/restores/view-restores');
+  };
+
   return (
     <div className={`restore-container ${darkMode ? 'dark' : ''}`}>
       <img
@@ -21,9 +29,12 @@ const Restores = ({ darkMode }) => {
       />
       <h1>Manage Your Restores</h1>
       <div className="restore-actions">
-        <button className="btn initiate">Initiate Restore</button>
-        <button className="btn history">Restore History</button>
-        <button className="btn settings">Restore Settings</button>
+        <button className="btn primary-btn" onClick={handleCreateRestore}>
+          Initiate Restore
+        </button>
+        <button className="btn secondary-btn" onClick={handleViewRestores}>
+          Restore History
+        </button>
       </div>
     </div>
   );
