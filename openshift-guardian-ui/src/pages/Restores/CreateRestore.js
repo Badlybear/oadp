@@ -1,11 +1,34 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './CreateRestore.css';
-import guardianLogo from '../GUARDIAN.png'; // Adjust path as needed
+import guardianLogo from '../GUARDIAN.png';
 
 const CreateRestore = ({ darkMode }) => {
   const [selectedBackup, setSelectedBackup] = useState('');
   const [selectedNamespace, setSelectedNamespace] = useState('');
+  const [includedResources, setIncludedResources] = useState({
+    allNamespaceResources: false,
+    deployments: false,
+    deploymentconfigs: false,
+    statefulsets: false,
+    replicasets: false,
+    daemonsets: false,
+    cronjobs: false,
+    configmaps: false,
+    secrets: false,
+    serviceaccounts: false,
+    services: false,
+    ingresses: false,
+    networkpolicies: false,
+    persistentvolumeclaims: false,
+    persistentvolumes: false,
+    volumesnapshots: false,
+    rolebinding: false,
+    roles: false,
+    routes: false,
+    buildconfigs: false,
+  });
+  const [matchLabels, setMatchLabels] = useState([{ key: '', value: '' }]);
   const [message, setMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [backups, setBackups] = useState([]);
@@ -38,9 +61,7 @@ const CreateRestore = ({ darkMode }) => {
     fetchData();
   }, []);
 
-  const handleLogoClick = () => {
-    navigate('/dashboard');
-  };
+  const handleLogoClick = () => navigate('/dashboard');
 
   const handleBackupChange = (e) => {
     setSelectedBackup(e.target.value);
@@ -52,18 +73,53 @@ const CreateRestore = ({ darkMode }) => {
     setMessage('');
   };
 
+  const handleResourceChange = (resource) => {
+    if (resource === 'allNamespaceResources') {
+      const allSelected = !includedResources.allNamespaceResources;
+      setIncludedResources(
+        Object.fromEntries(
+          Object.keys(includedResources).map(key => [key, allSelected])
+        )
+      );
+    } else {
+      setIncludedResources(prev => ({
+        ...prev,
+        [resource]: !prev[resource],
+        allNamespaceResources: false, // Uncheck "All" if individual items are toggled
+      }));
+    }
+  };
+
+  const handleLabelChange = (index, field, value) => {
+    const newLabels = [...matchLabels];
+    newLabels[index][field] = value;
+    setMatchLabels(newLabels);
+  };
+
+  const addLabelPair = () => {
+    setMatchLabels([...matchLabels, { key: '', value: '' }]);
+  };
+
   const handleCreateRestore = async () => {
     if (!selectedBackup || !selectedNamespace) {
       setMessage('Please select both a backup and a namespace.');
       return;
     }
 
+    const selectedResources = Object.entries(includedResources)
+      .filter(([_, value]) => value)
+      .map(([key]) => key);
+
+    if (selectedResources.length === 0) {
+      setMessage('Please select at least one resource to include.');
+      return;
+    }
+
     setIsLoading(true);
     try {
       await new Promise(resolve => setTimeout(resolve, 1000));
-      setMessage(`Restore created successfully from ${selectedBackup} to ${selectedNamespace}!`);
-      setSelectedBackup('');
-      setSelectedNamespace('');
+      setMessage(`Restore created successfully from ${selectedBackup} to ${selectedNamespace} with ${selectedResources.length} resources!`);
+      handleReset();
     } catch (error) {
       setMessage('Failed to create restore. Please try again.');
       console.error('Error creating restore:', error);
@@ -75,6 +131,10 @@ const CreateRestore = ({ darkMode }) => {
   const handleReset = () => {
     setSelectedBackup('');
     setSelectedNamespace('');
+    setIncludedResources(Object.fromEntries(
+      Object.keys(includedResources).map(key => [key, false])
+    ));
+    setMatchLabels([{ key: '', value: '' }]);
     setMessage('');
   };
 
@@ -92,6 +152,7 @@ const CreateRestore = ({ darkMode }) => {
       <header className="page-header">
         <h1>Create Restore</h1>
       </header>
+
       <div className="form-group">
         <label htmlFor="backup-select">Select Backup</label>
         <select
@@ -108,6 +169,7 @@ const CreateRestore = ({ darkMode }) => {
           ))}
         </select>
       </div>
+
       <div className="form-group">
         <label htmlFor="namespace-select">Select Namespace</label>
         <select
@@ -124,6 +186,60 @@ const CreateRestore = ({ darkMode }) => {
           ))}
         </select>
       </div>
+
+      <div className="resources-group">
+        <label>Included Resources</label>
+        <div className="resource-checkbox">
+          <input
+            type="checkbox"
+            id="allNamespaceResources"
+            checked={includedResources.allNamespaceResources}
+            onChange={() => handleResourceChange('allNamespaceResources')}
+            disabled={isLoading}
+          />
+          <label htmlFor="allNamespaceResources">All Namespace Resources</label>
+        </div>
+        {Object.keys(includedResources)
+          .filter(key => key !== 'allNamespaceResources')
+          .map(resource => (
+            <div key={resource} className="resource-checkbox">
+              <input
+                type="checkbox"
+                id={resource}
+                checked={includedResources[resource]}
+                onChange={() => handleResourceChange(resource)}
+                disabled={isLoading}
+              />
+              <label htmlFor={resource}>{resource}</label>
+            </div>
+          ))}
+      </div>
+
+      <div className="match-labels-group">
+        <label>Match Labels</label>
+        {matchLabels.map((label, index) => (
+          <div key={index} className="label-pair">
+            <input
+              type="text"
+              placeholder="Key"
+              value={label.key}
+              onChange={(e) => handleLabelChange(index, 'key', e.target.value)}
+              disabled={isLoading}
+            />
+            <input
+              type="text"
+              placeholder="Value"
+              value={label.value}
+              onChange={(e) => handleLabelChange(index, 'value', e.target.value)}
+              disabled={isLoading}
+            />
+          </div>
+        ))}
+        <button className="add-label-btn" onClick={addLabelPair} disabled={isLoading}>
+          Add Label
+        </button>
+      </div>
+
       <div className="button-group">
         <button
           onClick={handleCreateRestore}
@@ -135,6 +251,7 @@ const CreateRestore = ({ darkMode }) => {
           Reset
         </button>
       </div>
+
       {message && (
         <p className={`message ${message.includes('successfully') ? 'success' : 'error'}`}>
           {message}
