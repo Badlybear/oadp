@@ -54,7 +54,7 @@ const ScheduleBackup = ({ darkMode }) => {
         <img
           src={guardianLogo}
           alt="Guardian Logo"
-          className="guardian-logo"
+          className="app-logo"
           onClick={handleLogoClick}
           role="button"
           tabIndex={0}

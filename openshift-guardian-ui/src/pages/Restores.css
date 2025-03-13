@@ -1,114 +1,196 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+/* Restores.css */
 
-/* Root variables for consistent theming */
 :root {
-  --primary-color: #356adc; /* Matches original initiate button */
-  --primary-hover: #2a4b8b;
-  --secondary-color: #17a2b8; /* Matches original history button */
-  --secondary-hover: #2a5c4a;
-  --background-light: #f4f7fa;
-  --background-dark: #1e2a44;
-  --text-light: #333;
-  --text-dark: #e0e6ed;
-  --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.1);
-  --shadow-dark: 0 4px 12px rgba(0, 0, 0, 0.3);
+  --primary-color: #23a6d5;
+  --primary-hover: #1e93c0;
+  --secondary-color: #2ecc71;
+  --secondary-hover: #27ae60;
+  --card-bg-light: #ffffff;
+  --card-bg-dark: #2d3748;
+  --text-light: #2d3748;
+  --text-dark: #e2e8f0;
+  --shadow-light: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-dark: 0 4px 6px rgba(0, 0, 0, 0.2);
+  --gradient-create: linear-gradient(135deg, #23a6d5, #1e90ff);
+  --gradient-view: linear-gradient(135deg, #2ecc71, #27ae60);
 }
 
-/* Container */
 .restore-container {
+  padding: 40px;
+  max-width: 800px;
+  margin: 50px auto;
+  background-color: var(--card-bg-light);
+  border-radius: 12px;
+  box-shadow: var(--shadow-light);
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: 40px;
-  min-height: 100vh;
-  background-color: var(--background-light);
   font-family: 'Poppins', sans-serif;
-  flex-grow: 1;
+  animation: fadeIn 0.5s ease-out;
 }
 
-/* Heading */
+.dark .restore-container {
+  background-color: var(--card-bg-dark);
+  box-shadow: var(--shadow-dark);
+}
+
+.page-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
 .restore-container h1 {
-  font-size: 2.2rem;
+  font-size: 2rem;
   font-weight: 600;
   color: var(--text-light);
-  margin-bottom: 40px;
-  text-align: center;
+  margin: 0;
+  padding-bottom: 10px;
+  position: relative;
 }
 
-/* Actions */
-.restore-actions {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 25px;
-}
-
-/* Button Styles */
-.btn {
-  padding: 16px 32px;
-  border: none;
-  border-radius: 50px;
-  font-size: 1.3rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: var(--shadow-light);
-  min-width: 240px;
-  color: #ffffff;
-}
-
-.primary-btn {
+.restore-container h1::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 3px;
   background-color: var(--primary-color);
+  border-radius: 2px;
+  transition: width 0.3s ease;
 }
 
-.primary-btn:hover {
-  background-color: var(--primary-hover);
-  transform: translateY(-4px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-}
-
-.secondary-btn {
-  background-color: var(--secondary-color);
-}
-
-.secondary-btn:hover {
-  background-color: var(--secondary-hover);
-  transform: translateY(-4px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-}
-
-/* Dark Mode Styles */
-.dark.restore-container {
-  background-color: var(--background-dark);
+.restore-container h1:hover::after {
+  width: 100px;
 }
 
 .dark .restore-container h1 {
   color: var(--text-dark);
 }
 
-.dark .primary-btn {
-  background-color: #1a2f5b; /* Darker shade of primary */
+.dark .restore-container h1::after {
+  background-color: var(--secondary-color);
 }
 
-.dark .primary-btn:hover {
-  background-color: #2a4b8b;
-  box-shadow: var(--shadow-dark);
+.restore-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  width: 100%;
+  padding: 0 20px;
 }
 
-.dark .secondary-btn {
-  background-color: #1a3c34; /* Darker shade of secondary */
+.restore-actions .btn {
+  flex: 1;
+  min-width: 200px;
+  padding: 14px 20px;
+  border: none;
+  border-radius: 50px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  color: #ffffff;
+  background-size: 200% 100%;
+  background-position: 100% 0;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+  position: relative;
+  overflow: hidden;
 }
 
-.dark .secondary-btn:hover {
-  background-color: #2a5c4a;
-  box-shadow: var(--shadow-dark);
+.restore-actions .btn::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.4s ease, height 0.4s ease;
 }
 
-/* Responsive Design */
+.restore-actions .btn:hover:not(:disabled) {
+  background-position: 0 0;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+}
+
+.restore-actions .btn:hover::after {
+  width: 300px;
+  height: 300px;
+}
+
+.restore-actions .btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.restore-actions .btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(35, 166, 213, 0.5);
+}
+
+.btn.create {
+  background-image: var(--gradient-create);
+}
+
+.btn.view {
+  background-image: var(--gradient-view);
+}
+
+.dark .restore-actions .btn {
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+}
+
+.dark .restore-actions .btn.create {
+  background-image: linear-gradient(135deg, #2b6cb0, #2c5282);
+}
+
+.dark .restore-actions .btn.view {
+  background-image: linear-gradient(135deg, #219653, #276749);
+}
+
+.dark .restore-actions .btn:hover:not(:disabled) {
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @media (max-width: 768px) {
+  .restore-container {
+    margin: 30px 20px;
+    padding: 30px;
+  }
+
+  .restore-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .restore-actions .btn {
+    width: 100%;
+    max-width: 300px;
+    padding: 12px 16px;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
   .restore-container {
     padding: 20px;
   }
@@ -117,24 +199,10 @@
     font-size: 1.8rem;
   }
 
-  .btn {
-    padding: 14px 28px;
-    font-size: 1.2rem;
-    min-width: 200px;
+
+
+  .restore-actions .btn {
+    padding: 10px 14px;
+    font-size: 0.95rem;
   }
-
-
-}
-
-@media (max-width: 480px) {
-  .restore-container h1 {
-    font-size: 1.6rem;
-  }
-
-  .btn {
-    padding: 12px 24px;
-    font-size: 1.1rem;
-    min-width: 180px;
-  }
-
 }

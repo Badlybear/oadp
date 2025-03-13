@@ -137,7 +137,7 @@
     padding: 25px;
   }
 
-  .create-backup-container h1 {
+  .create-backup-container h1 a{
     font-size: 1.8rem;
   }
 }

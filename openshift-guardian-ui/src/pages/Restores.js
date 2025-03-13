@@ -25,15 +25,19 @@ const Restores = ({ darkMode }) => {
         alt="Guardian Logo"
         className="guardian-logo"
         onClick={handleLogoClick}
-        style={{ cursor: 'pointer' }}
+        role="button"
+        tabIndex={0}
+        onKeyPress={(e) => e.key === 'Enter' && handleLogoClick()}
       />
-      <h1>Manage Your Restores</h1>
+      <header className="page-header">
+        <h1>Manage Your Restores</h1>
+      </header>
       <div className="restore-actions">
-        <button className="btn primary-btn" onClick={handleCreateRestore}>
-          Initiate Restore
+        <button className="btn create" onClick={handleCreateRestore}>
+          Create Restore
         </button>
-        <button className="btn secondary-btn" onClick={handleViewRestores}>
-          Restore History
+        <button className="btn view" onClick={handleViewRestores}>
+          View Restores
         </button>
       </div>
     </div>

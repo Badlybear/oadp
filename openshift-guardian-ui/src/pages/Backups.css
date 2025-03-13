@@ -13,11 +13,15 @@
   --shadow-dark: 0 4px 6px rgba(0, 0, 0, 0.2);
   --success: #38a169;
   --error: #e53e3e;
+  --gradient-create: linear-gradient(135deg, #23a6d5, #1e90ff);
+  --gradient-view: linear-gradient(135deg, #2ecc71, #27ae60);
+  --gradient-schedule: linear-gradient(135deg, #8e44ad, #6b46c1);
+  --gradient-delete: linear-gradient(135deg, #e53e3e, #c53030);
 }
 
 .backup-container {
   padding: 40px;
-  max-width: 800px;
+  max-width: 1200px; /* Increased to accommodate 4 buttons side by side */
   margin: 50px auto;
   background-color: var(--card-bg-light);
   border-radius: 12px;
@@ -98,100 +102,113 @@
 }
 
 .backup-actions {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px;
+  display: flex;
+  flex-wrap: wrap; /* Allows wrapping on smaller screens */
+  justify-content: space-between; /* Evenly spaces buttons */
+  gap: 15px; /* Reduced gap for tighter spacing */
   width: 100%;
   padding: 0 20px;
 }
 
+/* Enhanced Button Styles */
 .backup-actions .btn {
+  flex: 1; /* Makes buttons take equal width */
+  min-width: 200px; /* Ensures a minimum width */
   padding: 14px 20px;
   border: none;
-  border-radius: 8px;
+  border-radius: 50px;
   font-size: 1.1rem;
-  font-weight: 500;
+  font-weight: 600;
   text-transform: uppercase;
+  letter-spacing: 0.5px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   color: #ffffff;
+  background-size: 200% 100%;
+  background-position: 100% 0;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+.backup-actions .btn::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.4s ease, height 0.4s ease;
 }
 
 .backup-actions .btn:hover:not(:disabled) {
+  background-position: 0 0;
   transform: translateY(-3px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+}
+
+.backup-actions .btn:hover::after {
+  width: 300px;
+  height: 300px;
 }
 
 .backup-actions .btn:active {
   transform: translateY(1px);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.backup-actions .btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(35, 166, 213, 0.5);
 }
 
 /* Button Variants */
 .btn.create {
-  background-color: var(--primary-color);
-}
-
-.btn.create:hover {
-  background-color: var(--primary-hover);
+  background-image: var(--gradient-create);
 }
 
 .btn.view {
-  background-color: #2ecc71;
-}
-
-.btn.view:hover {
-  background-color: #27ae60;
+  background-image: var(--gradient-view);
 }
 
 .btn.schedule {
-  background-color: #8e44ad;
-}
-
-.btn.schedule:hover {
-  background-color: #7d3c98;
+  background-image: var(--gradient-schedule);
 }
 
 .btn.delete {
-  background-color: var(--error);
-}
-
-.btn.delete:hover {
-  background-color: #c53030;
+  background-image: var(--gradient-delete);
 }
 
 /* Dark Mode Styles */
-.dark .backup-actions .btn.create {
-  background-color: #2b6cb0;
+.dark .backup-actions .btn {
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
 }
 
-.dark .backup-actions .btn.create:hover {
-  background-color: #2c5282;
+.dark .backup-actions .btn.create {
+  background-image: linear-gradient(135deg, #2b6cb0, #2c5282);
 }
 
 .dark .backup-actions .btn.view {
-  background-color: #219653;
-}
-
-.dark .backup-actions .btn.view:hover {
-  background-color: #276749;
+  background-image: linear-gradient(135deg, #219653, #276749);
 }
 
 .dark .backup-actions .btn.schedule {
-  background-color: #6b46c1;
-}
-
-.dark .backup-actions .btn.schedule:hover {
-  background-color: #553c9a;
+  background-image: linear-gradient(135deg, #6b46c1, #553c9a);
 }
 
 .dark .backup-actions .btn.delete {
-  background-color: #c53030;
+  background-image: linear-gradient(135deg, #c53030, #9b2c2c);
 }
 
-.dark .backup-actions .btn.delete:hover {
-  background-color: #9b2c2c;
+.dark .backup-actions .btn:hover:not(:disabled) {
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+
+.dark .backup-actions .btn:focus {
+  box-shadow: 0 0 0 3px rgba(100, 181, 246, 0.5);
 }
 
 /* Animations */
@@ -207,10 +224,23 @@
 }
 
 /* Responsive Design */
+@media (max-width: 1024px) {
+  .backup-container {
+    max-width: 900px;
+  }
+
+  .backup-actions .btn {
+    min-width: 180px;
+    padding: 12px 16px;
+    font-size: 1rem;
+  }
+}
+
 @media (max-width: 768px) {
   .backup-container {
     margin: 30px 20px;
     padding: 30px;
+    max-width: 100%;
   }
 
   .guardian-logo {
@@ -220,11 +250,13 @@
   }
 
   .backup-actions {
-    grid-template-columns: 1fr;
-    padding: 0;
+    flex-direction: column;
+    align-items: center;
   }
 
   .backup-actions .btn {
+    width: 100%;
+    max-width: 300px; /* Limits width on smaller screens */
     padding: 12px 16px;
     font-size: 1rem;
   }

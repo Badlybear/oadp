@@ -34,13 +34,13 @@ const Dashboard = ({ darkMode }) => {
 
       <section className="dashboard-links">
         <button
-          className="btn primary-btn large-btn"
+          className="btn primary-btn"
           onClick={() => handleNavigation('/backups')}
         >
           Manage Backups
         </button>
         <button
-          className="btn primary-btn large-btn"
+          className="btn secondary-btn"
           onClick={() => handleNavigation('/restores')}
         >
           Manage Restores

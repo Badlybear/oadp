@@ -1,10 +1,9 @@
 /* CreateRestore.css */
 
 .create-restore-container {
-    padding: 40px;
-    max-width: 600px;
-    width: 100%;
-    margin: 0 auto; /* Centered horizontally */
+    padding: 50px;
+    max-width: 650px;
+    margin: 100px auto 40px;
     background: linear-gradient(135deg, var(--background-light) 0%, var(--border-light) 100%);
     border-radius: 20px;
     box-shadow: var(--shadow-light);
@@ -22,7 +21,7 @@
   
   .page-header {
     text-align: center;
-    margin-bottom: 30px;
+    margin-bottom: 35px;
   }
   
   .create-restore-container h1 {
@@ -60,7 +59,7 @@
   
   .form-group {
     width: 100%;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
   }
   
   .form-group label {
@@ -98,14 +97,8 @@
     color: var(--text-dark);
   }
   
-  .button-group {
-    display: flex;
-    gap: 15px;
-    width: 100%;
-  }
-  
   .create-restore-container button {
-    flex: 1;
+    width: 100%;
     padding: 15px 25px;
     background-color: var(--primary-color);
     color: #ffffff;
@@ -130,7 +123,7 @@
   }
   
   .message {
-    margin-top: 20px;
+    margin-top: 25px;
     padding: 14px 25px;
     border-radius: 10px;
     width: 100%;
@@ -151,7 +144,7 @@
   }
   
   .loader {
-    margin-top: 20px;
+    margin-top: 25px;
     width: 50px;
     height: 50px;
     border: 5px solid var(--border-light);
@@ -162,8 +155,8 @@
   
   @media (max-width: 600px) {
     .create-restore-container {
-      padding: 20px;
-      margin: 20px 10px;
+      margin: 80px 15px 20px;
+      padding: 30px;
     }
   
     .create-restore-container h1 {
@@ -178,10 +171,5 @@
     .create-restore-container button {
       padding: 12px 20px;
       font-size: 1.1rem;
-    }
-  
-    .button-group {
-      flex-direction: column;
-      gap: 10px;
     }
   }

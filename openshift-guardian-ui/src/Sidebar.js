@@ -1,10 +1,11 @@
-// components/Sidebar.jsx
 import React, { useState, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import './Sidebar.css';
 
 const Sidebar = ({ isOpen, toggleSidebar, darkMode }) => {
   const [showConfirm, setShowConfirm] = useState(false);
+  const [isBackupsOpen, setIsBackupsOpen] = useState(false);
+  const [isRestoresOpen, setIsRestoresOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -41,12 +42,20 @@ const Sidebar = ({ isOpen, toggleSidebar, darkMode }) => {
 
   const confirmLogout = () => {
     setShowConfirm(false);
-    toggleSidebar(); // Closes the sidebar on sign out
-    navigate("/");
+    toggleSidebar();
+    navigate('/');
   };
 
   const cancelLogout = () => {
     setShowConfirm(false);
+  };
+
+  const toggleBackups = () => {
+    setIsBackupsOpen(!isBackupsOpen);
+  };
+
+  const toggleRestores = () => {
+    setIsRestoresOpen(!isRestoresOpen);
   };
 
   return (
@@ -54,30 +63,75 @@ const Sidebar = ({ isOpen, toggleSidebar, darkMode }) => {
       <button className="sidebar-toggle" onClick={toggleSidebar}>
         {isOpen ? '✕' : '☰'}
       </button>
-      
+
       <nav className="sidebar-nav">
-        <NavLink 
-          to="/dashboard" 
-          className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}
+        <NavLink
+          to="/dashboard"
+          className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}
         >
           Dashboard
         </NavLink>
-        <NavLink 
-          to="/backups" 
-          className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}
-        >
-          Backups
-        </NavLink>
-        <NavLink 
-          to="/restores" 
-          className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}
-        >
-          Restores
-        </NavLink>
-        {/* Sign Out link still triggers the logout confirmation */}
-        <NavLink 
+
+        {/* Backups Section */}
+        <div className="nav-section">
+          <div className="nav-link nav-header" onClick={toggleBackups}>
+            Backups
+            <span className={`arrow ${isBackupsOpen ? 'open' : ''}`}>▼</span>
+          </div>
+          <div className={`submenu ${isBackupsOpen ? 'open' : ''}`}>
+            <NavLink
+              to="/backups/delete-backup"
+              className={({ isActive }) => (isActive ? 'nav-link sub active' : 'nav-link sub')}
+            >
+              Delete Backup
+            </NavLink>
+            <NavLink
+              to="/backups/schedule-backup"
+              className={({ isActive }) => (isActive ? 'nav-link sub active' : 'nav-link sub')}
+            >
+              Schedule Backup
+            </NavLink>
+            <NavLink
+              to="/backups/view-backups"
+              className={({ isActive }) => (isActive ? 'nav-link sub active' : 'nav-link sub')}
+            >
+              View Backups
+            </NavLink>
+            <NavLink
+              to="/backups/create-backup"
+              className={({ isActive }) => (isActive ? 'nav-link sub active' : 'nav-link sub')}
+            >
+              Create Backup
+            </NavLink>
+          </div>
+        </div>
+
+        {/* Restores Section */}
+        <div className="nav-section">
+          <div className="nav-link nav-header" onClick={toggleRestores}>
+            Restores
+            <span className={`arrow ${isRestoresOpen ? 'open' : ''}`}>▼</span>
+          </div>
+          <div className={`submenu ${isRestoresOpen ? 'open' : ''}`}>
+            <NavLink
+              to="/restores/create-restore"
+              className={({ isActive }) => (isActive ? 'nav-link sub active' : 'nav-link sub')}
+            >
+              Create Restore
+            </NavLink>
+            <NavLink
+              to="/restores/view-restores"
+              className={({ isActive }) => (isActive ? 'nav-link sub active' : 'nav-link sub')}
+            >
+              View Restores
+            </NavLink>
+          </div>
+        </div>
+
+        {/* Sign Out */}
+        <NavLink
           to="/"
-          className={({ isActive }) => isActive ? 'nav-link logout active' : 'nav-link logout'}
+          className={({ isActive }) => (isActive ? 'nav-link logout active' : 'nav-link logout')}
           onClick={handleLogoutClick}
         >
           Sign Out
