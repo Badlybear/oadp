@@ -25,8 +25,6 @@
 :root {
   --primary-color: #23a6d5;
   --primary-hover: #1e93c0;
-  --secondary-color: #2ecc71;
-  --secondary-hover: #27ae60;
   --background-light: #f4f7fa;
   --background-dark: #1e2a44;
   --text-light: #2d3748;
@@ -36,8 +34,31 @@
   --shadow-light: 0 4px 6px rgba(0, 0, 0, 0.1);
   --shadow-dark: 0 4px 6px rgba(0, 0, 0, 0.2);
   --gradient-primary: linear-gradient(135deg, #23a6d5, #1e90ff);
-  --gradient-secondary: linear-gradient(135deg, #2ecc71, #27ae60);
+  --gradient-secondary: linear-gradient(135deg, #e53e3e, #c53030); /* Redder color */
 }
+
+.dashboard-logo {
+  width: 350px;
+  height: 350px;
+  margin-bottom: -30px;
+  transition: transform 0.3s ease, filter 0.3s ease, box-shadow 0.3s ease;
+  filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.2));
+}
+
+.dashboard-logo:hover {
+  transform: scale(1.05) rotate(2deg);
+  filter: brightness(1.2) drop-shadow(0 4px 10px rgba(0, 0, 0, 0.3));
+}
+
+.dark .dashboard-logo {
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+}
+
+.dark .dashboard-logo:hover {
+  transform: scale(1.1) rotate(2deg);
+  filter: brightness(1.3) drop-shadow(0 0 15px rgba(255, 255, 255, 0.7));
+}
+
 
 /* Container */
 .dashboard-container {
@@ -125,11 +146,11 @@
 
 .btn {
   flex: 1;
-  min-width: 180px; /* Smaller min-width */
-  padding: 10px 16px; /* Smaller padding */
+  min-width: 200px; /* Smaller min-width */
+  padding: 20px 16px; /* Smaller padding */
   border: none;
   border-radius: 50px;
-  font-size: 1rem; /* Smaller font size */
+  font-size: 1.2rem; /* Smaller font size */
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -194,7 +215,7 @@
 }
 
 .dark .secondary-btn {
-  background-image: linear-gradient(135deg, #219653, #276749);
+  background-image: linear-gradient(135deg, #7c2727, #c53030); /* Redder color */
 }
 
 .dark .btn:hover {
@@ -208,7 +229,7 @@
 
 /* Footer */
 .page-footer {
-  font-size: 0.95rem;
+  font-size: 2.95rem;
   color: var(--text-light);
   opacity: 0.8;
   padding: 20px 0;
@@ -238,12 +259,6 @@
     align-items: center;
   }
 
-  .btn {
-    width: 100%;
-    max-width: 250px; /* Smaller max-width */
-    padding: 8px 14px;
-    font-size: 0.9rem;
-  }
 }
 
 @media (max-width: 480px) {

@@ -6,6 +6,12 @@ body {
   padding: 0;
 }
 
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  overflow: hidden; /* Disable scrolling completely */
+}
+
 .app-container {
   min-height: 100vh;
   display: flex;
@@ -14,6 +20,26 @@ body {
   background-size: 400% 400%;
   animation: gradientBlue 15s ease infinite;
   color: #ffffff;
+  height: 100vh; /* fixed viewport height */
+  position: relative;
+  overflow: hidden;
+}
+
+.page-content {
+  flex: 1;
+  overflow-y: auto; /* Enable vertical scrolling */
+  position: relative;
+  z-index: 1; /* Ensure it is above the background */
+}
+
+.dashboard-page .page-content {
+  overflow: hidden; /* Disable scrolling on the Dashboard page */
+}
+
+.threejs-background {
+  width: 100%;
+  height: 100%;
+  z-index: -1; /* Ensure it is behind other content */
 }
 
 @keyframes gradientBlue {
@@ -56,21 +82,4 @@ body {
 @keyframes gradientDark {
   0%,100% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
-}
-/* App.css */
-html, body, #root {
-  height: 100%;
-  margin: 0;
-  overflow: hidden; /* Disable scrolling completely */
-}
-
-.app-container {
-  height: 100vh; /* fixed viewport height */
-  display: flex;
-  flex-direction: column;
-}
-
-.page-content {
-  flex: 1;
-  overflow: hidden; /* prevent scrolling within content */
 }

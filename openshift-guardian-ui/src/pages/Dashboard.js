@@ -12,21 +12,13 @@ const Dashboard = ({ darkMode }) => {
     navigate(path);
   };
 
-  const handleLogoClick = () => {
-    navigate('/dashboard');
-  };
-
   return (
     <div className={`dashboard-container ${applyPopEffect ? 'fade-in' : ''} ${darkMode ? 'dark' : ''}`}>
       <header className="dashboard-header">
         <img
           src={guardianLogo}
           alt="Guardian Logo"
-          className="guardian-logo"
-          onClick={handleLogoClick}
-          role="button"
-          tabIndex={0}
-          onKeyPress={(e) => e.key === 'Enter' && handleLogoClick()}
+          className="dashboard-logo"
         />
         <h1>Openshift Guardian</h1>
         <p className="tagline">Your Guardian is always watching—protecting your data 24/7.</p>
@@ -34,13 +26,13 @@ const Dashboard = ({ darkMode }) => {
 
       <section className="dashboard-links">
         <button
-          className="btn primary-btn"
+          className="btn primary-btn large-btn"
           onClick={() => handleNavigation('/backups')}
         >
           Manage Backups
         </button>
         <button
-          className="btn secondary-btn"
+          className="btn secondary-btn large-btn"
           onClick={() => handleNavigation('/restores')}
         >
           Manage Restores
@@ -50,10 +42,6 @@ const Dashboard = ({ darkMode }) => {
       <main className="dashboard-content">
         {/* Empty content section for spacing */}
       </main>
-
-      <footer className="page-footer">
-        <p>© {new Date().getFullYear()} Guardian. All rights reserved.</p>
-      </footer>
     </div>
   );
 };
