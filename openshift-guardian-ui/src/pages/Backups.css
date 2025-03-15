@@ -243,12 +243,6 @@
     max-width: 100%;
   }
 
-  .guardian-logo {
-    width: 250px;
-    height: 250px;
-    margin-bottom: -20px;
-  }
-
   .backup-actions {
     flex-direction: column;
     align-items: center;
@@ -270,13 +264,6 @@
   .backup-container h1 {
     font-size: 1.8rem;
   }
-
-  .guardian-logo {
-    width: 200px;
-    height: 200px;
-    margin-bottom: -15px;
-  }
-
   .backup-actions .btn {
     padding: 10px 14px;
     font-size: 0.95rem;
