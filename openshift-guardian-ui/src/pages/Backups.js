@@ -27,6 +27,10 @@ const Backups = ({ darkMode }) => {
     navigate('/backups/schedule-backup');
   };
 
+  const handleDeleteSchedule = () => {
+    navigate('/backups/delete-schedule-resource');
+  };
+
   return (
     <div className={`backup-container ${darkMode ? 'dark' : ''}`}>
       <img
@@ -53,6 +57,9 @@ const Backups = ({ darkMode }) => {
         </button>
         <button className="btn delete" onClick={handleDeleteBackup}>
           Delete Backup
+        </button>
+        <button className="btn delete-schedule" onClick={handleDeleteSchedule}>
+          Delete Schedule
         </button>
       </div>
     </div>
