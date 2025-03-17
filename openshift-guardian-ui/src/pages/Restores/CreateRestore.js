@@ -39,21 +39,14 @@ const CreateRestore = ({ darkMode }) => {
     const fetchData = async () => {
       try {
         setIsLoading(true);
-        const fetchedBackups = [
-          { id: 1, name: 'Backup_001' },
-          { id: 2, name: 'Backup_002' },
-          { id: 3, name: 'Backup_003' },
-        ];
-        const fetchedNamespaces = [
-          { id: 1, name: 'Namespace 1' },
-          { id: 2, name: 'Namespace 2' },
-          { id: 3, name: 'Namespace 3' },
-        ];
-        setBackups(fetchedBackups);
-        setNamespaces(fetchedNamespaces);
+        const backupResponse = await fetch('http://localhost:8000/get-backups');
+        const namespaceResponse = await fetch('http://localhost:8000/get-user-namespaces');
+        const backupsData = await backupResponse.json();
+        const namespacesData = await namespaceResponse.json();
+        setBackups(backupsData.backups || []);
+        setNamespaces(namespacesData.namespaces || []);
       } catch (error) {
         setMessage('Failed to load backups or namespaces.');
-        console.error('Error fetching data:', error);
       } finally {
         setIsLoading(false);
       }
@@ -63,23 +56,11 @@ const CreateRestore = ({ darkMode }) => {
 
   const handleLogoClick = () => navigate('/dashboard');
 
-  const handleBackupChange = (e) => {
-    setSelectedBackup(e.target.value);
-    setMessage('');
-  };
-
-  const handleNamespaceChange = (e) => {
-    setSelectedNamespace(e.target.value);
-    setMessage('');
-  };
-
   const handleResourceChange = (resource) => {
     if (resource === 'allNamespaceResources') {
       const allSelected = !includedResources.allNamespaceResources;
       setIncludedResources(
-        Object.fromEntries(
-          Object.keys(includedResources).map(key => [key, allSelected])
-        )
+        Object.fromEntries(Object.keys(includedResources).map(key => [key, allSelected]))
       );
     } else {
       setIncludedResources(prev => ({
@@ -106,36 +87,36 @@ const CreateRestore = ({ darkMode }) => {
       return;
     }
 
-    const selectedResources = Object.entries(includedResources)
-      .filter(([_, value]) => value)
-      .map(([key]) => key);
+    const selectedResources = includedResources.allNamespaceResources
+      ? '*'
+      : Object.entries(includedResources)
+          .filter(([_, value]) => value)
+          .map(([key]) => key);
 
-    if (selectedResources.length === 0) {
-      setMessage('Please select at least one resource to include.');
-      return;
-    }
+    const matchLabelsObj = matchLabels.reduce((acc, { key, value }) => {
+      if (key && value) acc[key] = value;
+      return acc;
+    }, {});
 
     setIsLoading(true);
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      setMessage(`Restore created successfully from ${selectedBackup} to ${selectedNamespace} with ${selectedResources.length} resources!`);
-      handleReset();
+      const response = await fetch('http://localhost:8000/create-restore', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          namespaces: selectedNamespace,
+          backup_name: selectedBackup,
+          included_resources: selectedResources,
+          match_lables: matchLabelsObj,
+        }),
+      });
+      if (!response.ok) throw new Error('Failed to create restore');
+      setMessage('Restore created successfully!');
     } catch (error) {
       setMessage('Failed to create restore. Please try again.');
-      console.error('Error creating restore:', error);
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const handleReset = () => {
-    setSelectedBackup('');
-    setSelectedNamespace('');
-    setIncludedResources(Object.fromEntries(
-      Object.keys(includedResources).map(key => [key, false])
-    ));
-    setMatchLabels([{ key: '', value: '' }]);
-    setMessage('');
   };
 
   return (
@@ -154,36 +135,18 @@ const CreateRestore = ({ darkMode }) => {
       </header>
 
       <div className="form-group">
-        <label htmlFor="backup-select">Select Backup</label>
-        <select
-          id="backup-select"
-          value={selectedBackup}
-          onChange={handleBackupChange}
-          disabled={isLoading}
-        >
-          <option value="">--Select a backup--</option>
-          {backups.map((backup) => (
-            <option key={backup.id} value={backup.name}>
-              {backup.name}
-            </option>
-          ))}
+        <label>Select Namespace</label>
+        <select value={selectedNamespace} onChange={(e) => setSelectedNamespace(e.target.value)}>
+          <option value="">--Select a namespace--</option>
+          {namespaces.map(ns => <option key={ns.name} value={ns.name}>{ns.name}</option>)}
         </select>
       </div>
 
       <div className="form-group">
-        <label htmlFor="namespace-select">Select Namespace</label>
-        <select
-          id="namespace-select"
-          value={selectedNamespace}
-          onChange={handleNamespaceChange}
-          disabled={isLoading}
-        >
-          <option value="">--Select a namespace--</option>
-          {namespaces.map((namespace) => (
-            <option key={namespace.id} value={namespace.name}>
-              {namespace.name}
-            </option>
-          ))}
+        <label>Select Backup</label>
+        <select value={selectedBackup} onChange={(e) => setSelectedBackup(e.target.value)}>
+          <option value="">--Select a backup--</option>
+          {backups.map(b => <option key={b.backup_name} value={b.backup_name}>{`${b.backup_name} | Namespce: ${b["namespace"]}`}</option>)}
         </select>
       </div>
 
@@ -195,7 +158,6 @@ const CreateRestore = ({ darkMode }) => {
             id="allNamespaceResources"
             checked={includedResources.allNamespaceResources}
             onChange={() => handleResourceChange('allNamespaceResources')}
-            disabled={isLoading}
           />
           <label htmlFor="allNamespaceResources">All Namespace Resources</label>
         </div>
@@ -208,7 +170,6 @@ const CreateRestore = ({ darkMode }) => {
                 id={resource}
                 checked={includedResources[resource]}
                 onChange={() => handleResourceChange(resource)}
-                disabled={isLoading}
               />
               <label htmlFor={resource}>{resource}</label>
             </div>
@@ -219,45 +180,18 @@ const CreateRestore = ({ darkMode }) => {
         <label>Match Labels</label>
         {matchLabels.map((label, index) => (
           <div key={index} className="label-pair">
-            <input
-              type="text"
-              placeholder="Key"
-              value={label.key}
-              onChange={(e) => handleLabelChange(index, 'key', e.target.value)}
-              disabled={isLoading}
-            />
-            <input
-              type="text"
-              placeholder="Value"
-              value={label.value}
-              onChange={(e) => handleLabelChange(index, 'value', e.target.value)}
-              disabled={isLoading}
-            />
+            <input type="text" placeholder="Key" value={label.key} onChange={(e) => handleLabelChange(index, 'key', e.target.value)} />
+            <input type="text" placeholder="Value" value={label.value} onChange={(e) => handleLabelChange(index, 'value', e.target.value)} />
           </div>
         ))}
-        <button className="add-label-btn" onClick={addLabelPair} disabled={isLoading}>
-          Add Label
+        <button className="add-label-btn" onClick={addLabelPair} title="Click to apply labels">
+        submit label ➕
         </button>
+
       </div>
 
-      <div className="button-group">
-        <button
-          onClick={handleCreateRestore}
-          disabled={isLoading || !selectedBackup || !selectedNamespace}
-        >
-          {isLoading ? 'Creating...' : 'Create Restore'}
-        </button>
-        <button onClick={handleReset} disabled={isLoading}>
-          Reset
-        </button>
-      </div>
-
-      {message && (
-        <p className={`message ${message.includes('successfully') ? 'success' : 'error'}`}>
-          {message}
-        </p>
-      )}
-      {isLoading && <div className="loader"></div>}
+      <button onClick={handleCreateRestore} disabled={isLoading}>Create Restore</button>
+      {message && <p className="message">{message}</p>}
     </div>
   );
 };

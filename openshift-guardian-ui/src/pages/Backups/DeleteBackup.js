@@ -16,7 +16,10 @@ const DeleteBackup = ({ darkMode }) => {
         setIsLoading(true);
         const response = await fetch('http://localhost:8000/get-backups');
         const data = await response.json();
-        setBackups(data.backups);
+        
+        // ✅ Ensure 'backups' contains valid data
+        setBackups(Array.isArray(data.backups) ? data.backups.filter(b => b.backup_name) : []);
+        
       } catch (error) {
         setMessage('Error fetching backups.');
       } finally {
@@ -78,7 +81,7 @@ const DeleteBackup = ({ darkMode }) => {
         >
           <option value="">--Select a backup--</option>
           {backups.map((backup) => (
-            <option key={backup.backup_name} value={backup.backup_name}>{backup.backup_name}</option>
+            <option key={backup.backup_name} value={backup.backup_name}>{`${backup.backup_name} | Namespce: ${backup["namespace"]}`}</option>
           ))}
         </select>
       </div>

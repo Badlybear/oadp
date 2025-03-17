@@ -10,6 +10,7 @@ const ScheduleBackup = ({ darkMode }) => {
   const [message, setMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [namespaces, setNamespaces] = useState([]);
+  const [scheduledBackups, setScheduledBackups] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -27,6 +28,7 @@ const ScheduleBackup = ({ darkMode }) => {
     };
     fetchNamespaces();
   }, []);
+  
 
   const handleLogoClick = () => {
     navigate('/dashboard');
@@ -46,10 +48,12 @@ const ScheduleBackup = ({ darkMode }) => {
         body: JSON.stringify({ namespaces: selectedNamespace, schedule: frequencyDays, amount: backupHour }),
       });
       if (!response.ok) throw new Error('Failed to create scheduled backup');
-      setMessage(`Scheduled backup created successfully! Backup will run every ${frequencyDays} day(s) at ${backupHour}:00.`);
+      
+      setMessage(`Scheduled backup created successfully!`);
       setSelectedNamespace('');
       setFrequencyDays('');
       setBackupHour('');
+      
     } catch (error) {
       setMessage(error.message || 'Failed to create scheduled backup.');
     } finally {

@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './ViewRestores.css';
-import guardianLogo from '../GUARDIAN.png'; // Adjust path as needed
+import guardianLogo from '../GUARDIAN.png';
 
 const ViewRestores = ({ darkMode }) => {
   const [restores, setRestores] = useState([]);
+  const [expandedRestore, setExpandedRestore] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
@@ -12,11 +14,9 @@ const ViewRestores = ({ darkMode }) => {
     const fetchRestores = async () => {
       try {
         setIsLoading(true);
-        const mockRestores = [
-          { id: 1, name: 'Restore_001', timeCreated: '2025-03-11 10:00:00', status: 'Completed', namespace: 'Namespace 1' },
-          { id: 2, name: 'Restore_002', timeCreated: '2025-03-12 15:30:00', status: 'Failed', namespace: 'Namespace 2' },
-        ];
-        setRestores(mockRestores);
+        const response = await fetch('http://localhost:8000/get-restores');
+        const data = await response.json();
+        setRestores(data.restores || []);
       } catch (error) {
         console.error('Error fetching restores:', error);
       } finally {
@@ -29,6 +29,14 @@ const ViewRestores = ({ darkMode }) => {
   const handleLogoClick = () => {
     navigate('/dashboard');
   };
+
+  const toggleExpand = (id) => {
+    setExpandedRestore(expandedRestore === id ? null : id);
+  };
+
+  const filteredRestores = restores.filter(restore =>
+    restore.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <div className={`view-restores-container ${darkMode ? 'dark' : ''}`}>
@@ -44,9 +52,20 @@ const ViewRestores = ({ darkMode }) => {
         />
         <h1>View Restores</h1>
       </header>
+
+      <div className="search-bar-container">
+        <input
+          type="text"
+          placeholder="Search restores..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="search-bar"
+        />
+      </div>
+
       {isLoading ? (
         <div className="loader">Loading...</div>
-      ) : restores.length === 0 ? (
+      ) : filteredRestores.length === 0 ? (
         <p>No restores found.</p>
       ) : (
         <div className="table-wrapper">
@@ -57,16 +76,45 @@ const ViewRestores = ({ darkMode }) => {
                 <th>Time Created</th>
                 <th>Status</th>
                 <th>Namespace</th>
+                <th>Details</th>
               </tr>
             </thead>
             <tbody>
-              {restores.map((restore) => (
-                <tr key={restore.id}>
-                  <td>{restore.name}</td>
-                  <td>{restore.timeCreated}</td>
-                  <td className={`status ${restore.status.toLowerCase()}`}>{restore.status}</td>
-                  <td>{restore.namespace}</td>
-                </tr>
+              {filteredRestores.map((restore, index) => (
+                <React.Fragment key={index}>
+                  <tr onClick={() => toggleExpand(index)} className="clickable-row">
+                    <td>{restore.name}</td>
+                    <td>{restore["Time Created"]}</td>
+                    <td className={`status ${restore.status ? restore.status.toLowerCase() : ''}`}>
+                      {restore.status || 'Unknown'}
+                    </td>
+                    <td>{restore.namespace}</td>
+                    <td>{expandedRestore === index ? '▲' : '▼'}</td>
+                  </tr>
+                  {expandedRestore === index && (
+                    <tr className="restore-details">
+                      <td colSpan="5">
+                        <strong>Included Resources:</strong>
+                        <ul>
+                          {restore.included_resources === '*'
+                            ? <li>All Resources</li>
+                            : Array.isArray(restore.included_resources)
+                              ? restore.included_resources.map((res, idx) => <li key={idx}>{res}</li>)
+                              : 'None'}
+                        </ul>
+                        <br />
+                        <strong>Match Labels:</strong>
+                        <ul>
+                          {restore.match_lables
+                            ? Object.entries(restore.match_lables).map(([key, value]) => (
+                                <li key={key}>{key}: {value}</li>
+                              ))
+                            : 'None'}
+                        </ul>
+                      </td>
+                    </tr>
+                  )}
+                </React.Fragment>
               ))}
             </tbody>
           </table>

@@ -80,16 +80,10 @@ const Sidebar = ({ isOpen, toggleSidebar, darkMode }) => {
           </div>
           <div className={`submenu ${isBackupsOpen ? 'open' : ''}`}>
             <NavLink
-              to="/backups/delete-backup"
+              to="/backups/create-backup"
               className={({ isActive }) => (isActive ? 'nav-link sub active' : 'nav-link sub')}
             >
-              Delete Backup
-            </NavLink>
-            <NavLink
-              to="/backups/schedule-backup"
-              className={({ isActive }) => (isActive ? 'nav-link sub active' : 'nav-link sub')}
-            >
-              Schedule Backup
+              Create Backup
             </NavLink>
             <NavLink
               to="/backups/view-backups"
@@ -98,10 +92,22 @@ const Sidebar = ({ isOpen, toggleSidebar, darkMode }) => {
               View Backups
             </NavLink>
             <NavLink
-              to="/backups/create-backup"
+              to="/backups/schedule-backup"
               className={({ isActive }) => (isActive ? 'nav-link sub active' : 'nav-link sub')}
             >
-              Create Backup
+              Schedule Backup
+            </NavLink>
+            <NavLink
+              to="/backups/delete-backup"
+              className={({ isActive }) => (isActive ? 'nav-link sub active' : 'nav-link sub')}
+            >
+              Delete Backup
+            </NavLink>
+            <NavLink
+              to="/backups/delete-schedule-resource"
+              className={({ isActive }) => (isActive ? 'nav-link sub active' : 'nav-link sub')}
+            >
+              Delete Schedule
             </NavLink>
           </div>
         </div>
