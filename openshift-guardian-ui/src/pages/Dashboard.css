@@ -72,7 +72,6 @@
   justify-content: space-between;
   padding: 40px 20px;
   font-family: 'Poppins', sans-serif;
-  overflow-y: auto;
 }
 
 .fade-in {
@@ -240,44 +239,4 @@
   color: var(--text-dark);
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-  .dashboard-container {
-    padding: 30px 15px;
-  }
 
-  .dashboard-header h1 {
-    font-size: 2rem;
-  }
-
-  .dashboard-header .tagline {
-    font-size: 1rem;
-  }
-
-  .dashboard-links {
-    flex-direction: column;
-    align-items: center;
-  }
-
-}
-
-@media (max-width: 480px) {
-  .dashboard-container {
-    padding: 20px 10px;
-  }
-
-  .dashboard-header h1 {
-    font-size: 1.8rem;
-  }
-
-  .dashboard-header .tagline {
-    font-size: 0.9rem;
-  }
-
-  .btn {
-    padding: 6px 12px;
-    font-size: 0.85rem;
-    min-width: 160px;
-  }
-  
-}

@@ -32,21 +32,6 @@ html, body, #root {
   z-index: 1; /* Ensure it is above the background */
 }
 
-.dashboard-page .page-content {
-  overflow: hidden; /* Disable scrolling on the Dashboard page */
-}
-
-.threejs-background {
-  width: 100%;
-  height: 100%;
-  z-index: -1; /* Ensure it is behind other content */
-}
-
-@keyframes gradientBlue {
-  0%,100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-}
-
 .main-header {
   background: transparent;
   border-bottom: 1px solid rgba(255,255,255,0.2);

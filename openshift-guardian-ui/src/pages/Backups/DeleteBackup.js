@@ -1,4 +1,3 @@
-// DeleteBackup.jsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './DeleteBackup.css';
@@ -15,12 +14,9 @@ const DeleteBackup = ({ darkMode }) => {
     const fetchBackups = async () => {
       try {
         setIsLoading(true);
-        const mockBackups = [
-          { id: 1, name: 'Backup_001' },
-          { id: 2, name: 'Backup_002' },
-          { id: 3, name: 'Backup_003' },
-        ];
-        setBackups(mockBackups);
+        const response = await fetch('http://localhost:8000/get-backups');
+        const data = await response.json();
+        setBackups(data.backups);
       } catch (error) {
         setMessage('Error fetching backups.');
       } finally {
@@ -42,9 +38,14 @@ const DeleteBackup = ({ darkMode }) => {
 
     setIsLoading(true);
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const response = await fetch('http://localhost:8000/delete-backup', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ backup_name: selectedBackup }),
+      });
+      if (!response.ok) throw new Error('Failed to delete backup');
       setMessage(`Backup "${selectedBackup}" deleted successfully!`);
-      setBackups(backups.filter((b) => b.name !== selectedBackup));
+      setBackups(backups.filter((b) => b.backup_name !== selectedBackup));
       setSelectedBackup('');
     } catch (error) {
       setMessage('Failed to delete backup.');
@@ -77,7 +78,7 @@ const DeleteBackup = ({ darkMode }) => {
         >
           <option value="">--Select a backup--</option>
           {backups.map((backup) => (
-            <option key={backup.id} value={backup.name}>{backup.name}</option>
+            <option key={backup.backup_name} value={backup.backup_name}>{backup.backup_name}</option>
           ))}
         </select>
       </div>

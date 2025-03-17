@@ -1,4 +1,3 @@
-// CreateBackup.jsx (unchanged)
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './CreateBackup.css';
@@ -15,12 +14,9 @@ const CreateBackup = ({ darkMode }) => {
     const fetchNamespaces = async () => {
       try {
         setIsLoading(true);
-        const fetchedNamespaces = [
-          { id: 1, name: 'Namespace 1' },
-          { id: 2, name: 'Namespace 2' },
-          { id: 3, name: 'Namespace 3' },
-        ];
-        setNamespaces(fetchedNamespaces);
+        const response = await fetch('http://localhost:8000/get-user-namespaces');
+        const data = await response.json();
+        setNamespaces(data.namespaces);
       } catch (error) {
         setMessage('Error fetching namespaces.');
       } finally {
@@ -47,7 +43,12 @@ const CreateBackup = ({ darkMode }) => {
 
     setIsLoading(true);
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const response = await fetch('http://localhost:8000/create-backup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ namespaces: selectedNamespace }), // ✅ Send only namespace
+      });
+      if (!response.ok) throw new Error('Failed to create backup');
       setMessage('Backup created successfully!');
       setSelectedNamespace('');
     } catch (error) {
@@ -80,10 +81,8 @@ const CreateBackup = ({ darkMode }) => {
           disabled={isLoading}
         >
           <option value="">--Select a namespace--</option>
-          {namespaces.map((namespace) => (
-            <option key={namespace.id} value={namespace.name}>
-              {namespace.name}
-            </option>
+          {namespaces.map((ns) => (
+            <option key={ns.name} value={ns.name}>{ns.name}</option>
           ))}
         </select>
       </div>

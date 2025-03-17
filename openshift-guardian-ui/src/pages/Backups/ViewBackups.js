@@ -12,12 +12,9 @@ const ViewBackups = ({ darkMode }) => {
     const fetchBackups = async () => {
       try {
         setIsLoading(true);
-        const mockBackups = [
-          { id: 1, name: 'Backup_001', timeCreated: '2025-03-10 14:30:00', status: 'Completed', expirationDate: '2025-04-10' },
-          { id: 2, name: 'Backup_002', timeCreated: '2025-03-11 09:15:00', status: 'Failed', expirationDate: '2025-04-11' },
-          { id: 3, name: 'Backup_003', timeCreated: '2025-03-12 22:45:00', status: 'Completed', expirationDate: '2025-04-12' },
-        ];
-        setBackups(mockBackups);
+        const response = await fetch('http://localhost:8000/get-backups');
+        const data = await response.json();
+        setBackups(data.backups); // ✅ Corrected to access 'backups' key in response
       } catch (error) {
         console.error('Error fetching backups:', error);
       } finally {
@@ -54,22 +51,25 @@ const ViewBackups = ({ darkMode }) => {
           <table className="backups-table">
             <thead>
               <tr>
-                <th>Name</th>
+                <th>Namespace</th>
+                <th>Backup Name</th>
                 <th>Time Created</th>
                 <th>Status</th>
-                <th>Expiration Date</th>
               </tr>
             </thead>
             <tbody>
-              {backups.map((backup) => (
-                <tr key={backup.id}>
-                  <td>{backup.name}</td>
-                  <td>{backup.timeCreated}</td>
-                  <td className={`status ${backup.status.toLowerCase()}`}>{backup.status}</td>
-                  <td>{backup.expirationDate}</td>
-                </tr>
-              ))}
-            </tbody>
+  {backups.map((backup, index) => (
+    <tr key={index}>
+      <td>{backup.namespace}</td>
+      <td>{backup.backup_name}</td>
+      <td>{backup["Time Created"]}</td>
+      <td className={`status ${backup.Status ? backup.Status.toLowerCase() : ''}`}>
+        {backup.Status || 'Unknown'}
+      </td>
+    </tr>
+  ))}
+</tbody>
+
           </table>
         </div>
       )}

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './DeleteScheduleResource.css';
+import './DeleteBackup.css';
 import guardianLogo from '../GUARDIAN.png';
 
 const DeleteScheduleResource = ({ darkMode }) => {
@@ -14,12 +14,9 @@ const DeleteScheduleResource = ({ darkMode }) => {
     const fetchResources = async () => {
       try {
         setIsLoading(true);
-        const mockResources = [
-          { id: 1, name: 'Schedule_001' },
-          { id: 2, name: 'Schedule_002' },
-          { id: 3, name: 'Schedule_003' },
-        ];
-        setResources(mockResources);
+        const response = await fetch('http://localhost:8000/get-scheduled-backups');
+        const data = await response.json();
+        setResources(data.backups);
       } catch (error) {
         setMessage('Error fetching scheduled resources.');
       } finally {
@@ -41,15 +38,15 @@ const DeleteScheduleResource = ({ darkMode }) => {
 
     setIsLoading(true);
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      const success = Math.random() > 0.2;
-      if (success) {
-        setMessage(`Scheduled resource "${selectedResource}" deleted successfully!`);
-        setResources(resources.filter((r) => r.name !== selectedResource));
-        setSelectedResource('');
-      } else {
-        throw new Error('Failed to delete scheduled resource.');
-      }
+      const response = await fetch('http://localhost:8000/delete-schedule-backup', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ schedule_name: selectedResource }),
+      });
+      if (!response.ok) throw new Error('Failed to delete scheduled resource');
+      setMessage(`Scheduled resource "${selectedResource}" deleted successfully!`);
+      setResources(resources.filter((r) => r.name !== selectedResource));
+      setSelectedResource('');
     } catch (error) {
       setMessage(error.message || 'Failed to delete scheduled resource.');
     } finally {
@@ -58,17 +55,17 @@ const DeleteScheduleResource = ({ darkMode }) => {
   };
 
   return (
-    <div className={`delete-schedule-container ${darkMode ? 'dark' : ''}`}>
+    <div className={`delete-backup-container ${darkMode ? 'dark' : ''}`}>
+      <img
+        src={guardianLogo}
+        alt="Guardian Logo"
+        className="app-logo"
+        onClick={handleLogoClick}
+        role="button"
+        tabIndex={0}
+        onKeyPress={(e) => e.key === 'Enter' && handleLogoClick()}
+      />
       <header className="page-header">
-        <img
-          src={guardianLogo}
-          alt="Guardian Logo"
-          className="guardian-logo"
-          onClick={handleLogoClick}
-          role="button"
-          tabIndex={0}
-          onKeyPress={(e) => e.key === 'Enter' && handleLogoClick()}
-        />
         <h1>Delete Scheduled Resource</h1>
       </header>
       <div className="form-group">
@@ -81,7 +78,7 @@ const DeleteScheduleResource = ({ darkMode }) => {
         >
           <option value="">--Select a resource--</option>
           {resources.map((resource) => (
-            <option key={resource.id} value={resource.name}>{resource.name}</option>
+            <option key={resource.name} value={resource.name}>{resource.name}</option>
           ))}
         </select>
       </div>

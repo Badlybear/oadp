@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './ScheduleBackup.css';
 import guardianLogo from '../GUARDIAN.png';
@@ -9,15 +9,24 @@ const ScheduleBackup = ({ darkMode }) => {
   const [backupHour, setBackupHour] = useState('');
   const [message, setMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [namespaces, setNamespaces] = useState([]);
   const navigate = useNavigate();
 
-  const namespaces = [
-    { id: 1, name: 'Namespace 1' },
-    { id: 2, name: 'Namespace 2' },
-    { id: 3, name: 'Namespace 3' },
-  ];
-  const daysOptions = Array.from({ length: 10 }, (_, i) => i + 1);
-  const hoursOptions = Array.from({ length: 24 }, (_, i) => i);
+  useEffect(() => {
+    const fetchNamespaces = async () => {
+      try {
+        setIsLoading(true);
+        const response = await fetch('http://localhost:8000/get-user-namespaces');
+        const data = await response.json();
+        setNamespaces(data.namespaces);
+      } catch (error) {
+        setMessage('Error fetching namespaces.');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchNamespaces();
+  }, []);
 
   const handleLogoClick = () => {
     navigate('/dashboard');
@@ -31,16 +40,16 @@ const ScheduleBackup = ({ darkMode }) => {
 
     setIsLoading(true);
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      const success = Math.random() > 0.2;
-      if (success) {
-        setMessage(`Scheduled backup created successfully! Backup will run every ${frequencyDays} day(s) at ${backupHour}:00.`);
-        setSelectedNamespace('');
-        setFrequencyDays('');
-        setBackupHour('');
-      } else {
-        throw new Error('Failed to create scheduled backup.');
-      }
+      const response = await fetch('http://localhost:8000/create-schedule-backup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ namespaces: selectedNamespace, schedule: frequencyDays, amount: backupHour }),
+      });
+      if (!response.ok) throw new Error('Failed to create scheduled backup');
+      setMessage(`Scheduled backup created successfully! Backup will run every ${frequencyDays} day(s) at ${backupHour}:00.`);
+      setSelectedNamespace('');
+      setFrequencyDays('');
+      setBackupHour('');
     } catch (error) {
       setMessage(error.message || 'Failed to create scheduled backup.');
     } finally {
@@ -72,7 +81,7 @@ const ScheduleBackup = ({ darkMode }) => {
         >
           <option value="">--Select a namespace--</option>
           {namespaces.map((namespace) => (
-            <option key={namespace.id} value={namespace.name}>{namespace.name}</option>
+            <option key={namespace.name} value={namespace.name}>{namespace.name}</option>
           ))}
         </select>
       </div>
@@ -85,7 +94,7 @@ const ScheduleBackup = ({ darkMode }) => {
           disabled={isLoading}
         >
           <option value="">--Select frequency--</option>
-          {daysOptions.map((day) => (
+          {Array.from({ length: 10 }, (_, i) => i + 1).map((day) => (
             <option key={day} value={day}>Every {day} day{day > 1 ? 's' : ''}</option>
           ))}
         </select>
@@ -99,7 +108,7 @@ const ScheduleBackup = ({ darkMode }) => {
           disabled={isLoading}
         >
           <option value="">--Select hour--</option>
-          {hoursOptions.map((hour) => (
+          {Array.from({ length: 24 }, (_, i) => i).map((hour) => (
             <option key={hour} value={hour}>{hour.toString().padStart(2, '0')}:00</option>
           ))}
         </select>
