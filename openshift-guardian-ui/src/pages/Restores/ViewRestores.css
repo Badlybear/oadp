@@ -3,7 +3,7 @@
 .view-restores-container {
   padding: 40px;
   min-height: 100vh;
-  background: linear-gradient(135deg, #23a6d5 0%, #1e93c0 100%);
+  background: linear-gradient(135deg, #1f88f1 0%, #205992 100%); /* Softer light mode background */
   font-family: 'Poppins', sans-serif;
   display: flex;
   flex-direction: column;

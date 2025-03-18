@@ -73,9 +73,9 @@ const ViewRestores = ({ darkMode }) => {
             <thead>
               <tr>
                 <th>Name</th>
-                <th>Time Created</th>
-                <th>Status</th>
                 <th>Namespace</th>
+                <th>Status</th>
+                <th>Time Created</th>
                 <th>Details</th>
               </tr>
             </thead>
@@ -84,11 +84,11 @@ const ViewRestores = ({ darkMode }) => {
                 <React.Fragment key={index}>
                   <tr onClick={() => toggleExpand(index)} className="clickable-row">
                     <td>{restore.name}</td>
-                    <td>{restore["Time Created"]}</td>
+                    <td>{restore.namespace}</td>
                     <td className={`status ${restore.status ? restore.status.toLowerCase() : ''}`}>
                       {restore.status || 'Unknown'}
                     </td>
-                    <td>{restore.namespace}</td>
+                    <td>{restore["Time Created"]}</td>
                     <td>{expandedRestore === index ? '▲' : '▼'}</td>
                   </tr>
                   {expandedRestore === index && (
