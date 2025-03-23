@@ -55,6 +55,7 @@ body {
 
 .resource-checkbox label {
     font-size: 1.1rem;
+    color: #000; /* Dark text for better contrast on light backgrounds */
 }
 
 /* Enhanced Button Styles */
@@ -128,7 +129,7 @@ body {
     border: 2px solid var(--primary-color);
     border-radius: 8px;
     background-color: var(--card-bg-light);
-    color: var(--text-light);
+    color: #000; /* Dark text for better contrast on light backgrounds */
 }
 
 .dark .label-pair input {
@@ -162,4 +163,15 @@ body {
         flex-direction: column;
         gap: 15px;
     }
+}
+
+/* For any checkbox inputs within the restore form */
+input[type="checkbox"] {
+    /* Use an accent color for the checkbox (supported on modern browsers) */
+    accent-color: var(--primary-color);
+}
+
+/* If you have deployment labels or checkboxes, ensure their associated text is dark */
+.create-restore-container label {
+    color: #000;
 }
