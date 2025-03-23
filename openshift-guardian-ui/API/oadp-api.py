@@ -1,10 +1,12 @@
 from fastapi import FastAPI, HTTPException, Request, Query
+from fastapi.security import OpenIdConnect
 from pydantic import BaseModel
 from typing import List
 import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(title="Simple Item API")
+OIDC_PROVIDER = OpenIdConnect(openIdConnectUrl="https://dev-x2ym4ilm6iyjc6w3.us.auth0.com/oauth2/.well-known/openid-configuration")
 
 app.add_middleware(
     CORSMiddleware,
