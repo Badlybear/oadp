@@ -211,3 +211,44 @@
       max-width: 250px;
   }
 }
+/* Custom centered + smaller dropdown just for ViewRestores */
+.namespace-select-restores {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.namespace-select-restores label {
+  margin-bottom: 6px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-light);
+}
+
+.dark .namespace-select-restores label {
+  color: var(--text-dark);
+}
+
+.namespace-select-restores select {
+  width: 180px;
+  padding: 6px 10px;
+  font-size: 0.9rem;
+  text-align: center;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #ffffff;
+  transition: all 0.3s ease;
+}
+
+.dark .namespace-select-restores select {
+  background-color: #1a202c;
+  color: var(--text-dark);
+  border-color: #444;
+}
+
+.namespace-select-restores select:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 5px rgba(35, 166, 213, 0.4);
+  outline: none;
+}

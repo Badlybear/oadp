@@ -155,3 +155,44 @@
     margin: 0 -10px;
   }
 }
+/* Unique and smaller namespace dropdown just for ViewBackups */
+.namespace-select-backups {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.namespace-select-backups label {
+  margin-bottom: 6px;
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: var(--text-light);
+}
+
+.dark .namespace-select-backups label {
+  color: var(--text-dark);
+}
+
+.namespace-select-backups select {
+  width: 300px;
+  padding: 6px 10px;
+  font-size: 1rem;
+  text-align: center;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #ffffff;
+  transition: all 0.3s ease;
+}
+
+.dark .namespace-select-backups select {
+  background-color: #1a202c;
+  color: var(--text-dark);
+  border-color: #444;
+}
+
+.namespace-select-backups select:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 5px rgba(35, 166, 213, 0.4);
+  outline: none;
+}

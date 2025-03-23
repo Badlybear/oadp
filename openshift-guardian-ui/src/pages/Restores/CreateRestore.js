@@ -36,24 +36,39 @@ const CreateRestore = ({ darkMode }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchNamespaces = async () => {
+      try {
+        const res = await fetch('http://localhost:8000/get-user-namespaces');
+        const data = await res.json();
+        setNamespaces(data.namespaces || []);
+      } catch (error) {
+        setMessage('Failed to load namespaces.');
+      }
+    };
+    fetchNamespaces();
+  }, []);
+  
+  useEffect(() => {
+    const fetchBackups = async () => {
+      if (!selectedNamespace) {
+        setBackups([]);
+        return;
+      }
+  
       try {
         setIsLoading(true);
-        const backupResponse = await fetch('http://localhost:8000/get-backups');
-        const namespaceResponse = await fetch('http://localhost:8000/get-user-namespaces');
-        const backupsData = await backupResponse.json();
-        const namespacesData = await namespaceResponse.json();
-        setBackups(backupsData.backups || []);
-        setNamespaces(namespacesData.namespaces || []);
+        const res = await fetch(`http://localhost:8000/get-backups?namespace=${selectedNamespace}`);
+        const data = await res.json();
+        setBackups(data.backups || []);
       } catch (error) {
-        setMessage('Failed to load backups or namespaces.');
+        setMessage('Failed to load backups.');
       } finally {
         setIsLoading(false);
       }
     };
-    fetchData();
-  }, []);
-
+    fetchBackups();
+  }, [selectedNamespace]);
+  
   const handleLogoClick = () => navigate('/dashboard');
 
   const handleResourceChange = (resource) => {
