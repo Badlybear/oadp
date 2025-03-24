@@ -11,9 +11,13 @@ oauth = OAuth()
 app = FastAPI(title="Simple Item API")
 OIDC_PROVIDER = OpenIdConnect(openIdConnectUrl="https://dev-x2ym4ilm6iyjc6w3.us.auth0.com/oauth2/.well-known/openid-configuration")
 
+origins = [
+    "http://localhost:5173",
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://localhost:5173"],  # 👈 Allow only React app
+    allow_origins=origins,  # 👈 Allow only React app
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

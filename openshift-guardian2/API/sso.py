@@ -9,11 +9,16 @@ import os, uvicorn
 env_path ='./.env'
 load_dotenv(dotenv_path="./.env")
 
+origins = [
+    "http://localhost:5173",
+    "http://localhost:8000"
+]
+
 app = FastAPI()
 app.add_middleware(SessionMiddleware, secret_key="supersecret")  # Change this in prod!
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],  # 👈 Allow only React app
+    allow_origins=origins,  # 👈 Allow only React app
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
