@@ -15,14 +15,15 @@ origins = [
 ]
 
 app = FastAPI()
-app.add_middleware(SessionMiddleware, secret_key="supersecret")  # Change this in prod!
+app.add_middleware(SessionMiddleware, secret_key="supersecret")  
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,  # 👈 Allow only React app
-    allow_credentials=True,
+    allow_origins=origins,
+    allow_credentials=True,  # 👈 important for cookies
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 oauth = OAuth()
 

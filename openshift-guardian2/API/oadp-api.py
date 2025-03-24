@@ -13,6 +13,7 @@ OIDC_PROVIDER = OpenIdConnect(openIdConnectUrl="https://dev-x2ym4ilm6iyjc6w3.us.
 
 origins = [
     "http://localhost:5173",
+    "http://localhost:8080",
 ]
 
 app.add_middleware(

@@ -1,3 +1,4 @@
+// useAuth.jsx
 export const verifyAuth = async () => {
   try {
     const res = await fetch("http://localhost:8080/me", {
@@ -6,7 +7,7 @@ export const verifyAuth = async () => {
 
     if (!res.ok) {
       console.warn("🛑 /me responded with status:", res.status);
-      window.location.href = "http://localhost:5173/login";
+      window.location.href = "http://localhost:8080/login"; // 🔁 FIXED!
       throw new Error("Not authenticated");
     }
 
@@ -15,7 +16,7 @@ export const verifyAuth = async () => {
     return data.user;
   } catch (err) {
     console.error("Failed to verify auth:", err);
-    window.location.href = "http://localhost:5173/login";
+    window.location.href = "http://localhost:8080/login"; // 🔁 FIXED!
     throw err;
   }
 };
