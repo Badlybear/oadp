@@ -2,19 +2,25 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './CreateBackup.css';
 import guardianLogo from '../GUARDIAN.png';
+import { verifyAuth } from '../../auth/useAuth.jsx'; // ✅ ייבוא פונקציית האימות
 
 const CreateBackup = ({ darkMode }) => {
   const [selectedNamespace, setSelectedNamespace] = useState('');
   const [message, setMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [namespaces, setNamespaces] = useState([]);
+  const [user, setUser] = useState(null); // ✅ נשתמש בזה לשם המשתמש
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchNamespaces = async () => {
       try {
         setIsLoading(true);
-        const response = await fetch('http://localhost:8000/get-user-namespaces');
+        const currentUser = await verifyAuth(); // 🔒 בדיקת התחברות
+        setUser(currentUser); // ✅ שמור את המשתמש להצגה
+        const response = await fetch('http://localhost:8000/get-user-namespaces', {
+          credentials: "include",
+        });
         const data = await response.json();
         setNamespaces(data.namespaces);
       } catch (error) {
@@ -23,6 +29,7 @@ const CreateBackup = ({ darkMode }) => {
         setIsLoading(false);
       }
     };
+
     fetchNamespaces();
   }, []);
 
@@ -43,10 +50,12 @@ const CreateBackup = ({ darkMode }) => {
 
     setIsLoading(true);
     try {
+      await verifyAuth(); // 🔒 בדיקה גם לפני יצירת גיבוי
       const response = await fetch('http://localhost:8000/create-backup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ namespaces: selectedNamespace }), // ✅ Send only namespace
+        credentials: "include",
+        body: JSON.stringify({ namespaces: selectedNamespace }),
       });
       if (!response.ok) throw new Error('Failed to create backup');
       setMessage('Backup created successfully!');
@@ -71,6 +80,11 @@ const CreateBackup = ({ darkMode }) => {
       />
       <header className="page-header">
         <h1>Create Backup</h1>
+        {user && (
+          <p style={{ fontSize: "14px", marginTop: "-10px" }}>
+            👤 Connected as: <strong>{user.name || user.email}</strong>
+          </p>
+        )}
       </header>
       <div className="form-group">
         <label htmlFor="namespace-select">Select Namespace</label>

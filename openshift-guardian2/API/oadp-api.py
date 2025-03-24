@@ -1,16 +1,19 @@
 from fastapi import FastAPI, HTTPException, Request, Query
 from fastapi.security import OpenIdConnect
+from authlib.integrations.starlette_client import OAuth
 from pydantic import BaseModel
 from typing import List
 import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
 
+
+oauth = OAuth()
 app = FastAPI(title="Simple Item API")
 OIDC_PROVIDER = OpenIdConnect(openIdConnectUrl="https://dev-x2ym4ilm6iyjc6w3.us.auth0.com/oauth2/.well-known/openid-configuration")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # 👈 Allow only React app
+    allow_origins=["http://localhost:3000", "http://localhost:5173"],  # 👈 Allow only React app
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -24,8 +27,12 @@ namespaces = {"namespaces": [{"name": "aloni"}, {"name": "omeriko"}, {"name": "k
 
 
 @app.get("/get-user-namespaces", response_model=dict)
-async def get_user_namespaces():
+
+async def get_user_namespaces(request: Request):
     """Get namespaces"""
+    token = request.session.get("token")
+    user_info = await oauth.oidc.userinfo(token=token)
+    
     return namespaces
 
 

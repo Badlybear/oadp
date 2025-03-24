@@ -2,6 +2,7 @@ from fastapi import FastAPI, Request, Depends, HTTPException
 from fastapi.responses import RedirectResponse, JSONResponse
 from authlib.integrations.starlette_client import OAuth
 from starlette.middleware.sessions import SessionMiddleware
+from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 import os, uvicorn
 
@@ -10,6 +11,13 @@ load_dotenv(dotenv_path="./.env")
 
 app = FastAPI()
 app.add_middleware(SessionMiddleware, secret_key="supersecret")  # Change this in prod!
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],  # 👈 Allow only React app
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 oauth = OAuth()
 
@@ -40,14 +48,16 @@ async def auth_callback(request: Request):
     token = await oauth.oidc.authorize_access_token(request)
     user_info = await oauth.oidc.userinfo(token=token)
     request.session['user'] = dict(user_info)
-    return RedirectResponse(url="http://localhost:3000/dashboard") 
+    request.session['token'] = dict(token)
+    return RedirectResponse(url="http://localhost:5173/dashboard") 
 
 
 @app.get("/me")
 def protected_user(request: Request):
     user = request.session.get("user")
     if not user:
-        raise HTTPException(status_code=401, detail="Not authenticated")
+        return RedirectResponse(url="http://localhost:5173/login") 
+    print(f"user: {user}")
     return JSONResponse(content={"user": user})
 
 if __name__ == "__main__":
