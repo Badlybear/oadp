@@ -40,7 +40,8 @@ async def auth_callback(request: Request):
     token = await oauth.oidc.authorize_access_token(request)
     user_info = await oauth.oidc.userinfo(token=token)
     request.session['user'] = dict(user_info)
-    return RedirectResponse(url="http://localhost:3000/dashboard")
+    return RedirectResponse(url="http://localhost:3000/dashboard") 
+
 
 @app.get("/me")
 def protected_user(request: Request):

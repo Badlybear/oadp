@@ -1,0 +1,198 @@
+/* ViewBackups.css */
+
+.view-backups-container {
+  padding: 40px;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #268de2 0%, #0573ce 100%);
+  font-family: 'Poppins', sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.dark.view-backups-container {
+  background: linear-gradient(135deg, #1a202c 0%, #324e8a 100%);
+}
+
+.page-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.view-backups-container h1 {
+  font-size: 2.2rem;
+  font-weight: 600;
+  color: var(--text-light);
+}
+
+.dark .view-backups-container h1 {
+  color: var(--text-dark);
+}
+
+.table-wrapper {
+  width: 100%;
+  max-width: 1200px;
+  overflow-x: auto;
+  border-radius: 12px;
+  box-shadow: var(--shadow-light);
+}
+
+.dark .table-wrapper {
+  box-shadow: var(--shadow-dark);
+}
+
+.backups-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.dark .backups-table {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.backups-table th,
+.backups-table td {
+  padding: 15px 20px;
+  text-align: left;
+  font-size: 1rem;
+  color: var(--text-light);
+}
+
+.dark .backups-table td {
+  color: var(--text-dark);
+}
+
+.backups-table th {
+  background-color: var(--primary-color);
+  color: #ffffff;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.dark .backups-table th {
+  background-color: #324e8a;
+}
+
+.backups-table tr {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  transition: background-color 0.2s ease;
+}
+
+.dark .backups-table tr {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.backups-table tr:last-child {
+  border-bottom: none;
+}
+
+.backups-table tr:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.dark .backups-table tr:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.status.completed {
+  color: var(--status-completed);
+  font-weight: 500;
+}
+
+.status.failed {
+  color: var(--status-failed);
+  font-weight: 500;
+}
+
+.loader {
+  margin-top: 20px;
+  font-size: 1.2rem;
+  color: var(--text-light);
+}
+
+.dark .loader {
+  color: var(--text-dark);
+}
+
+.view-backups-container p {
+  font-size: 1.2rem;
+  color: var(--text-light);
+  margin-top: 20px;
+}
+
+.dark .view-backups-container p {
+  color: var(--text-dark);
+}
+
+@media (max-width: 768px) {
+  .view-backups-container {
+    padding: 20px;
+  }
+
+  .view-backups-container h1 {
+    font-size: 1.8rem;
+  }
+
+  .backups-table th,
+  .backups-table td {
+    padding: 12px 15px;
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .backups-table th,
+  .backups-table td {
+    padding: 10px 12px;
+    font-size: 0.9rem;
+  }
+
+  .table-wrapper {
+    margin: 0 -10px;
+  }
+}
+/* Unique and smaller namespace dropdown just for ViewBackups */
+.namespace-select-backups {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.namespace-select-backups label {
+  margin-bottom: 6px;
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: var(--text-light);
+}
+
+.dark .namespace-select-backups label {
+  color: var(--text-dark);
+}
+
+.namespace-select-backups select {
+  width: 300px;
+  padding: 6px 10px;
+  font-size: 1rem;
+  text-align: center;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #ffffff;
+  transition: all 0.3s ease;
+}
+
+.dark .namespace-select-backups select {
+  background-color: #1a202c;
+  color: var(--text-dark);
+  border-color: #444;
+}
+
+.namespace-select-backups select:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 5px rgba(35, 166, 213, 0.4);
+  outline: none;
+}

@@ -1,0 +1,175 @@
+/* CreateRestore.css */
+
+.create-restore-container {
+    padding: 50px;
+    max-width: 650px;
+    margin: 100px auto 40px;
+    background: linear-gradient(135deg, var(--background-light) 0%, var(--border-light) 100%);
+    border-radius: 20px;
+    box-shadow: var(--shadow-light);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: 'Poppins', sans-serif;
+    animation: fadeIn 0.6s ease-out;
+  }
+  
+  .dark .create-restore-container {
+    background: linear-gradient(135deg, var(--background-dark) 0%, var(--card-bg-dark) 100%);
+    box-shadow: var(--shadow-dark);
+  }
+  
+  .page-header {
+    text-align: center;
+    margin-bottom: 35px;
+  }
+  
+  .create-restore-container h1 {
+    font-size: 2.3rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    margin: 0 0 20px;
+    position: relative;
+  }
+  
+  .create-restore-container h1::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 70px;
+    height: 4px;
+    background-color: var(--primary-color);
+    border-radius: 4px;
+    transition: width 0.4s ease;
+  }
+  
+  .create-restore-container h1:hover::after {
+    width: 120px;
+  }
+  
+  .dark .create-restore-container h1 {
+    color: var(--secondary-color);
+  }
+  
+  .dark .create-restore-container h1::after {
+    background-color: var(--secondary-color);
+  }
+  
+  .form-group {
+    width: 100%;
+    margin-bottom: 25px;
+  }
+  
+  .form-group label {
+    display: block;
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin-bottom: 10px;
+    color: var(--text-light);
+  }
+  
+  .dark .form-group label {
+    color: var(--text-dark);
+  }
+  
+  .form-group select {
+    width: 100%;
+    padding: 14px 18px;
+    font-size: 1.1rem;
+    border: 2px solid var(--primary-color);
+    border-radius: 10px;
+    background-color: var(--card-bg-light);
+    color: var(--text-light);
+    transition: all 0.3s ease;
+  }
+  
+  .form-group select:focus {
+    outline: none;
+    border-color: var(--primary-hover);
+    box-shadow: 0 0 8px rgba(107, 72, 255, 0.4);
+  }
+  
+  .dark .form-group select {
+    background-color: var(--card-bg-dark);
+    border-color: var(--secondary-color);
+    color: var(--text-dark);
+  }
+  
+  .create-restore-container button {
+    width: 100%;
+    padding: 15px 25px;
+    background-color: var(--primary-color);
+    color: #ffffff;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .create-restore-container button:hover:not(:disabled) {
+    background-color: var(--primary-hover);
+    transform: scale(1.02);
+    box-shadow: 0 6px 14px rgba(107, 72, 255, 0.3);
+  }
+  
+  .create-restore-container button:disabled {
+    background-color: #a0a0c0;
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+  
+  .message {
+    margin-top: 25px;
+    padding: 14px 25px;
+    border-radius: 10px;
+    width: 100%;
+    text-align: center;
+    font-weight: 500;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+  }
+  
+  .message.success {
+    color: var(--success);
+    background-color: rgba(46, 204, 113, 0.15);
+  }
+  
+  .message.error {
+    color: var(--error);
+    background-color: rgba(255, 71, 87, 0.15);
+  }
+  
+  .loader {
+    margin-top: 25px;
+    width: 50px;
+    height: 50px;
+    border: 5px solid var(--border-light);
+    border-top: 5px solid var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+  
+  @media (max-width: 600px) {
+    .create-restore-container {
+      margin: 80px 15px 20px;
+      padding: 30px;
+    }
+  
+    .create-restore-container h1 {
+      font-size: 2rem;
+    }
+  
+    .form-group select {
+      padding: 12px 15px;
+      font-size: 1rem;
+    }
+  
+    .create-restore-container button {
+      padding: 12px 20px;
+      font-size: 1.1rem;
+    }
+  }
