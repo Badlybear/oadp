@@ -1,18 +1,20 @@
 /* ClientLogin.css */
 
 .login-container {
-  min-height: 100vh; /* changed from calc(100vh - 60px) */
+  height: 100vh; /* Ensure it takes the full height of the viewport */
+  width: 100vw; /* Ensure it takes the full width of the viewport */
   display: flex;
   justify-content: center;
   align-items: center;
   background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
   background-size: 400% 400%;
   animation: gradientBG 15s ease infinite !important;
-  padding: 20px;
+  margin: 0; /* Remove any default margin */
+  padding: 0; /* Remove any default padding */
 }
 
 @keyframes gradientBG {
-  0%,100% { background-position: 0% 50%; }
+  0%, 100% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
 }
 
@@ -75,7 +77,7 @@
 }
 
 @keyframes gradientDark {
-  0%,100% { background-position: 0% 50%; }
+  0%, 100% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
 }
 
