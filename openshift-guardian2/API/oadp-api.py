@@ -5,20 +5,21 @@ from pydantic import BaseModel
 from typing import List
 import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
-
+from starlette.middleware.sessions import SessionMiddleware  # Add this import
 
 oauth = OAuth()
 app = FastAPI(title="Simple Item API")
-OIDC_PROVIDER = OpenIdConnect(openIdConnectUrl="https://dev-x2ym4ilm6iyjc6w3.us.auth0.com/oauth2/.well-known/openid-configuration")
+
+# Add session middleware to handle sessions across requests
+app.add_middleware(SessionMiddleware, secret_key="supersecret")  # Ensure this matches the secret key in sso.py
 
 origins = [
     "http://localhost:5173",
-    "http://localhost:8080",
 ]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,  # 👈 Allow only React app
+    allow_origins=origins,  # Allow only React app
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -32,12 +33,12 @@ namespaces = {"namespaces": [{"name": "aloni"}, {"name": "omeriko"}, {"name": "k
 
 
 @app.get("/get-user-namespaces", response_model=dict)
-
 async def get_user_namespaces(request: Request):
     """Get namespaces"""
     token = request.session.get("token")
+    if not token:
+        raise HTTPException(status_code=400, detail="Token is missing in the session.")
     user_info = await oauth.oidc.userinfo(token=token)
-    
     return namespaces
 
 
