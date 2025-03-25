@@ -11,7 +11,7 @@ const ClientLogin = () => {
   const handleSSOLogin = async () => {
     // Start the fade-out animation
     setTransition(true);
-    window.location.href = "http://localhost:8080/login"
+    window.location.href = "http://localhost:8000/login"
     
     // Simulate a login request delay
     const simulatedResponse = { data: { success: true, token: 'dummy_token' } };
