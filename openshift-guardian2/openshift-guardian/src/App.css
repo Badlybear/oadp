@@ -71,5 +71,6 @@ html, body, #root {
 .user-info {
   font-size: 14px;
   color: white;
-  
+  position: fixed;
+  left: 44vw;
 }
