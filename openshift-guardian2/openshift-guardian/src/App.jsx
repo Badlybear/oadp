@@ -7,7 +7,6 @@ import Restores from './pages/Restores';
 import Sidebar from './Sidebar';
 import './App.css';
 
-
 // Backup Pages
 import CreateBackup from './pages/Backups/CreateBackup';
 import ViewBackups from './pages/Backups/ViewBackups';
@@ -19,7 +18,7 @@ import DeleteScheduleResource from './pages/Backups/DeleteScheduleResource'; // 
 import CreateRestore from './pages/Restores/CreateRestore'; // New component
 import ViewRestores from './pages/Restores/ViewRestores'; // New component
 
-const AppLayout = ({ darkMode, toggleDarkMode }) => {
+const AppLayout = ({ darkMode, toggleDarkMode, user }) => {
   const location = useLocation();
   const isLoginPage = location.pathname.startsWith('/login');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -37,6 +36,11 @@ const AppLayout = ({ darkMode, toggleDarkMode }) => {
           />
           <header className="main-header">
             <h1>Openshift Guardian</h1>
+            <div className="user-info">
+              {user ? (
+                <p>Connected as: <strong>{user.name || user.email}</strong></p>
+              ) : null}
+            </div>
             <button onClick={toggleDarkMode} className="dark-mode-toggle">
               {darkMode ? '☀️' : '🌙'}
             </button>
@@ -72,6 +76,7 @@ const AppLayout = ({ darkMode, toggleDarkMode }) => {
 
 function App() {
   const [darkMode, setDarkMode] = useState(() => localStorage.getItem('darkMode') === 'true');
+  const [user, setUser] = useState(null);
 
   const toggleDarkMode = () => setDarkMode((prev) => !prev);
 
@@ -79,9 +84,29 @@ function App() {
     localStorage.setItem('darkMode', darkMode);
   }, [darkMode]);
 
+  useEffect(() => {
+    // Fetch user info if available (e.g., from session or API)
+    const fetchUser = async () => {
+      try {
+        const response = await fetch('http://localhost:8000/me', { credentials: 'include' });
+        if (response.ok) {
+          const data = await response.json();
+          setUser(data.user);
+        } else {
+          setUser(null);
+        }
+      } catch (error) {
+        console.error("Failed to fetch user:", error);
+        setUser(null);
+      }
+    };
+
+    fetchUser();
+  }, []);
+
   return (
     <Router>
-      <AppLayout darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
+      <AppLayout darkMode={darkMode} toggleDarkMode={toggleDarkMode} user={user} />
     </Router>
   );
 }

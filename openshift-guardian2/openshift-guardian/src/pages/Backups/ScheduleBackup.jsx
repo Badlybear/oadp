@@ -9,7 +9,7 @@ const ScheduleBackup = ({ darkMode }) => {
   const [backupHour, setBackupHour] = useState('');
   const [message, setMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [namespaces, setNamespaces] = useState([]);
+  const [namespaces, setNamespaces] = useState([]); // Initialize namespaces as an empty array
   const [scheduledBackups, setScheduledBackups] = useState([]);
   const navigate = useNavigate();
 
@@ -18,10 +18,17 @@ const ScheduleBackup = ({ darkMode }) => {
       try {
         setIsLoading(true);
         const response = await fetch('http://localhost:8000/get-user-namespaces');
+        if (!response.ok) throw new Error('Error fetching namespaces');
+        
         const data = await response.json();
-        setNamespaces(data.namespaces);
+        // Ensure the response contains a valid 'namespaces' array
+        if (Array.isArray(data.namespaces)) {
+          setNamespaces(data.namespaces);
+        } else {
+          throw new Error('Invalid namespaces structure');
+        }
       } catch (error) {
-        setMessage('Error fetching namespaces.');
+        setMessage(error.message || 'Error fetching namespaces.');
       } finally {
         setIsLoading(false);
       }
@@ -84,9 +91,13 @@ const ScheduleBackup = ({ darkMode }) => {
           disabled={isLoading}
         >
           <option value="">--Select a namespace--</option>
-          {namespaces.map((namespace) => (
-            <option key={namespace.name} value={namespace.name}>{namespace.name}</option>
-          ))}
+          {namespaces.length > 0 ? (
+            namespaces.map((namespace) => (
+              <option key={namespace.name} value={namespace.name}>{namespace.name}</option>
+            ))
+          ) : (
+            <option value="">No namespaces available</option>
+          )}
         </select>
       </div>
       <div className="form-group">

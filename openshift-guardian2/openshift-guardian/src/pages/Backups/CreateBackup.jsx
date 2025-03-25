@@ -81,7 +81,13 @@ const CreateBackup = ({ darkMode }) => {
       <header className="page-header">
         <h1>Create Backup</h1>
         {user && (
-          <p style={{ fontSize: "14px", marginTop: "-10px" }}>
+          <p
+            style={{
+              fontSize: "14px", 
+              marginTop: "-10px", 
+              color: darkMode ? 'lightgray' : 'black' // Dynamic color based on darkMode
+            }}
+          >
             👤 Connected as: <strong>{user.name || user.email}</strong>
           </p>
         )}

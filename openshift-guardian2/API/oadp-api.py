@@ -3,6 +3,7 @@ from fastapi.responses import RedirectResponse, JSONResponse
 from authlib.integrations.starlette_client import OAuth
 from starlette.middleware.sessions import SessionMiddleware
 from fastapi.middleware.cors import CORSMiddleware
+from authlib.integrations.starlette_client import OAuthError
 from dotenv import load_dotenv
 import os
 import uvicorn
@@ -79,14 +80,18 @@ def protected_user(request: Request):
     print(f"user: {user}")
     return JSONResponse(content={"user": user})
 
-# API Routes (original endpoints)
 @app.get("/get-user-namespaces", response_model=dict)
 async def get_user_namespaces(request: Request):
     """Get namespaces"""
     token = request.session.get("token")
     if not token:
         raise HTTPException(status_code=400, detail="Token is missing in the session.")
-    user_info = await oauth.oidc.userinfo(token=token)
+    
+    try:
+        user_info = await oauth.oidc.userinfo(token=token)
+    except OAuthError:
+        raise HTTPException(status_code=401, detail="Invalid or expired token.")
+
     return namespaces
 
 @app.get("/get-backups", response_model=dict)
