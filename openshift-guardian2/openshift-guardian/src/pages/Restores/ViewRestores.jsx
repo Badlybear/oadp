@@ -10,16 +10,20 @@ const ViewRestores = ({ darkMode }) => {
   const [expandedRestore, setExpandedRestore] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchNamespaces = async () => {
       try {
-        const res = await fetch('http://localhost:8000/get-user-namespaces');
+        const res = await fetch('http://localhost:8000/get-user-namespaces', {
+          credentials: 'include',
+        });
+        if (!res.ok) throw new Error('Failed to fetch namespaces');
         const data = await res.json();
         setNamespaces(data.namespaces || []);
       } catch (error) {
-        console.error('Error fetching namespaces:', error);
+        setError('Error fetching namespaces: ' + error.message);
       }
     };
     fetchNamespaces();
@@ -34,16 +38,19 @@ const ViewRestores = ({ darkMode }) => {
 
       try {
         setIsLoading(true);
-        const res = await fetch(`http://localhost:8000/get-restores?namespace=${selectedNamespace}`);
+        const res = await fetch(`http://localhost:8000/get-restores?namespace=${selectedNamespace}`, {
+          credentials: 'include',
+        });
+        if (!res.ok) throw new Error('Failed to fetch restores');
         const data = await res.json();
         setRestores(data.restores || []);
+        setError('');
       } catch (error) {
-        console.error('Error fetching restores:', error);
+        setError('Error fetching restores: ' + error.message);
       } finally {
         setIsLoading(false);
       }
     };
-
     fetchRestores();
   }, [selectedNamespace]);
 
@@ -72,6 +79,8 @@ const ViewRestores = ({ darkMode }) => {
         <h1>View Restores</h1>
       </header>
 
+      {error && <p className="error">{error}</p>}
+
       <div className="search-bar-container">
         <input
           type="text"
@@ -83,7 +92,6 @@ const ViewRestores = ({ darkMode }) => {
       </div>
 
       <div className="namespace-select-restores">
-
         <label htmlFor="namespace-select">Select Namespace:</label>
         <select
           id="namespace-select"

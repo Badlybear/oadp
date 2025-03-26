@@ -15,11 +15,14 @@ const DeleteSchedule = ({ darkMode }) => {
   useEffect(() => {
     const fetchNamespaces = async () => {
       try {
-        const res = await fetch('http://localhost:8000/get-user-namespaces');
+        const res = await fetch('http://localhost:8000/get-user-namespaces', {
+          credentials: 'include',
+        });
+        if (!res.ok) throw new Error('Failed to fetch namespaces');
         const data = await res.json();
         setNamespaces(data.namespaces || []);
       } catch (error) {
-        setMessage('Error fetching namespaces.');
+        setMessage('Error fetching namespaces: ' + error.message);
       }
     };
     fetchNamespaces();
@@ -34,22 +37,23 @@ const DeleteSchedule = ({ darkMode }) => {
 
       try {
         setIsLoading(true);
-        const res = await fetch(`http://localhost:8000/get-scheduled-backups?namespace=${selectedNamespace}`);
+        const res = await fetch('http://localhost:8000/get-scheduled-backups', {
+          credentials: 'include',
+        });
+        if (!res.ok) throw new Error('Failed to fetch scheduled backups');
         const data = await res.json();
-        setSchedules(data.schedule_backups || []);
+        const filteredSchedules = (data.schedule_backups || []).filter(s => s.namespace === selectedNamespace);
+        setSchedules(filteredSchedules);
       } catch (error) {
-        setMessage('Error fetching scheduled backups.');
+        setMessage('Error fetching scheduled backups: ' + error.message);
       } finally {
         setIsLoading(false);
       }
     };
-
     fetchSchedules();
   }, [selectedNamespace]);
 
-  const handleLogoClick = () => {
-    navigate('/dashboard');
-  };
+  const handleLogoClick = () => navigate('/dashboard');
 
   const handleDeleteSchedule = async () => {
     if (!selectedNamespace || !selectedSchedule) {
@@ -62,18 +66,17 @@ const DeleteSchedule = ({ darkMode }) => {
       const response = await fetch('http://localhost:8000/delete-schedule-backup', {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({
           schedule_name: selectedSchedule,
-          namespace: selectedNamespace
-        })
+        }),
       });
       if (!response.ok) throw new Error('Failed to delete scheduled backup');
-
       setMessage(`Scheduled backup "${selectedSchedule}" deleted successfully!`);
       setSchedules(schedules.filter((s) => s.name !== selectedSchedule));
       setSelectedSchedule('');
     } catch (error) {
-      setMessage('Failed to delete scheduled backup.');
+      setMessage('Failed to delete scheduled backup: ' + error.message);
     } finally {
       setIsLoading(false);
     }
@@ -93,6 +96,12 @@ const DeleteSchedule = ({ darkMode }) => {
       <header className="page-header">
         <h1>Delete Scheduled Backup</h1>
       </header>
+
+      {message && (
+        <p className={`message ${message.includes('successfully') ? 'success' : 'error'}`}>
+          {message}
+        </p>
+      )}
 
       <div className="form-group">
         <label htmlFor="namespace-select">Select Namespace</label>
@@ -139,12 +148,6 @@ const DeleteSchedule = ({ darkMode }) => {
       <button onClick={handleDeleteSchedule} disabled={isLoading || !selectedSchedule}>
         {isLoading ? 'Deleting...' : 'Delete Scheduled Backup'}
       </button>
-
-      {message && (
-        <p className={`message ${message.includes('successfully') ? 'success' : 'error'}`}>
-          {message}
-        </p>
-      )}
 
       {isLoading && <div className="loader"></div>}
     </div>

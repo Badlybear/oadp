@@ -3,25 +3,51 @@ import { useNavigate } from 'react-router-dom';
 import './ViewBackups.css';
 import guardianLogo from '../GUARDIAN.png';
 
-const ViewBackups = ({ darkMode }) => {
+const CreateRestore = ({ darkMode }) => {
+  const [selectedBackup, setSelectedBackup] = useState('');
+  const [selectedNamespace, setSelectedNamespace] = useState('');
+  const [includedResources, setIncludedResources] = useState({
+    allNamespaceResources: false,
+    deployments: false,
+    deploymentconfigs: false,
+    statefulsets: false,
+    replicasets: false,
+    daemonsets: false,
+    cronjobs: false,
+    configmaps: false,
+    secrets: false,
+    serviceaccounts: false,
+    services: false,
+    ingresses: false,
+    networkpolicies: false,
+    persistentvolumeclaims: false,
+    persistentvolumes: false,
+    volumesnapshots: false,
+    rolebinding: false,
+    roles: false,
+    routes: false,
+    buildconfigs: false,
+  });
+  const [matchLabels, setMatchLabels] = useState([{ key: '', value: '' }]);
+  const [message, setMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const [backups, setBackups] = useState([]);
   const [namespaces, setNamespaces] = useState([]);
-  const [selectedNamespace, setSelectedNamespace] = useState('');
-  const [searchQuery, setSearchQuery] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchNamespaces = async () => {
       try {
-        const namespacesRes = await fetch('http://localhost:8000/get-user-namespaces');
-        const namespacesData = await namespacesRes.json();
-        setNamespaces(namespacesData.namespaces || []);
+        const res = await fetch('http://localhost:8000/get-user-namespaces', {
+          credentials: 'include',
+        });
+        if (!res.ok) throw new Error('Failed to load namespaces');
+        const data = await res.json();
+        setNamespaces(data.namespaces || []);
       } catch (error) {
-        console.error('Error fetching namespaces:', error);
+        setMessage('Failed to load namespaces: ' + error.message);
       }
     };
-
     fetchNamespaces();
   }, []);
 
@@ -34,106 +60,178 @@ const ViewBackups = ({ darkMode }) => {
 
       try {
         setIsLoading(true);
-        const response = await fetch(`http://localhost:8000/get-backups?namespace=${selectedNamespace}`);
-        const data = await response.json();
+        const res = await fetch(`http://localhost:8000/get-backups?namespace=${selectedNamespace}`, {
+          credentials: 'include',
+        });
+        if (!res.ok) throw new Error('Failed to load backups');
+        const data = await res.json();
         setBackups(data.backups || []);
       } catch (error) {
-        console.error('Error fetching backups:', error);
+        setMessage('Failed to load backups: ' + error.message);
       } finally {
         setIsLoading(false);
       }
     };
-
     fetchBackups();
   }, [selectedNamespace]);
 
-  const handleLogoClick = () => {
-    navigate('/dashboard');
+  const handleLogoClick = () => navigate('/dashboard');
+
+  const handleResourceChange = (resource) => {
+    if (resource === 'allNamespaceResources') {
+      const allSelected = !includedResources.allNamespaceResources;
+      setIncludedResources(
+        Object.fromEntries(Object.keys(includedResources).map((key) => [key, allSelected]))
+      );
+    } else {
+      setIncludedResources((prev) => ({
+        ...prev,
+        [resource]: !prev[resource],
+        allNamespaceResources: false,
+      }));
+    }
   };
 
-  const filteredBackups = backups.filter((backup) =>
-    backup.backup_name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const handleLabelChange = (index, field, value) => {
+    const newLabels = [...matchLabels];
+    newLabels[index][field] = value;
+    setMatchLabels(newLabels);
+  };
+
+  const addLabelPair = () => {
+    setMatchLabels([...matchLabels, { key: '', value: '' }]);
+  };
+
+  const handleCreateRestore = async () => {
+    if (!selectedBackup || !selectedNamespace) {
+      setMessage('Please select both a backup and a namespace.');
+      return;
+    }
+
+    const selectedResources = includedResources.allNamespaceResources
+      ? '*'
+      : Object.entries(includedResources)
+          .filter(([_, value]) => value)
+          .map(([key]) => key);
+
+    const matchLabelsObj = matchLabels.reduce((acc, { key, value }) => {
+      if (key && value) acc[key] = value;
+      return acc;
+    }, {});
+
+    setIsLoading(true);
+    try {
+      const response = await fetch('http://localhost:8000/create-restore', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({
+          namespaces: selectedNamespace,
+          backup_name: selectedBackup,
+          included_resources: selectedResources,
+          match_lables: matchLabelsObj,
+        }),
+      });
+      if (!response.ok) throw new Error('Failed to create restore');
+      setMessage('Restore created successfully!');
+    } catch (error) {
+      setMessage('Failed to create restore: ' + error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
-    <div className={`view-backups-container ${darkMode ? 'dark' : ''}`}>
+    <div className={`create-restore-container ${darkMode ? 'dark' : ''}`}>
+      <img
+        src={guardianLogo}
+        alt="Guardian Logo"
+        className="app-logo"
+        onClick={handleLogoClick}
+        role="button"
+        tabIndex={0}
+        onKeyPress={(e) => e.key === 'Enter' && handleLogoClick()}
+      />
       <header className="page-header">
-        <img
-          src={guardianLogo}
-          alt="Guardian Logo"
-          className="app-logo"
-          onClick={handleLogoClick}
-          role="button"
-          tabIndex={0}
-          onKeyPress={(e) => e.key === 'Enter' && handleLogoClick()}
-        />
-        <h1>View Backups</h1>
+        <h1>Create Restore</h1>
       </header>
 
-      <div className="search-bar-container">
-        <input
-          type="text"
-          placeholder="Search backups..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="search-bar"
-        />
-      </div>
+      {message && <p className={`message ${message.includes('successfully') ? 'success' : 'error'}`}>{message}</p>}
 
-      <div className="namespace-select-backups">
-        <label htmlFor="namespace-select">Select Namespace:</label>
-        <select
-          id="namespace-select"
-          value={selectedNamespace}
-          onChange={(e) => {
-            setSelectedNamespace(e.target.value);
-            setBackups([]); // clear backups while loading
-          }}
-        >
-          <option value="">-- Select Namespace --</option>
+      <div className="form-group">
+        <label>Select Namespace</label>
+        <select value={selectedNamespace} onChange={(e) => setSelectedNamespace(e.target.value)}>
+          <option value="">--Select a namespace--</option>
           {namespaces.map((ns) => (
-            <option key={ns.name} value={ns.name}>
-              {ns.name}
-            </option>
+            <option key={ns.name} value={ns.name}>{ns.name}</option>
           ))}
         </select>
       </div>
 
-      {isLoading ? (
-  <div className="loader"></div>
-) : !selectedNamespace ? (
-  <p>No backups found.</p>
-) : filteredBackups.length === 0 ? (
-  <p>No backups found.</p>
-) : (
-  <div className="table-wrapper">
-    <table className="backups-table">
-      <thead>
-        <tr>
-          <th>Namespace</th>
-          <th>Backup Name</th>
-          <th>Time Created</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        {filteredBackups.map((backup, index) => (
-          <tr key={index}>
-            <td>{backup.namespace}</td>
-            <td>{backup.backup_name}</td>
-            <td>{backup['Time Created']}</td>
-            <td className={`status ${backup.Status ? backup.Status.toLowerCase() : ''}`}>
-              {backup.Status || 'Unknown'}
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  </div>
-)}
+      <div className="form-group">
+        <label>Select Backup</label>
+        <select value={selectedBackup} onChange={(e) => setSelectedBackup(e.target.value)}>
+          <option value="">--Select a backup--</option>
+          {backups.map((b) => (
+            <option key={b.backup_name} value={b.backup_name}>{`${b.backup_name} | Namespace: ${b["namespace"]}`}</option>
+          ))}
+        </select>
+      </div>
 
+      <div className="resources-group">
+        <label>Included Resources</label>
+        <div className="resource-checkbox">
+          <input
+            type="checkbox"
+            id="allNamespaceResources"
+            checked={includedResources.allNamespaceResources}
+            onChange={() => handleResourceChange('allNamespaceResources')}
+          />
+          <label htmlFor="allNamespaceResources">All Namespace Resources</label>
+        </div>
+        {Object.keys(includedResources)
+          .filter((key) => key !== 'allNamespaceResources')
+          .map((resource) => (
+            <div key={resource} className="resource-checkbox">
+              <input
+                type="checkbox"
+                id={resource}
+                checked={includedResources[resource]}
+                onChange={() => handleResourceChange(resource)}
+              />
+              <label htmlFor={resource}>{resource}</label>
+            </div>
+          ))}
+      </div>
+
+      <div className="match-labels-group">
+        <label>Match Labels</label>
+        {matchLabels.map((label, index) => (
+          <div key={index} className="label-pair">
+            <input
+              type="text"
+              placeholder="Key"
+              value={label.key}
+              onChange={(e) => handleLabelChange(index, 'key', e.target.value)}
+            />
+            <input
+              type="text"
+              placeholder="Value"
+              value={label.value}
+              onChange={(e) => handleLabelChange(index, 'value', e.target.value)}
+            />
+          </div>
+        ))}
+        <button className="add-label-btn" onClick={addLabelPair} title="Click to add labels">
+          Add Label ➕
+        </button>
+      </div>
+
+      <button onClick={handleCreateRestore} disabled={isLoading}>
+        {isLoading ? 'Creating...' : 'Create Restore'}
+      </button>
     </div>
   );
 };
 
-export default ViewBackups;
+export default CreateRestore;
