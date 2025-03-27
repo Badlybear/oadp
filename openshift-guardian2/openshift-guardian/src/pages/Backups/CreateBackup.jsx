@@ -78,17 +78,6 @@ const CreateBackup = ({ darkMode }) => {
       />
       <header className="page-header">
         <h1>Create Backup</h1>
-        {user && (
-          <p
-            style={{
-              fontSize: "14px",
-              marginTop: "-10px",
-              color: darkMode ? 'lightgray' : 'black',
-            }}
-          >
-            👤 Connected as: <strong>{user.name || user.email}</strong>
-          </p>
-        )}
       </header>
       <div className="form-group">
         <label htmlFor="namespace-select">Select Namespace</label>

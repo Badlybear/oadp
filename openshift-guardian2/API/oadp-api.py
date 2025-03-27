@@ -7,8 +7,7 @@ from dotenv import load_dotenv
 import os
 import uvicorn
 from uuid import uuid4
-from typing import Optional, Dict, Any
-from pydantic import BaseModel
+from typing import Optional, Dict
 import logging
 
 # Configure logging
@@ -50,47 +49,25 @@ restores: Dict[str, list] = {"restores": []}
 schedule_backups: Dict[str, list] = {"schedule_backups": []}
 namespaces: Dict[str, list] = {"namespaces": [{"name": "aloni"}, {"name": "omeriko"}, {"name": "kaki"}]}
 
-# Pydantic models for request validation
-class BackupRequest(BaseModel):
-    namespaces: str
-    included_resources: Optional[list] = None
-    match_labels: Optional[dict] = None
-
-class RestoreRequest(BaseModel):
-    namespaces: str
-    included_resources: list
-    match_labels: dict
-
-class ScheduleBackupRequest(BaseModel):
-    namespaces: str
-    schedule: str
-    amount: int
-
-class DeleteBackupRequest(BaseModel):
-    backup_name: str
-
-class DeleteScheduleBackupRequest(BaseModel):
-    schedule_name: str
-
 # Dependency for authentication
 async def get_current_user(request: Request) -> dict:
     """Check authentication and return user info, caching it in the session."""
     token = request.session.get("token")
     user_info = request.session.get("user_info")
 
-    if not token or (not user_info or request.session.get("token_hash") != hash(str(token))):
+    if not token:
+        logger.info("No token found.")
+        raise HTTPException(status_code=401, detail="Not authenticated")
+
+    if not user_info or request.session.get("token_hash") != hash(str(token)):
         try:
-            if token:  # If token exists but is invalid, try to fetch user info
-                user_info = await oauth.oidc.userinfo(token=token)
-                request.session["user_info"] = dict(user_info)
-                request.session["token_hash"] = hash(str(token))
-                logger.info("User info fetched and cached.")
-            else:
-                logger.info("No token found, redirecting to login.")
-                return RedirectResponse(url="/login")
+            user_info = await oauth.oidc.userinfo(token=token)
+            request.session["user_info"] = dict(user_info)
+            request.session["token_hash"] = hash(str(token))
+            logger.info("User info fetched and cached.")
         except OAuthError as e:
             logger.warning(f"Invalid or expired token: {str(e)}")
-            return RedirectResponse(url="/login")
+            raise HTTPException(status_code=401, detail="Invalid or expired token")
         except Exception as e:
             logger.error(f"Unexpected error fetching user info: {str(e)}")
             raise HTTPException(status_code=500, detail="Internal server error")
@@ -109,6 +86,13 @@ async def login(request: Request):
     request.session["state"] = state
     redirect_uri = os.getenv("REDIRECT_URI")  # Should be http://localhost:8000/auth/callback
     return await oauth.oidc.authorize_redirect(request, redirect_uri, state=state)
+
+@app.get("/logout")
+async def logout(request: Request):
+    """Clear the session and log the user out."""
+    request.session.clear()  # Clear all session data
+    logger.info("User logged out successfully")
+    return RedirectResponse(url="http://localhost:5173/")
 
 @app.get("/auth/callback")
 async def auth_callback(request: Request):
@@ -132,21 +116,15 @@ async def auth_callback(request: Request):
 
 @app.get("/me")
 async def protected_user(user: dict = Depends(get_current_user)):
-    if isinstance(user, RedirectResponse):
-        return user
     return {"user": user}
 
 # API Endpoints
 @app.get("/get-user-namespaces", response_model=dict)
 async def get_user_namespaces(user: dict = Depends(get_current_user)):
-    if isinstance(user, RedirectResponse):
-        return user
     return namespaces
 
 @app.get("/get-backups", response_model=dict)
 async def get_backups(namespace: Optional[str] = Query(None), user: dict = Depends(get_current_user)):
-    if isinstance(user, RedirectResponse):
-        return user
     if namespace:
         filtered = [b for b in backups["backups"] if b.get("namespace") == namespace]
         return {"backups": filtered}
@@ -154,8 +132,6 @@ async def get_backups(namespace: Optional[str] = Query(None), user: dict = Depen
 
 @app.get("/get-restores", response_model=dict)
 async def get_restores(namespace: Optional[str] = Query(None), user: dict = Depends(get_current_user)):
-    if isinstance(user, RedirectResponse):
-        return user
     if namespace:
         filtered = [r for r in restores["restores"] if r.get("namespace") == namespace]
         return {"restores": filtered}
@@ -163,17 +139,14 @@ async def get_restores(namespace: Optional[str] = Query(None), user: dict = Depe
 
 @app.get("/get-scheduled-backups", response_model=dict)
 async def get_schedule_backups(user: dict = Depends(get_current_user)):
-    if isinstance(user, RedirectResponse):
-        return user
     return schedule_backups
 
 @app.post("/create-backup", response_model=dict)
-async def create_backup(params: BackupRequest, user: dict = Depends(get_current_user)):
-    if isinstance(user, RedirectResponse):
-        return user
+async def create_backup(request: Request, user: dict = Depends(get_current_user)):
+    params = await request.json()
     backup = {
-        "namespace": params.namespaces,
-        "backup_name": f"{params.namespaces}-backup",
+        "namespace": params["namespaces"],
+        "backup_name": f"{params['namespaces']}-backup",
         "Time Created": "2025-03-13T",
         "Status": "Completed",
     }
@@ -181,30 +154,28 @@ async def create_backup(params: BackupRequest, user: dict = Depends(get_current_
     return {"message": "Created backup successfully"}
 
 @app.post("/create-restore", response_model=dict)
-async def create_restore(params: RestoreRequest, user: dict = Depends(get_current_user)):
-    if isinstance(user, RedirectResponse):
-        return user
+async def create_restore(request: Request, user: dict = Depends(get_current_user)):
+    params = await request.json()
     restore = {
-        "name": f"{params.namespaces}-restore",
+        "name": f"{params['namespaces']}-restore",
         "Time Created": "2025-03-13T",
         "status": "Completed",
-        "namespace": params.namespaces,
-        "backup_name": f"{params.namespaces}-restore",
-        "included_resources": params.included_resources,
-        "match_labels": params.match_labels,
+        "namespace": params["namespaces"],
+        "backup_name": f"{params['namespaces']}-restore",
+        "included_resources": params["included_resources"],
+        "match_labels": params["match_lables"],
     }
     restores["restores"].append(restore)
     return {"message": "Created restore successfully"}
 
 @app.post("/create-schedule-backup", response_model=dict)
-async def create_schedule_backup(params: ScheduleBackupRequest, user: dict = Depends(get_current_user)):
-    if isinstance(user, RedirectResponse):
-        return user
+async def create_schedule_backup(request: Request, user: dict = Depends(get_current_user)):
+    params = await request.json()
     schedule_backup = {
-        "name": f"{params.namespaces}-schedule",
-        "namespace": params.namespaces,
-        "frequency": params.schedule,
-        "amount": str(params.amount),
+        "name": f"{params['namespaces']}-schedule",
+        "namespace": params["namespaces"],
+        "frequency": params["schedule"],
+        "amount": f"{params['amount']}",
         "Time Created": "2025-03-13T",
         "Status": "Scheduled",
     }
@@ -212,22 +183,21 @@ async def create_schedule_backup(params: ScheduleBackupRequest, user: dict = Dep
     return {"message": "Created scheduled backup successfully"}
 
 @app.delete("/delete-backup", response_model=dict)
-async def delete_backup(params: DeleteBackupRequest, user: dict = Depends(get_current_user)):
-    if isinstance(user, RedirectResponse):
-        return user
-    backups["backups"] = [b for b in backups["backups"] if b.get("backup_name") != params.backup_name]
-    return {"message": f"Backup '{params.backup_name}' deleted successfully"}
+async def delete_backup(request: Request, user: dict = Depends(get_current_user)):
+    params = await request.json()
+    backups["backups"] = [b for b in backups["backups"] if b.get("backup_name") != params["backup_name"]]
+    return {"message": f"Backup {params['backup_name']} deleted successfully"}
 
 @app.delete("/delete-schedule-backup", response_model=dict)
-async def delete_schedule_backup(params: DeleteScheduleBackupRequest, user: dict = Depends(get_current_user)):
-    if isinstance(user, RedirectResponse):
-        return user
-    if not any(s["name"] == params.schedule_name for s in schedule_backups["schedule_backups"]):
+async def delete_schedule_backup(request: Request, user: dict = Depends(get_current_user)):
+    params = await request.json()
+    schedule_name = params.get("schedule_name")
+    if not any(s["name"] == schedule_name for s in schedule_backups["schedule_backups"]):
         raise HTTPException(status_code=404, detail="Scheduled backup not found")
     schedule_backups["schedule_backups"] = [
-        s for s in schedule_backups["schedule_backups"] if s["name"] != params.schedule_name
+        s for s in schedule_backups["schedule_backups"] if s["name"] != schedule_name
     ]
-    return {"message": f"Scheduled backup '{params.schedule_name}' deleted successfully"}
+    return {"message": f"Scheduled backup '{schedule_name}' deleted successfully"}
 
 # Run the app
 if __name__ == "__main__":

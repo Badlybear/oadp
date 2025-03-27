@@ -33,6 +33,7 @@ const CreateRestore = ({ darkMode }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [backups, setBackups] = useState([]);
   const [namespaces, setNamespaces] = useState([]);
+  const [showConfirmPopup, setShowConfirmPopup] = useState(false); // New state for popup
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -102,12 +103,35 @@ const CreateRestore = ({ darkMode }) => {
     setMatchLabels([...matchLabels, { key: '', value: '' }]);
   };
 
-  const handleCreateRestore = async () => {
+  const getRestoreSummary = () => {
+    const selectedResources = includedResources.allNamespaceResources
+      ? '*'
+      : Object.entries(includedResources)
+          .filter(([_, value]) => value)
+          .map(([key]) => key)
+          .join(', ') || 'None';
+    const matchLabelsObj = matchLabels
+      .filter(({ key, value }) => key && value)
+      .map(({ key, value }) => `${key}: ${value}`)
+      .join(', ') || 'None';
+
+    return {
+      namespace: selectedNamespace,
+      backup: selectedBackup,
+      resources: selectedResources,
+      labels: matchLabelsObj,
+    };
+  };
+
+  const handleCreateRestore = () => {
     if (!selectedBackup || !selectedNamespace) {
       setMessage('Please select both a backup and a namespace.');
       return;
     }
+    setShowConfirmPopup(true); // Show popup instead of creating immediately
+  };
 
+  const confirmCreateRestore = async () => {
     const selectedResources = includedResources.allNamespaceResources
       ? '*'
       : Object.entries(includedResources)
@@ -120,6 +144,7 @@ const CreateRestore = ({ darkMode }) => {
     }, {});
 
     setIsLoading(true);
+    setShowConfirmPopup(false); // Hide popup
     try {
       const response = await fetch('http://localhost:8000/create-restore', {
         method: 'POST',
@@ -139,6 +164,10 @@ const CreateRestore = ({ darkMode }) => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const cancelCreateRestore = () => {
+    setShowConfirmPopup(false); // Just close the popup
   };
 
   return (
@@ -230,6 +259,29 @@ const CreateRestore = ({ darkMode }) => {
       <button onClick={handleCreateRestore} disabled={isLoading}>
         {isLoading ? 'Creating...' : 'Create Restore'}
       </button>
+
+      {showConfirmPopup && (
+        <div className="confirm-popup-overlay">
+          <div className={`confirm-popup ${darkMode ? 'dark' : ''}`}>
+            <h2>Restore Summary</h2>
+            <div className="summary-content">
+              <p><strong>Namespace:</strong> {getRestoreSummary().namespace}</p>
+              <p><strong>Backup:</strong> {getRestoreSummary().backup}</p>
+              <p><strong>Included Resources:</strong> {getRestoreSummary().resources}</p>
+              <p><strong>Match Labels:</strong> {getRestoreSummary().labels}</p>
+            </div>
+            <p className="confirm-question">Are you sure you want to create this restore?</p>
+            <div className="confirm-buttons">
+              <button className="confirm-yes" onClick={confirmCreateRestore}>
+                Yes
+              </button>
+              <button className="confirm-no" onClick={cancelCreateRestore}>
+                No
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
