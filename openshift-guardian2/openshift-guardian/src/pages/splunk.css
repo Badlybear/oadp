@@ -1,0 +1,166 @@
+:where(.splunk-page-container) body {
+    overflow: hidden; /* Override main app scroll */
+  }
+  
+  .splunk-page-container {
+    padding: 2rem;
+    background: #e6f0fa;
+    height: calc(100vh - 60px); /* Account for 60px header */
+    max-height: calc(100vh - 60px);
+    overflow: hidden;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Start at top */
+    box-sizing: border-box;
+  }
+  
+  .splunk-page-container.splunk-dark {
+    background: linear-gradient(180deg, #2d4739 0%, #1a2e22 100%);
+    color: #e2e8f0;
+  }
+  
+  .splunk-page-container.sidebar-open {
+    margin-left: 250px; /* Shift for sidebar */
+  }
+  
+  .splunk-content {
+    max-width: 600px;
+    width: 100%;
+    max-height: calc(100vh - 60px - 4rem); /* Account for padding */
+    overflow: hidden;
+    text-align: center;
+    padding-top: 1rem; /* Space below header */
+    box-sizing: border-box;
+  }
+  
+  .splunk-page-title {
+    font-size: 2.25rem;
+    font-weight: 700;
+    color: #0877a6;
+    margin-bottom: 1.5rem;
+  }
+  
+  .splunk-page-container.splunk-dark .splunk-page-title {
+    color: #53a051;
+  }
+  
+  .splunk-explanation {
+    background: linear-gradient(180deg, #ffffff 0%, #f0f7ff 100%); /* Subtle gradient */
+    border: 1px solid #0877a6; /* Colored border */
+    border-radius: 12px; /* Softer corners */
+    padding: 2rem; /* Spacious */
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1); /* Softer shadow */
+    max-height: 40vh;
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+  
+  .splunk-page-container.splunk-dark .splunk-explanation {
+    background: linear-gradient(180deg, #2d3748 0%, #1a2e22 100%);
+    border: 1px solid #53a051;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  }
+  
+  .splunk-explanation h2 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #2d3748;
+    margin-bottom: 1rem;
+    letter-spacing: 0.02em; /* Elegant spacing */
+  }
+  
+  .splunk-page-container.splunk-dark .splunk-explanation h2 {
+    color: #e2e8f0;
+  }
+  
+  .splunk-explanation ul {
+    list-style-type: disc;
+    text-align: left;
+    padding-left: 2rem; /* More space for bullets */
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: #4a5568;
+    line-height: 1.6;
+  }
+  
+  .splunk-page-container.splunk-dark .splunk-explanation ul {
+    color: #a0aec0;
+  }
+  
+  .splunk-explanation li {
+    margin-bottom: 0.75rem; /* More spacing */
+  }
+  
+  .splunk-link-section {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .splunk-link-card {
+    background: linear-gradient(135deg, #0877a6 0%, #60a5fa 100%);
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease;
+    max-width: 400px;
+    width: 100%;
+    max-height: 20vh;
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+  
+  .splunk-page-container.splunk-dark .splunk-link-card {
+    background: linear-gradient(135deg, #2d4739 0%, #53a051 100%);
+  }
+  
+  .splunk-link-card:hover {
+    transform: scale(1.05);
+  }
+  
+  .splunk-link-card .splunk-link-placeholder {
+    font-size: 1.25rem;
+    font-style: italic;
+    color: #e2e8f0;
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+  
+  .splunk-link-card p {
+    font-size: 0.875rem;
+    color: #e2e8f0;
+  }
+  
+  @media (max-width: 768px) {
+    .splunk-page-container {
+      padding: 1rem;
+      margin-left: 0; /* No sidebar offset on mobile */
+    }
+  
+    .splunk-content {
+      max-height: calc(100vh - 60px - 2rem);
+      padding-top: 0.5rem;
+    }
+  
+    .splunk-page-title {
+      font-size: 2rem;
+    }
+  
+    .splunk-explanation {
+      padding: 1.5rem;
+    }
+  
+    .splunk-explanation h2 {
+      font-size: 1.5rem;
+    }
+  
+    .splunk-explanation ul {
+      font-size: 1.125rem;
+      padding-left: 1.5rem;
+    }
+  
+    .splunk-link-card {
+      padding: 1rem;
+    }
+  }

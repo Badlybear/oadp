@@ -6,17 +6,38 @@ import Backups from './pages/Backups';
 import Restores from './pages/Restores';
 import Sidebar from './Sidebar';
 import './App.css';
+import Doc from './pages/Doc';
+import Splunk from './pages/Splunk';
 
 // Backup Pages
 import CreateBackup from './pages/Backups/CreateBackup';
 import ViewBackups from './pages/Backups/ViewBackups';
 import ScheduleBackup from './pages/Backups/ScheduleBackup';
 import DeleteBackup from './pages/Backups/DeleteBackup';
-import DeleteScheduleResource from './pages/Backups/DeleteScheduleResource'; // New component
+import DeleteScheduleResource from './pages/Backups/DeleteScheduleResource';
 
 // Restore Pages
-import CreateRestore from './pages/Restores/CreateRestore'; // New component
-import ViewRestores from './pages/Restores/ViewRestores'; // New component
+import CreateRestore from './pages/Restores/CreateRestore';
+import ViewRestores from './pages/Restores/ViewRestores';
+
+// DocLayout - A separate layout component for the Doc page
+const DocLayout = ({ darkMode }) => {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const toggleSidebar = () => setIsSidebarOpen((prev) => !prev);
+
+  return (
+    <div className={`app-container ${darkMode ? 'dark' : ''}`}>
+      <Sidebar 
+        isOpen={isSidebarOpen} 
+        toggleSidebar={toggleSidebar} 
+        darkMode={darkMode} 
+      />
+      <div className="doc-content">
+        <Doc darkMode={darkMode} />
+      </div>
+    </div>
+  );
+};
 
 const AppLayout = ({ darkMode, toggleDarkMode, user }) => {
   const location = useLocation();
@@ -53,6 +74,7 @@ const AppLayout = ({ darkMode, toggleDarkMode, user }) => {
           <Route path="/" element={<Navigate to="/login" />} />
           <Route path="/login" element={<ClientLogin darkMode={darkMode} />} />
           <Route path="/dashboard" element={<Dashboard darkMode={darkMode} toggleDarkMode={toggleDarkMode} />} />
+          <Route path="/splunk" element={<Splunk darkMode={darkMode} />} />
           <Route path="/backups" element={<Backups darkMode={darkMode} />} />
           <Route path="/backups/create-backup" element={<CreateBackup darkMode={darkMode} />} />
           <Route path="/backups/view-backups" element={<ViewBackups darkMode={darkMode} />} />
@@ -85,7 +107,6 @@ function App() {
   }, [darkMode]);
 
   useEffect(() => {
-    // Fetch user info if available (e.g., from session or API)
     const fetchUser = async () => {
       try {
         const response = await fetch('http://localhost:8000/me', { credentials: 'include' });
@@ -106,7 +127,10 @@ function App() {
 
   return (
     <Router>
-      <AppLayout darkMode={darkMode} toggleDarkMode={toggleDarkMode} user={user} />
+      <Routes>
+        <Route path="/doc" element={<DocLayout darkMode={darkMode} />} />
+        <Route path="*" element={<AppLayout darkMode={darkMode} toggleDarkMode={toggleDarkMode} user={user} />} />
+      </Routes>
     </Router>
   );
 }

@@ -72,7 +72,6 @@ const Sidebar = ({ isOpen, toggleSidebar, darkMode }) => {
           Dashboard
         </NavLink>
 
-        {/* Backups Section */}
         <div className="nav-section">
           <div className="nav-link nav-header" onClick={toggleBackups}>
             Backups
@@ -112,7 +111,6 @@ const Sidebar = ({ isOpen, toggleSidebar, darkMode }) => {
           </div>
         </div>
 
-        {/* Restores Section */}
         <div className="nav-section">
           <div className="nav-link nav-header" onClick={toggleRestores}>
             Restores
@@ -134,7 +132,20 @@ const Sidebar = ({ isOpen, toggleSidebar, darkMode }) => {
           </div>
         </div>
 
-        {/* Sign Out */}
+        <NavLink
+          to="/splunk"
+          className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}
+        >
+          Splunk
+        </NavLink>
+
+        <NavLink
+          to="/doc"
+          className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}
+        >
+          Documentation
+        </NavLink>
+
         <NavLink
           to="/"
           className={({ isActive }) => (isActive ? 'nav-link logout active' : 'nav-link logout')}
