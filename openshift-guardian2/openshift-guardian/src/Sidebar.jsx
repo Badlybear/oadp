@@ -40,10 +40,29 @@ const Sidebar = ({ isOpen, toggleSidebar, darkMode }) => {
     setShowConfirm(true);
   };
 
-  const confirmLogout = () => {
-    setShowConfirm(false);
-    toggleSidebar();
-    navigate('/');
+  const confirmLogout = async () => {
+    try {
+      // Call the logout endpoint to clear the session on the server
+      const response = await fetch('http://localhost:8000/logout', {
+        method: 'GET',
+        credentials: 'include', // Include cookies to clear the session
+      });
+
+      if (!response.ok) {
+        throw new Error('Logout failed');
+      }
+
+      // Clear any client-side state (optional, if you store anything locally)
+      setShowConfirm(false);
+      toggleSidebar(); // Close the sidebar
+      navigate('/'); // Navigate to the root/login page
+    } catch (error) {
+      console.error('Error during logout:', error);
+      // Optionally show an error message to the user
+      setShowConfirm(false);
+      toggleSidebar();
+      navigate('/'); // Navigate anyway to ensure logout behavior
+    }
   };
 
   const cancelLogout = () => {

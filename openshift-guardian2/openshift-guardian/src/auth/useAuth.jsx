@@ -1,13 +1,13 @@
 // useAuth.jsx
 export const verifyAuth = async () => {
   try {
-    const res = await fetch("http://localhost:8000/me", {  
+    const res = await fetch("http://localhost:8000/me", {
       credentials: "include",
     });
 
     if (!res.ok) {
       console.warn("🛑 /me responded with status:", res.status);
-      window.location.href = "http://localhost:8000/login"; 
+      window.location.href = "http://localhost:8000/login"; // Redirect to backend login
       throw new Error("Not authenticated");
     }
 
@@ -16,7 +16,7 @@ export const verifyAuth = async () => {
     return data.user;
   } catch (err) {
     console.error("Failed to verify auth:", err);
-    window.location.href = "http://localhost:8000/login";  
+    window.location.href = "http://localhost:8000/login";
     throw err;
   }
 };

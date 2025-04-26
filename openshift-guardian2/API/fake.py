@@ -1,36 +1,16 @@
 import requests
-import json
-from itsdangerous import URLSafeTimedSerializer
-import base64
 
-# Simulate the session data
-session_data = {
-    "user": {"sub": "fake-user", "email": "fake@example.com"},
-    "token": {"access_token": "fake-access-token"}
+# The URL of the FastAPI app running locally
+url = "http://localhost:8000/get-user-namespaces"
+
+# Simulate a session with a fake token by adding it to the cookies
+cookies = {
+    "session": "eyJzdGF0ZSI6ICIxNzg4Zjk3NS1iZWUwLTQxODEtOGE2YS03MTM0OTBmODM0Y2MiLCAidXNlciI6IHsic3ViIjogImF1dGgwfDY3ZTExZTNjY2VkNjhkNDMyNzI1YTFmYyIsICJuaWNrbmFtZSI6ICJuaWdnYSIsICJuYW1lIjogIm5pZ2dhQGdtYWlsLmNvbSIsICJwaWN0dXJlIjogImh0dHBzOi8vcy5ncmF2YXRhci5jb20vYXZhdGFyLzgxMzQwN2NhYmEwZDQ4ZDNhNzgwNzcwODFhNTM1ZjhmP3M9NDgwJnI9cGcmZD1odHRwcyUzQSUyRiUyRmNkbi5hdXRoMC5jb20lMkZhdmF0YXJzJTJGbmkucG5nIiwgInVwZGF0ZWRfYXQiOiAiMjAyNS0wMy0yNVQyMjoxMzo1NS43MzlaIiwgImVtYWlsIjogIm5pZ2dhQGdtYWlsLmNvbSIsICJlbWFpbF92ZXJpZmllZCI6IGZhbHNlfSwgInRva2VuIjogeyJhY2Nlc3NfdG9rZW4iOiAiZXlKaGJHY2lPaUprYVhJaUxDSmxibU1pT2lKQk1qVTJSME5OSWl3aWFYTnpJam9pYUhSMGNITTZMeTlrWlhZdGFuZHlOSHBrYnpKeVptZ3dabkJvTkM1MWN5NWhkWFJvTUM1amIyMHZJbjAuLlVLWHJ6X2tCUzNkOUtUMnUuZl82NTBuWmRrS09OU0xVdldLVkdJNllkOWVfLXNweHoxQ3Q1bEo5WmVVV0tBVjgxOWhLX240UDhDS21CYzh0LXlQbnhYYWNpWWVCU1N1ZHNaeGZON3NOWXFQUkV5dDZYTTBjc1hzVDRhdGpaWF9FRXp5bkhfb29DWHNjMVVkNHRkTzBXNElMclFTMTJ3YUdGUWs3NFZLTWhleHFxY1dMNUhsVFQ1VmdmUEhkQm02eVVFT3JGT0FJekhJYVJNTDNJS0JLNHBHRXlPX2NQUG13X20xNi1yZGx..."
 }
 
-# The secret key must match the one in your FastAPI app
-secret_key = "supersecret"
+# Send the GET request with the fake session token
+response = requests.get(url, cookies=cookies)
 
-# Create a serializer object (matching SessionMiddleware)
-serializer = URLSafeTimedSerializer(secret_key)
-
-# Serialize and sign the session data
-# SessionMiddleware expects a dict, not a JSON string, so we pass the dict directly
-signed_session = serializer.dumps(session_data)  # This handles base64 encoding internally
-
-# Set the session cookie with the signed value
-session_cookie = {
-    "session": signed_session
-}
-
-# Make the GET request
-response = requests.get(
-    "http://localhost:8000/get-user-namespaces",
-    cookies=session_cookie,
-    headers={"Accept": "application/json"}
-)
-
-# Print the response
-print(response.status_code)
-print(response.json())
+# Print the status code and response
+print("Status Code:", response.status_code)
+print("Response Body:", response.json())

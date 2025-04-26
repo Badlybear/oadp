@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './DeleteBackup.css';
 import guardianLogo from '../GUARDIAN.png';
+import { verifyAuth } from '../../auth/useAuth.jsx';
 
 const DeleteBackup = ({ darkMode }) => {
   const [selectedNamespace, setSelectedNamespace] = useState('');
@@ -15,29 +16,50 @@ const DeleteBackup = ({ darkMode }) => {
   useEffect(() => {
     const fetchNamespaces = async () => {
       try {
-        const res = await fetch('http://localhost:8000/get-user-namespaces');
-        const data = await res.json();
-        setNamespaces(data.namespaces || []);
+        setIsLoading(true);
+        const currentUser = await verifyAuth(); // 🔒 בדיקת התחברות
+        const response = await fetch('http://localhost:8000/get-user-namespaces', {
+          credentials: "include",
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch namespaces.');
+        }
+        
+        const data = await response.json();
+        setNamespaces(data.namespaces);
       } catch (error) {
         setMessage('Error fetching namespaces.');
+      } finally {
+        setIsLoading(false);
       }
     };
+
     fetchNamespaces();
   }, []);
 
   const fetchBackupsByNamespace = async (namespace) => {
     try {
+      await verifyAuth(); // Ensure this works with your auth logic
       setIsLoading(true);
-      const res = await fetch(`http://localhost:8000/get-backups?namespace=${namespace}`);
+      const res = await fetch(`http://localhost:8000/get-backups?namespace=${namespace}`, {
+        credentials: 'include', // Include cookies/session for authentication
+      });
+      if (res.status === 401) {
+        window.location.href = '/login'; // Redirect to login page
+        return;
+      }
+      if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
       const data = await res.json();
       setBackups(data.backups || []);
     } catch (error) {
-      setMessage('Error fetching backups.');
+      console.error('Error:', error.message);
+      setMessage(`Error fetching backups: ${error.message}`);
     } finally {
       setIsLoading(false);
     }
   };
-
+  
   const handleNamespaceChange = (e) => {
     const ns = e.target.value;
     setSelectedNamespace(ns);
@@ -59,29 +81,40 @@ const DeleteBackup = ({ darkMode }) => {
       setMessage('Please select a namespace and a backup to delete.');
       return;
     }
-
+  
     setIsLoading(true);
     try {
       const response = await fetch('http://localhost:8000/delete-backup', {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include', // Include cookies/session for authentication
         body: JSON.stringify({
           backup_name: selectedBackup,
-          namespace: selectedNamespace
-        })
+          namespace: selectedNamespace,
+        }),
       });
-
-      if (!response.ok) throw new Error('Failed to delete backup');
-      setMessage(`Backup "${selectedBackup}" deleted successfully!`);
+  
+      if (response.status === 401) {
+        window.location.href = '/login'; // Redirect to login on auth failure
+        return;
+      }
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || 'Failed to delete backup');
+      }
+  
+      const data = await response.json();
+      setMessage(data.message || `Backup "${selectedBackup}" deleted successfully!`);
       setBackups(backups.filter((b) => b.backup_name !== selectedBackup));
       setSelectedBackup('');
     } catch (error) {
-      setMessage('Failed to delete backup.');
+      console.error('Error:', error.message);
+      setMessage(`Failed to delete backup: ${error.message}`);
     } finally {
       setIsLoading(false);
     }
   };
-
+  
   return (
     <div className={`delete-backup-container ${darkMode ? 'dark' : ''}`}>
       <img

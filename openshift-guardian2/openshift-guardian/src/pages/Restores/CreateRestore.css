@@ -9,7 +9,7 @@ body {
     padding: 40px;
     max-width: 800px;
     width: 100%;
-    margin: 40px auto; /* Added top/bottom margin for better spacing */
+    margin: 40px auto;
     background: linear-gradient(135deg, var(--background-light) 0%, var(--border-light) 100%);
     border-radius: 20px;
     box-shadow: var(--shadow-light);
@@ -18,7 +18,8 @@ body {
     align-items: center;
     font-family: 'Poppins', sans-serif;
     animation: fadeIn 0.6s ease-out;
-    min-height: 600px; /* Minimum height to ensure content is visible */
+    min-height: 600px;
+    position: relative; /* For positioning popup */
 }
 
 .dark .create-restore-container {
@@ -26,10 +27,28 @@ body {
     box-shadow: var(--shadow-dark);
 }
 
+/* Style the page-header and make the h1 dark in light mode */
+.page-header {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.create-restore-container .page-header h1 {
+    color: #000;
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.dark .create-restore-container .page-header h1 {
+    color: #ffffff;
+}
+
 .resources-group {
     width: 100%;
     margin-bottom: 20px;
-    max-height: 250px; /* Increased height for better visibility */
+    max-height: 250px;
     overflow-y: auto;
     padding: 15px;
     background-color: var(--card-bg-light);
@@ -51,22 +70,15 @@ body {
 
 .resource-checkbox input {
     margin-right: 12px;
-    transform: scale(1.2); /* Slightly larger checkboxes */
+    transform: scale(1.2);
 }
 
 .resource-checkbox label {
     font-size: 1.1rem;
-    color: #000; /* Dark text for better contrast on light backgrounds */
+    color: #000;
 }
 
 /* Enhanced Button Styles */
-.button-group {
-    display: flex;
-    gap: 20px;
-    width: 100%;
-    margin-top: 20px;
-}
-
 .create-restore-container button {
     flex: 1;
     padding: 15px 25px;
@@ -78,30 +90,14 @@ body {
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
-}
-
-/* Create Button Specific Styles */
-.create-restore-container button:first-child {
     background: linear-gradient(90deg, var(--primary-color) 0%, var(--primary-hover) 100%);
     color: #ffffff;
 }
 
-.create-restore-container button:first-child:hover:not(:disabled) {
+.create-restore-container button:hover:not(:disabled) {
     transform: translateY(-2px);
     box-shadow: 0 8px 16px rgba(107, 72, 255, 0.4);
     background: linear-gradient(90deg, var(--primary-hover) 0%, var(--primary-color) 100%);
-}
-
-/* Reset Button Specific Styles */
-.create-restore-container button:last-child {
-    background: linear-gradient(90deg, #ff4757 0%, #ff6b81 100%); /* Red gradient for reset */
-    color: #ffffff;
-}
-
-.create-restore-container button:last-child:hover:not(:disabled) {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 16px rgba(255, 71, 87, 0.4);
-    background: linear-gradient(90deg, #ff6b81 0%, #ff4757 100%);
 }
 
 .create-restore-container button:disabled {
@@ -112,12 +108,11 @@ body {
     transform: none;
 }
 
-/* Rest of the existing styles remain mostly unchanged */
+/* Rest of the existing styles */
 .match-labels-group {
     width: 100%;
     margin-bottom: 20px;
     color: #000;
-
 }
 
 .label-pair {
@@ -132,7 +127,7 @@ body {
     border: 2px solid var(--primary-color);
     border-radius: 8px;
     background-color: var(--card-bg-light);
-    color: #000; /* Dark text for better contrast on light backgrounds */
+    color: #000;
 }
 
 .dark .label-pair input {
@@ -155,6 +150,136 @@ body {
     background-color: var(--primary-hover);
 }
 
+/* Popup Styles */
+.confirm-popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6); /* Semi-transparent backdrop */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.confirm-popup {
+    background: linear-gradient(135deg, #ffffff 0%, #f0f0f5 100%);
+    border-radius: 15px;
+    padding: 25px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    animation: slideIn 0.3s ease-out;
+}
+
+.dark .confirm-popup {
+    background: linear-gradient(135deg, #2a2a3a 0%, #1f1f2f 100%);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    color: #ffffff;
+}
+
+.confirm-popup h2 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.dark .confirm-popup h2 {
+    color: #ffffff;
+}
+
+.summary-content {
+    text-align: left;
+    margin-bottom: 20px;
+    padding: 15px;
+    background: #f8f8fa;
+    border-radius: 10px;
+    font-size: 1rem;
+    color: #333;
+}
+
+.dark .summary-content {
+    background: #3a3a4a;
+    color: #e0e0e0;
+}
+
+.summary-content p {
+    margin: 8px 0;
+}
+
+.summary-content strong {
+    color: #000;
+}
+
+.dark .summary-content strong {
+    color: #ffffff;
+}
+
+.confirm-question {
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin-bottom: 25px;
+    color: #555;
+}
+
+.dark .confirm-question {
+    color: #d0d0d0;
+}
+
+.confirm-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+.confirm-buttons button {
+    padding: 12px 30px;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.confirm-yes {
+    background: linear-gradient(90deg, #28a745 0%, #34c759 100%);
+    color: #ffffff;
+}
+
+.confirm-yes:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(40, 167, 69, 0.4);
+    background: linear-gradient(90deg, #34c759 0%, #28a745 100%);
+}
+
+.confirm-no {
+    background: linear-gradient(90deg, #dc3545 0%, #ff4757 100%);
+    color: #ffffff;
+}
+
+.confirm-no:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(220, 53, 69, 0.4);
+    background: linear-gradient(90deg, #ff4757 0%, #dc3545 100%);
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideIn {
+    from { transform: translateY(-20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
 /* Media query adjustments */
 @media (max-width: 600px) {
     .create-restore-container {
@@ -162,22 +287,27 @@ body {
         margin: 20px 10px;
     }
 
-    .button-group {
+    .confirm-popup {
+        width: 95%;
+        padding: 20px;
+    }
+
+    .confirm-buttons {
         flex-direction: column;
-        gap: 15px;
+        gap: 10px;
     }
 }
 
-/* For any checkbox inputs within the restore form */
+/* Checkbox styles */
 input[type="checkbox"] {
-    /* Use an accent color for the checkbox (supported on modern browsers) */
     accent-color: var(--primary-color);
 }
 
-/* If you have deployment labels or checkboxes, ensure their associated text is dark */
-create-restore-container label {
+/* Labels */
+.create-restore-container label {
     color: #000;
 }
+
 .dark .create-restore-container label {
     color: #ffffff;
 }

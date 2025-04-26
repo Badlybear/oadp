@@ -2,40 +2,38 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './CreateBackup.css';
 import guardianLogo from '../GUARDIAN.png';
-import { verifyAuth } from '../../auth/useAuth.jsx'; // ✅ ייבוא פונקציית האימות
+import { verifyAuth } from '../../auth/useAuth.jsx';
 
 const CreateBackup = ({ darkMode }) => {
   const [selectedNamespace, setSelectedNamespace] = useState('');
   const [message, setMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [namespaces, setNamespaces] = useState([]);
-  const [user, setUser] = useState(null); // ✅ נשתמש בזה לשם המשתמש
+  const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchNamespaces = async () => {
       try {
         setIsLoading(true);
-        const currentUser = await verifyAuth(); // 🔒 בדיקת התחברות
-        setUser(currentUser); // ✅ שמור את המשתמש להצגה
+        const currentUser = await verifyAuth(); // Redirects to login if unauthenticated
+        setUser(currentUser);
         const response = await fetch('http://localhost:8000/get-user-namespaces', {
           credentials: "include",
         });
+        if (!response.ok) throw new Error('Failed to fetch namespaces');
         const data = await response.json();
-        setNamespaces(data.namespaces);
+        setNamespaces(data.namespaces || []);
       } catch (error) {
-        setMessage('Error fetching namespaces.');
+        setMessage('Error fetching namespaces: ' + error.message);
       } finally {
         setIsLoading(false);
       }
     };
-
     fetchNamespaces();
   }, []);
 
-  const handleLogoClick = () => {
-    navigate('/dashboard');
-  };
+  const handleLogoClick = () => navigate('/dashboard');
 
   const handleNamespaceChange = (e) => {
     setSelectedNamespace(e.target.value);
@@ -50,7 +48,7 @@ const CreateBackup = ({ darkMode }) => {
 
     setIsLoading(true);
     try {
-      await verifyAuth(); // 🔒 בדיקה גם לפני יצירת גיבוי
+      await verifyAuth(); // Redirects to login if unauthenticated
       const response = await fetch('http://localhost:8000/create-backup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -61,7 +59,7 @@ const CreateBackup = ({ darkMode }) => {
       setMessage('Backup created successfully!');
       setSelectedNamespace('');
     } catch (error) {
-      setMessage('Failed to create backup.');
+      setMessage('Failed to create backup: ' + error.message);
     } finally {
       setIsLoading(false);
     }
@@ -80,17 +78,6 @@ const CreateBackup = ({ darkMode }) => {
       />
       <header className="page-header">
         <h1>Create Backup</h1>
-        {user && (
-          <p
-            style={{
-              fontSize: "14px", 
-              marginTop: "-10px", 
-              color: darkMode ? 'lightgray' : 'black' // Dynamic color based on darkMode
-            }}
-          >
-            👤 Connected as: <strong>{user.name || user.email}</strong>
-          </p>
-        )}
       </header>
       <div className="form-group">
         <label htmlFor="namespace-select">Select Namespace</label>

@@ -9,37 +9,29 @@ const ScheduleBackup = ({ darkMode }) => {
   const [backupHour, setBackupHour] = useState('');
   const [message, setMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [namespaces, setNamespaces] = useState([]); // Initialize namespaces as an empty array
-  const [scheduledBackups, setScheduledBackups] = useState([]);
+  const [namespaces, setNamespaces] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchNamespaces = async () => {
       try {
         setIsLoading(true);
-        const response = await fetch('http://localhost:8000/get-user-namespaces');
-        if (!response.ok) throw new Error('Error fetching namespaces');
-        
+        const response = await fetch('http://localhost:8000/get-user-namespaces', {
+          credentials: 'include',
+        });
+        if (!response.ok) throw new Error('Failed to fetch namespaces');
         const data = await response.json();
-        // Ensure the response contains a valid 'namespaces' array
-        if (Array.isArray(data.namespaces)) {
-          setNamespaces(data.namespaces);
-        } else {
-          throw new Error('Invalid namespaces structure');
-        }
+        setNamespaces(data.namespaces || []);
       } catch (error) {
-        setMessage(error.message || 'Error fetching namespaces.');
+        setMessage('Error fetching namespaces: ' + error.message);
       } finally {
         setIsLoading(false);
       }
     };
     fetchNamespaces();
   }, []);
-  
 
-  const handleLogoClick = () => {
-    navigate('/dashboard');
-  };
+  const handleLogoClick = () => navigate('/dashboard');
 
   const handleCreateScheduledBackup = async () => {
     if (!selectedNamespace || !frequencyDays || backupHour === '') {
@@ -52,17 +44,16 @@ const ScheduleBackup = ({ darkMode }) => {
       const response = await fetch('http://localhost:8000/create-schedule-backup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({ namespaces: selectedNamespace, schedule: frequencyDays, amount: backupHour }),
       });
       if (!response.ok) throw new Error('Failed to create scheduled backup');
-      
-      setMessage(`Scheduled backup created successfully!`);
+      setMessage('Scheduled backup created successfully!');
       setSelectedNamespace('');
       setFrequencyDays('');
       setBackupHour('');
-      
     } catch (error) {
-      setMessage(error.message || 'Failed to create scheduled backup.');
+      setMessage('Failed to create scheduled backup: ' + error.message);
     } finally {
       setIsLoading(false);
     }
@@ -82,12 +73,22 @@ const ScheduleBackup = ({ darkMode }) => {
         />
         <h1>Create Scheduled Backup</h1>
       </header>
+
+      {message && (
+        <p className={`message ${message.includes('successfully') ? 'success' : 'error'}`}>
+          {message}
+        </p>
+      )}
+
       <div className="form-group">
         <label htmlFor="namespace-select">Choose a namespace:</label>
         <select
           id="namespace-select"
           value={selectedNamespace}
-          onChange={(e) => { setSelectedNamespace(e.target.value); setMessage(''); }}
+          onChange={(e) => {
+            setSelectedNamespace(e.target.value);
+            setMessage('');
+          }}
           disabled={isLoading}
         >
           <option value="">--Select a namespace--</option>
@@ -100,12 +101,16 @@ const ScheduleBackup = ({ darkMode }) => {
           )}
         </select>
       </div>
+
       <div className="form-group">
         <label htmlFor="frequency-select">Backup Frequency (days):</label>
         <select
           id="frequency-select"
           value={frequencyDays}
-          onChange={(e) => { setFrequencyDays(e.target.value); setMessage(''); }}
+          onChange={(e) => {
+            setFrequencyDays(e.target.value);
+            setMessage('');
+          }}
           disabled={isLoading}
         >
           <option value="">--Select frequency--</option>
@@ -114,12 +119,16 @@ const ScheduleBackup = ({ darkMode }) => {
           ))}
         </select>
       </div>
+
       <div className="form-group">
         <label htmlFor="hour-select">Backup Hour (24h):</label>
         <select
           id="hour-select"
           value={backupHour}
-          onChange={(e) => { setBackupHour(e.target.value); setMessage(''); }}
+          onChange={(e) => {
+            setBackupHour(e.target.value);
+            setMessage('');
+          }}
           disabled={isLoading}
         >
           <option value="">--Select hour--</option>
@@ -128,14 +137,14 @@ const ScheduleBackup = ({ darkMode }) => {
           ))}
         </select>
       </div>
-      <button onClick={handleCreateScheduledBackup} disabled={isLoading || !selectedNamespace || !frequencyDays || backupHour === ''}>
+
+      <button
+        onClick={handleCreateScheduledBackup}
+        disabled={isLoading || !selectedNamespace || !frequencyDays || backupHour === ''}
+      >
         {isLoading ? 'Scheduling...' : 'Create Scheduled Backup'}
       </button>
-      {message && (
-        <p className={`message ${message.includes('successfully') ? 'success' : 'error'}`}>
-          {message}
-        </p>
-      )}
+
       {isLoading && <div className="loader"></div>}
     </div>
   );

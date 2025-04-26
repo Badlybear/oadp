@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './ViewBackups.css';
 import guardianLogo from '../GUARDIAN.png';
+import { verifyAuth } from '../../auth/useAuth.jsx'; // Import verifyAuth
 
 const ViewBackups = ({ darkMode }) => {
   const [backups, setBackups] = useState([]);
@@ -9,16 +10,25 @@ const ViewBackups = ({ darkMode }) => {
   const [selectedNamespace, setSelectedNamespace] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(''); // Added error state for better feedback
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchNamespaces = async () => {
       try {
-        const namespacesRes = await fetch('http://localhost:8000/get-user-namespaces');
+        setIsLoading(true);
+        await verifyAuth(); // Redirects to login if unauthenticated
+        const namespacesRes = await fetch('http://localhost:8000/get-user-namespaces', {
+          credentials: 'include', // Include cookies for session authentication
+        });
+        if (!namespacesRes.ok) throw new Error('Failed to fetch namespaces');
         const namespacesData = await namespacesRes.json();
         setNamespaces(namespacesData.namespaces || []);
       } catch (error) {
+        setError('Error fetching namespaces: ' + error.message);
         console.error('Error fetching namespaces:', error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -34,10 +44,16 @@ const ViewBackups = ({ darkMode }) => {
 
       try {
         setIsLoading(true);
-        const response = await fetch(`http://localhost:8000/get-backups?namespace=${selectedNamespace}`);
+        await verifyAuth(); // Redirects to login if unauthenticated
+        const response = await fetch(`http://localhost:8000/get-backups?namespace=${selectedNamespace}`, {
+          credentials: 'include', // Include cookies for session authentication
+        });
+        if (!response.ok) throw new Error('Failed to fetch backups');
         const data = await response.json();
         setBackups(data.backups || []);
+        setError(''); // Clear error on success
       } catch (error) {
+        setError('Error fetching backups: ' + error.message);
         console.error('Error fetching backups:', error);
       } finally {
         setIsLoading(false);
@@ -70,6 +86,8 @@ const ViewBackups = ({ darkMode }) => {
         <h1>View Backups</h1>
       </header>
 
+      {error && <p className="error">{error}</p>} {/* Display errors if any */}
+
       <div className="search-bar-container">
         <input
           type="text"
@@ -87,7 +105,7 @@ const ViewBackups = ({ darkMode }) => {
           value={selectedNamespace}
           onChange={(e) => {
             setSelectedNamespace(e.target.value);
-            setBackups([]); // clear backups while loading
+            setBackups([]); // Clear backups while loading
           }}
         >
           <option value="">-- Select Namespace --</option>
@@ -100,38 +118,37 @@ const ViewBackups = ({ darkMode }) => {
       </div>
 
       {isLoading ? (
-  <div className="loader"></div>
-) : !selectedNamespace ? (
-  <p>No backups found.</p>
-) : filteredBackups.length === 0 ? (
-  <p>No backups found.</p>
-) : (
-  <div className="table-wrapper">
-    <table className="backups-table">
-      <thead>
-        <tr>
-          <th>Namespace</th>
-          <th>Backup Name</th>
-          <th>Time Created</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        {filteredBackups.map((backup, index) => (
-          <tr key={index}>
-            <td>{backup.namespace}</td>
-            <td>{backup.backup_name}</td>
-            <td>{backup['Time Created']}</td>
-            <td className={`status ${backup.Status ? backup.Status.toLowerCase() : ''}`}>
-              {backup.Status || 'Unknown'}
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  </div>
-)}
-
+        <div className="loader"></div>
+      ) : !selectedNamespace ? (
+        <p>Please select a namespace.</p>
+      ) : filteredBackups.length === 0 ? (
+        <p>No backups found.</p>
+      ) : (
+        <div className="table-wrapper">
+          <table className="backups-table">
+            <thead>
+              <tr>
+                <th>Namespace</th>
+                <th>Backup Name</th>
+                <th>Time Created</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredBackups.map((backup, index) => (
+                <tr key={index}>
+                  <td>{backup.namespace}</td>
+                  <td>{backup.backup_name}</td>
+                  <td>{backup['Time Created']}</td>
+                  <td className={`status ${backup.Status ? backup.Status.toLowerCase() : ''}`}>
+                    {backup.Status || 'Unknown'}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 };
