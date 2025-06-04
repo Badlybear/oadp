@@ -161,9 +161,11 @@ async def create_restore(request: Request, user: dict = Depends(get_current_user
         "Time Created": "2025-03-13T",
         "status": "Completed",
         "namespace": params["namespaces"],
-        "backup_name": f"{params['namespaces']}-restore",
+        # Track which backup this restore references
+        "backup_name": params.get("backup_name"),
         "included_resources": params["included_resources"],
-        "match_labels": params["match_lables"],
+        # Accept match_labels from request payload
+        "match_labels": params.get("match_labels", {}),
     }
     restores["restores"].append(restore)
     return {"message": "Created restore successfully"}

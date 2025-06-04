@@ -151,8 +151,8 @@ const ViewRestores = ({ darkMode }) => {
                         <br />
                         <strong>Match Labels:</strong>
                         <ul>
-                          {restore.match_lables ? (
-                            Object.entries(restore.match_lables).map(([key, value]) => (
+                          {restore.match_labels ? (
+                            Object.entries(restore.match_labels).map(([key, value]) => (
                               <li key={key}>{key}: {value}</li>
                             ))
                           ) : (

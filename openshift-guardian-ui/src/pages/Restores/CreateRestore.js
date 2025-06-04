@@ -122,7 +122,8 @@ const CreateRestore = ({ darkMode }) => {
           namespaces: selectedNamespace,
           backup_name: selectedBackup,
           included_resources: selectedResources,
-          match_lables: matchLabelsObj,
+          // send match label selectors
+          match_labels: matchLabelsObj,
         }),
       });
       if (!response.ok) throw new Error('Failed to create restore');
